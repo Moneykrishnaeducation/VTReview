@@ -1,0 +1,10 @@
+{
+  "name": "@Frontend/config",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "vp lint --no-error-on-unmatched-pattern",
+    "format": "vp fmt",
+    "check": "vp check --no-error-on-unmatched-pattern"
+  }
+}

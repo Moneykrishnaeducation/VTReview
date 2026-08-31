@@ -1,0 +1,23 @@
+{
+  "name": "@Frontend/env",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./web": "./src/web.ts"
+  },
+  "scripts": {
+    "lint": "vp lint --no-error-on-unmatched-pattern",
+    "format": "vp fmt",
+    "check": "vp check --no-error-on-unmatched-pattern"
+  },
+  "dependencies": {
+    "@t3-oss/env-core": "^0.13.11",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@Frontend/config": "workspace:*",
+    "typescript": "^6.0.3"
+  }
+}
