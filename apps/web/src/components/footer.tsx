@@ -16,18 +16,18 @@ export default function Footer() {
           <div>
             <h3 className="mb-4 text-sm font-semibold">Explore</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><NavLink to="#" className="hover:underline">Broker Reviews</NavLink></li>
-              <li><NavLink to="#" className="hover:underline">Rankings</NavLink></li>
-              <li><NavLink to="#" className="hover:underline">Compare Brokers</NavLink></li>
-              <li><NavLink to="#" className="hover:underline">Regulators</NavLink></li>
+              <li><NavLink to="/search" className="hover:underline">Broker Reviews</NavLink></li>
+              <li><NavLink to="/rankings" className="hover:underline">Rankings</NavLink></li>
+              <li><NavLink to="/compare" className="hover:underline">Compare Brokers</NavLink></li>
+              <li><NavLink to="/search" className="hover:underline">Regulators</NavLink></li>
             </ul>
           </div>
           <div>
             <h3 className="mb-4 text-sm font-semibold">Resources</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><NavLink to="#" className="hover:underline">News</NavLink></li>
-              <li><NavLink to="#" className="hover:underline">Education</NavLink></li>
-              <li><NavLink to="#" className="hover:underline">Trading Tools</NavLink></li>
+              <li><NavLink to="/news" className="hover:underline">Market News</NavLink></li>
+              <li><NavLink to="/news" className="hover:underline">Regulatory Alerts</NavLink></li>
+              <li><NavLink to="/news" className="hover:underline">Trading Insights</NavLink></li>
             </ul>
           </div>
           <div>

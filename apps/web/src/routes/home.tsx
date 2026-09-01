@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Search, ShieldCheck, Star, AlertTriangle, Scale, BookOpen, ChevronRight, CheckCircle2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -295,20 +296,29 @@ export default function Home() {
         {/* 12. Latest Financial News & 13. Educational Section */}
         <div className="grid md:grid-cols-2 gap-12">
           <div>
-             <h2 className="text-2xl font-bold mb-6">Latest News</h2>
+             <div className="flex items-center justify-between mb-6">
+               <h2 className="text-2xl font-bold">Latest News</h2>
+               <Link to="/news">
+                 <Button variant="ghost" size="sm">
+                   View All News <ChevronRight className="ml-1 h-4 w-4" />
+                 </Button>
+               </Link>
+             </div>
              <div className="space-y-4">
                {[
-                 { icon: "📰", title: "Market News", desc: "Latest forex and financial updates" },
-                 { icon: "📈", title: "Trading Insights", desc: "Market analysis and strategies" },
-                 { icon: "🏦", title: "Broker Industry News", desc: "Broker and regulatory updates" },
+                 { icon: "📰", title: "Market News", desc: "Latest forex and financial updates", link: "/news" },
+                 { icon: "📈", title: "Trading Insights", desc: "Market analysis and strategies", link: "/news" },
+                 { icon: "🏦", title: "Broker Industry News", desc: "Broker and regulatory updates", link: "/news" },
                ].map((item, i) => (
-                 <div key={i} className="flex items-start gap-4 p-4 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors border border-transparent hover:border-border">
-                   <div className="text-3xl">{item.icon}</div>
-                   <div>
-                     <h3 className="font-semibold">{item.title}</h3>
-                     <p className="text-sm text-muted-foreground">{item.desc}</p>
+                 <Link key={i} to={item.link} className="block">
+                   <div className="flex items-start gap-4 p-4 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors border border-transparent hover:border-border">
+                     <div className="text-3xl">{item.icon}</div>
+                     <div>
+                       <h3 className="font-semibold">{item.title}</h3>
+                       <p className="text-sm text-muted-foreground">{item.desc}</p>
+                     </div>
                    </div>
-                 </div>
+                 </Link>
                ))}
              </div>
           </div>

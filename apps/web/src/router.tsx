@@ -7,6 +7,7 @@ import Rankings from "./routes/rankings";
 import Compare from "./routes/compare";
 import Search from "./routes/search";
 import AdminDashboard from "./routes/admin";
+import News from "./routes/news";
 
 function NotFound() {
   return (
@@ -27,6 +28,7 @@ export const router = createBrowserRouter([
       { path: "rankings", element: <Rankings /> },
       { path: "compare", element: <Compare /> },
       { path: "search", element: <Search /> },
+      { path: "news", element: <News /> },
       { path: "admin", element: <AdminDashboard /> },
       { path: "*", element: <NotFound /> },
     ],
