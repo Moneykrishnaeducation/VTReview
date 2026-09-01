@@ -36,9 +36,11 @@ export default function Home() {
               placeholder="Search Broker Name" 
               className="w-full h-16 pl-14 pr-32 text-lg rounded-full shadow-sm"
             />
-            <Button size="lg" className="absolute right-2 top-2 h-12 rounded-full px-8 text-base">
-              Search
-            </Button>
+            <Link to="/search">
+              <Button size="lg" className="absolute right-2 top-2 h-12 rounded-full px-8 text-base">
+                Search
+              </Button>
+            </Link>
           </div>
           <div className="flex flex-wrap justify-center gap-8 md:gap-16 text-center">
             <div>
@@ -86,7 +88,9 @@ export default function Home() {
         <div>
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
             <h2 className="text-3xl font-bold">Top Rated Brokers</h2>
-            <Button variant="outline">View All Rankings <ChevronRight className="ml-2 h-4 w-4" /></Button>
+            <Link to="/rankings">
+              <Button variant="outline">View All Rankings <ChevronRight className="ml-2 h-4 w-4" /></Button>
+            </Link>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -160,7 +164,9 @@ export default function Home() {
             <p className="text-muted-foreground text-lg mb-6">
               Our comprehensive scoring system evaluates brokers across multiple critical dimensions to ensure you get the full picture before investing.
             </p>
-            <Button>Learn about our methodology</Button>
+            <Link to="/about">
+              <Button>Learn about our methodology</Button>
+            </Link>
           </div>
           <Card>
             <CardHeader>
@@ -218,8 +224,12 @@ export default function Home() {
               </Card>
             </div>
             <div className="flex gap-4">
-              <Button variant="outline" className="flex-1">Read All Reviews</Button>
-              <Button className="flex-1">Write a Review</Button>
+              <Link to="/reviews" className="flex-1">
+                <Button variant="outline" className="w-full">Read All Reviews</Button>
+              </Link>
+              <Link to="/search" className="flex-1">
+                <Button className="w-full">Write a Review</Button>
+              </Link>
             </div>
           </div>
 
@@ -260,7 +270,9 @@ export default function Home() {
             <Input placeholder="Select Broker 1 ▼" className="h-14 text-center md:text-left text-lg bg-background" />
             <div className="font-bold text-muted-foreground">VS</div>
             <Input placeholder="Select Broker 2 ▼" className="h-14 text-center md:text-left text-lg bg-background" />
-            <Button size="lg" className="h-14 px-8 w-full md:w-auto">Compare Now</Button>
+            <Link to="/compare">
+              <Button size="lg" className="h-14 px-8 w-full md:w-auto">Compare Now</Button>
+            </Link>
           </div>
           <div className="text-center text-sm text-muted-foreground flex flex-wrap justify-center gap-4">
             <span>Compare:</span>
@@ -272,7 +284,9 @@ export default function Home() {
         <div>
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
             <h2 className="text-3xl font-bold">Check Broker Regulation</h2>
-            <Button variant="ghost">View All Regulators <ChevronRight className="ml-2 h-4 w-4" /></Button>
+            <Link to="/regulators">
+              <Button variant="ghost">View All Regulators <ChevronRight className="ml-2 h-4 w-4" /></Button>
+            </Link>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {[
@@ -348,12 +362,16 @@ export default function Home() {
             Join thousands of traders who use VTINDEX to make informed decisions and trade with confidence.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button size="lg" variant="secondary" className="h-14 px-8 text-base">
-              <Search className="mr-2 h-5 w-5" /> Search a Broker
-            </Button>
-            <Button size="lg" variant="outline" className="h-14 px-8 text-base bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
-              Browse Broker Reviews
-            </Button>
+            <Link to="/search">
+              <Button size="lg" variant="secondary" className="h-14 px-8 text-base">
+                <Search className="mr-2 h-5 w-5" /> Search a Broker
+              </Button>
+            </Link>
+            <Link to="/reviews">
+              <Button size="lg" variant="outline" className="h-14 px-8 text-base bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+                Browse Broker Reviews
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

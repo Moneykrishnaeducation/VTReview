@@ -1,6 +1,7 @@
 import { ShieldCheck, Calendar, Globe, Star } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 
 interface BrokerProps {
   name: string;
@@ -44,9 +45,11 @@ export default function BrokerCard({ broker }: { broker: BrokerProps }) {
         </div>
       </CardContent>
       <CardFooter className="pt-4 border-t">
-        <Button className="w-full" variant="outline">
-          View Review
-        </Button>
+        <Link to={`/broker/${broker.name.toLowerCase().replace(/\s+/g, "-")}`} className="w-full">
+          <Button className="w-full" variant="outline">
+            View Review
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );

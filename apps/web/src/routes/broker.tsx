@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useParams, Link } from "react-router";
 import { ShieldCheck, Star, ExternalLink, MessageSquare, Scale, Globe, Calendar, Smartphone, Landmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,8 +21,12 @@ export default function BrokerDetail() {
               <h1 className="text-3xl font-bold">{brokerName}</h1>
               <div className="flex gap-2">
                 <Button><ExternalLink className="mr-2 h-4 w-4" /> Visit Website</Button>
-                <Button variant="outline"><MessageSquare className="mr-2 h-4 w-4" /> Write Review</Button>
-                <Button variant="secondary"><Scale className="mr-2 h-4 w-4" /> Compare</Button>
+                <Link to="/search">
+                  <Button variant="outline"><MessageSquare className="mr-2 h-4 w-4" /> Write Review</Button>
+                </Link>
+                <Link to="/compare">
+                  <Button variant="secondary"><Scale className="mr-2 h-4 w-4" /> Compare</Button>
+                </Link>
               </div>
             </div>
             
@@ -119,7 +123,9 @@ export default function BrokerDetail() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>User Reviews</CardTitle>
-              <Button size="sm" variant="outline">Write a Review</Button>
+              <Link to="/search">
+                <Button size="sm" variant="outline">Write a Review</Button>
+              </Link>
             </CardHeader>
             <CardContent className="space-y-6">
               {[

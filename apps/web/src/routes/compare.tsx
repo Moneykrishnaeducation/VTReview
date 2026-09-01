@@ -2,6 +2,7 @@ import { Search, ShieldCheck, X, Scale } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "react-router";
 
 export default function Compare() {
   return (
@@ -73,10 +74,14 @@ export default function Compare() {
             <tr>
               <td className="p-6 border-r"></td>
               <td className="p-6 border-r text-center">
-                <Button className="w-full">View Details</Button>
+                <Link to="/broker/ic-markets" className="w-full">
+                  <Button className="w-full">View Details</Button>
+                </Link>
               </td>
               <td className="p-6 border-r text-center">
-                <Button className="w-full">View Details</Button>
+                <Link to="/broker/exness" className="w-full">
+                  <Button className="w-full">View Details</Button>
+                </Link>
               </td>
               <td className="p-6"></td>
             </tr>
