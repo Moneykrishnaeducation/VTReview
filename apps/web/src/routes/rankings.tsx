@@ -62,7 +62,7 @@ export default function Rankings() {
                     <span className="flex items-center gap-1 text-yellow-500 font-medium">
                       <Star className="h-4 w-4 fill-yellow-500" /> {broker.rating}
                     </span>
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                       {broker.regulation}
                     </span>
                     <span>{broker.reviews} Reviews</span>

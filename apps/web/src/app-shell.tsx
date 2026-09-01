@@ -9,9 +9,10 @@ function RoutedLayout() {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="dark"
+      defaultTheme="light"
+      enableSystem
       disableTransitionOnChange
-      storageKey="vite-ui-theme"
+      storageKey="vtindex-theme"
     >
       <div className="flex min-h-svh flex-col">
         <Header />

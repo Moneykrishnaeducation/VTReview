@@ -111,7 +111,7 @@ export default function Home() {
                       </div>
                     </td>
                     <td className="py-4 px-4">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                         {b.regulation}
                       </span>
                     </td>
@@ -144,7 +144,7 @@ export default function Home() {
               { num: "3️⃣", text: "Read User Reviews" },
               { num: "4️⃣", text: "Make an Informed Decision" }
             ].map((step, i) => (
-              <div key={i} className="flex flex-col items-center bg-background p-4 rounded-xl shadow-sm border md:w-48">
+              <div key={i} className="flex flex-col items-center bg-card p-4 rounded-xl shadow-sm border md:w-48">
                 <div className="text-4xl mb-3">{step.num}</div>
                 <div className="font-semibold text-sm">{step.text}</div>
               </div>
@@ -223,12 +223,12 @@ export default function Home() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold mb-6 text-red-600 dark:text-red-400">Recent Trader Complaints & Issues</h2>
+            <h2 className="text-2xl font-bold mb-6 text-red-400">Recent Trader Complaints & Issues</h2>
             <div className="space-y-4">
               {[
-                { issue: "Withdrawal Issue", broker: "ScamBroker FX", status: "Under Review", statusColor: "text-yellow-600 bg-yellow-100" },
-                { issue: "Account Issue", broker: "TradeFast", status: "Resolved", statusColor: "text-green-600 bg-green-100" },
-                { issue: "Customer Support Complaint", broker: "Global Trade", status: "Investigating", statusColor: "text-blue-600 bg-blue-100" },
+                { issue: "Withdrawal Issue", broker: "ScamBroker FX", status: "Under Review", statusColor: "text-amber-300 bg-amber-500/20 border border-amber-500/30" },
+                { issue: "Account Issue", broker: "TradeFast", status: "Resolved", statusColor: "text-emerald-300 bg-emerald-500/20 border border-emerald-500/30" },
+                { issue: "Customer Support Complaint", broker: "Global Trade", status: "Investigating", statusColor: "text-sky-300 bg-sky-500/20 border border-sky-500/30" },
               ].map((complaint, i) => (
                 <Card key={i} className="border-l-4 border-l-red-500">
                   <CardContent className="pt-4 pb-4 flex justify-between items-center">
@@ -238,7 +238,7 @@ export default function Home() {
                       </div>
                       <div className="text-sm text-muted-foreground">{complaint.broker}</div>
                     </div>
-                    <div className={`text-xs font-medium px-2.5 py-1 rounded-full ${complaint.statusColor} dark:bg-opacity-20`}>
+                    <div className={`text-xs font-medium px-2.5 py-1 rounded-full ${complaint.statusColor}`}>
                       {complaint.status}
                     </div>
                   </CardContent>

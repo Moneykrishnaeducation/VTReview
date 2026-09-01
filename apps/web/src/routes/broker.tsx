@@ -30,7 +30,7 @@ export default function BrokerDetail() {
               <div className="flex items-center gap-1 text-yellow-500 font-medium text-lg">
                 <Star className="h-5 w-5 fill-yellow-500" /> 4.8 / 5
               </div>
-              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                 <ShieldCheck className="mr-1 h-4 w-4" /> REGULATED
               </div>
             </div>
