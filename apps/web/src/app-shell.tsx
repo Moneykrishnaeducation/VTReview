@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 
 import Header from "@/components/header";
+import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -12,9 +13,12 @@ function RoutedLayout() {
       disableTransitionOnChange
       storageKey="vite-ui-theme"
     >
-      <div className="grid h-svh grid-rows-[auto_1fr]">
+      <div className="flex min-h-svh flex-col">
         <Header />
-        <Outlet />
+        <main className="flex-1">
+          <Outlet />
+        </main>
+        <Footer />
       </div>
       <Toaster richColors />
     </ThemeProvider>
