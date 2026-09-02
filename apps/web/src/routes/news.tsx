@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router";
 import {
   Newspaper,
@@ -9,9 +9,13 @@ import {
   Loader2,
   RefreshCw,
   SlidersHorizontal,
+  Wifi,
+  CheckCircle2,
+  Radio,
 } from "lucide-react";
 import type { NewsArticle, NewsCategory } from "@/types/news";
 import { NEWS_ARTICLES } from "@/data/news-data";
+import { fetchLiveMT5News, getLiveBreakingAlerts } from "@/services/mt5-news-service";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import NewsTicker from "@/components/news/news-ticker";
@@ -35,6 +39,41 @@ export default function NewsPage() {
   const [sortBy, setSortBy] = useState<"latest" | "popular" | "trending">("latest");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
+  // Live MT5 News State
+  const [articles, setArticles] = useState<NewsArticle[]>(NEWS_ARTICLES);
+  const [isLiveLoading, setIsLiveLoading] = useState(false);
+  const [feedStatus, setFeedStatus] = useState({
+    source: "Connecting to MT5 Live Terminal Feed...",
+    isLive: false,
+    lastSync: new Date().toLocaleTimeString(),
+  });
+
+  const loadLiveFeed = useCallback(async () => {
+    setIsLiveLoading(true);
+    try {
+      const result = await fetchLiveMT5News();
+      setArticles(result.articles);
+      setFeedStatus({
+        source: result.source,
+        isLive: result.isLive,
+        lastSync: new Date().toLocaleTimeString(),
+      });
+    } catch (err) {
+      console.error("Error loading MT5 live feed:", err);
+    } finally {
+      setIsLiveLoading(false);
+    }
+  }, []);
+
+  // Initial load and periodic polling (every 60s)
+  useEffect(() => {
+    loadLiveFeed();
+    const interval = setInterval(() => {
+      loadLiveFeed();
+    }, 60000);
+    return () => clearInterval(interval);
+  }, [loadLiveFeed]);
+
   // Bookmarks state (in-memory, initialized from localStorage if available)
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
     try {
@@ -56,14 +95,14 @@ export default function NewsPage() {
   useEffect(() => {
     const articleSlug = searchParams.get("article");
     if (articleSlug) {
-      const found = NEWS_ARTICLES.find(
+      const found = articles.find(
         (a) => a.slug === articleSlug || a.id === articleSlug,
       );
       if (found) {
         setSelectedArticle(found);
       }
     }
-  }, [searchParams]);
+  }, [searchParams, articles]);
 
   // Sync bookmarks to localStorage
   const toggleBookmark = (id: string) => {
@@ -80,7 +119,7 @@ export default function NewsPage() {
 
   // Filter and sort articles
   const filteredArticles = useMemo(() => {
-    return NEWS_ARTICLES.filter((article) => {
+    return articles.filter((article) => {
       // Tab filter
       if (activeTab === "warnings") {
         if (article.category !== "Regulation & Alerts" && article.sentiment !== "High Alert") {
@@ -136,6 +175,7 @@ export default function NewsPage() {
       return 0; // Default latest order
     });
   }, [
+    articles,
     activeTab,
     selectedCategory,
     selectedSentiment,
@@ -174,14 +214,16 @@ export default function NewsPage() {
     setActiveTab("all");
   };
 
+  const liveAlerts = useMemo(() => getLiveBreakingAlerts(articles), [articles]);
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* 1. Live Market & Breaking Alerts Ticker */}
-      <NewsTicker />
+      <NewsTicker alerts={liveAlerts} />
 
       <main className="container mx-auto px-4 py-8 lg:px-8 flex-1">
         {/* 2. Page Header & View Tabs */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b pb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-6 border-b pb-6">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20 mb-3">
               <Sparkles className="h-3.5 w-3.5" /> VTINDEX Market Intelligence
@@ -239,10 +281,41 @@ export default function NewsPage() {
           </div>
         </div>
 
+        {/* 2.5 Live MT5 Terminal Status & Sync Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-card border shadow-xs text-xs mb-6">
+          <div className="flex items-center gap-2.5">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${feedStatus.isLive ? "bg-emerald-400 opacity-75" : "bg-sky-400 opacity-75"}`}></span>
+              <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${feedStatus.isLive ? "bg-emerald-500" : "bg-sky-500"}`}></span>
+            </span>
+            <div>
+              <span className="font-bold text-foreground">
+                {feedStatus.isLive ? "MT5 Live News Stream (Connected)" : "MT5 Terminal Feed (Live Gateway)"}
+              </span>
+              <span className="text-muted-foreground ml-2 hidden sm:inline">
+                • Source: <strong className="text-primary font-semibold">{feedStatus.source}</strong> • Synced: {feedStatus.lastSync}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={loadLiveFeed}
+              disabled={isLiveLoading}
+              className="h-8 px-3 text-xs font-semibold rounded-lg gap-1.5"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${isLiveLoading ? "animate-spin text-primary" : ""}`} />
+              <span>{isLiveLoading ? "Syncing MT5 Feeds..." : "Fetch Latest Live News"}</span>
+            </Button>
+          </div>
+        </div>
+
         {/* 3. Hero Feature Section (Only on "all" tab and when no active search) */}
         {activeTab === "all" && !searchQuery && selectedCategory === "All" && !selectedTag && (
           <NewsHero
-            articles={NEWS_ARTICLES}
+            articles={articles}
             onSelectArticle={handleSelectArticle}
           />
         )}
@@ -363,7 +436,7 @@ export default function NewsPage() {
       {/* 6. Article Detail Modal / Reader View */}
       <NewsDetailDialog
         article={selectedArticle}
-        allArticles={NEWS_ARTICLES}
+        allArticles={articles}
         isBookmarked={selectedArticle ? bookmarkedIds.includes(selectedArticle.id) : false}
         onToggleBookmark={toggleBookmark}
         onClose={handleCloseModal}
@@ -372,3 +445,4 @@ export default function NewsPage() {
     </div>
   );
 }
+
