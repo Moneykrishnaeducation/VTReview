@@ -77,7 +77,7 @@ export default function Header() {
   return (
     <>
       {/* 1. Top Micro Bar: Live Intelligence & Trust Ribbon */}
-      <div className="bg-slate-900 text-slate-300 text-[11px] py-1 px-4 border-b border-slate-800 hidden sm:block">
+      <div className="bg-[#0c1c45] text-slate-300 text-[11px] py-1 px-4 border-b border-white/10 hidden sm:block">
         <div className="container mx-auto flex items-center justify-between h-5">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1.5 text-emerald-400 font-medium">

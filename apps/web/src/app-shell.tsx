@@ -9,7 +9,7 @@ function RoutedLayout() {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="light"
+      defaultTheme="dark"
       enableSystem
       disableTransitionOnChange
       storageKey="vtindex-theme"
