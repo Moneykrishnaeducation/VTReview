@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { useState } from "react";
 import { useParams, Link } from "react-router";
 import {
@@ -21,10 +20,6 @@ import {
   ThumbsUp,
   Info,
 } from "lucide-react";
-=======
-import { useParams, Link } from "react-router";
-import { ShieldCheck, Star, ExternalLink, MessageSquare, Scale, Globe, Calendar, Smartphone, Landmark } from "lucide-react";
->>>>>>> 4448f3a5493171882e068651409b84f2eef8fce6
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -91,7 +86,6 @@ export default function BrokerDetail() {
   };
 
   return (
-<<<<<<< HEAD
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Breadcrumb Navigation */}
       <div className="flex items-center gap-2 text-xs text-muted-foreground mb-6">
@@ -111,27 +105,6 @@ export default function BrokerDetail() {
           <div className="flex flex-col items-center shrink-0">
             <div className="flex h-28 w-28 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 via-primary/5 to-muted text-primary text-4xl font-black border-2 border-primary/30 shadow-md">
               {broker.logo}
-=======
-    <div className="container mx-auto px-4 py-8 max-w-5xl">
-      {/* Broker Header */}
-      <Card className="mb-8 border-t-4 border-t-primary">
-        <CardContent className="pt-8 pb-8 flex flex-col md:flex-row items-center md:items-start gap-8">
-          <div className="flex h-32 w-32 items-center justify-center rounded-xl bg-muted text-4xl font-bold shrink-0">
-            {brokerName.substring(0, 2)}
-          </div>
-          <div className="flex-1 text-center md:text-left space-y-4">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <h1 className="text-3xl font-bold">{brokerName}</h1>
-              <div className="flex gap-2">
-                <Button><ExternalLink className="mr-2 h-4 w-4" /> Visit Website</Button>
-                <Link to="/search">
-                  <Button variant="outline"><MessageSquare className="mr-2 h-4 w-4" /> Write Review</Button>
-                </Link>
-                <Link to="/compare">
-                  <Button variant="secondary"><Scale className="mr-2 h-4 w-4" /> Compare</Button>
-                </Link>
-              </div>
->>>>>>> 4448f3a5493171882e068651409b84f2eef8fce6
             </div>
             <Badge variant="outline" className="mt-3 text-xs font-bold text-emerald-500 border-emerald-500/30 bg-emerald-500/10">
               <ShieldCheck className="mr-1 h-3.5 w-3.5 text-emerald-500" /> {broker.regulatoryStatus}
@@ -289,36 +262,10 @@ export default function BrokerDetail() {
                     {broker.name} is an internationally recognized multi-asset brokerage established in {broker.established}. Headquartered in {broker.headquarters}, it delivers institutional-grade liquidity, low latency connectivity to global server hubs, and true ECN/STP execution models for retail and institutional traders.
                   </p>
 
-<<<<<<< HEAD
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t text-xs">
                     <div className="flex justify-between py-2 border-b border-border/40">
                       <span className="text-muted-foreground">Headquarters:</span>
                       <span className="font-bold text-foreground">{broker.headquarters}</span>
-=======
-          {/* User Reviews */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>User Reviews</CardTitle>
-              <Link to="/search">
-                <Button size="sm" variant="outline">Write a Review</Button>
-              </Link>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {[
-                { name: "John Doe", rating: 5, date: "2 days ago", content: "Excellent execution speed. Withdrawals are processed within hours." },
-                { name: "Trader2026", rating: 4, date: "1 week ago", content: "Good platform, low spreads, but customer support took a while to respond during peak hours." }
-              ].map((review, i) => (
-                <div key={i} className="border-b last:border-0 pb-6 last:pb-0">
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-xs text-primary">
-                        {review.name.substring(0,2).toUpperCase()}
-                      </div>
-                      <div>
-                        <div className="font-medium text-sm">{review.name}</div>
-                        <div className="text-xs text-muted-foreground">{review.date}</div>
-                      </div>
->>>>>>> 4448f3a5493171882e068651409b84f2eef8fce6
                     </div>
                     <div className="flex justify-between py-2 border-b border-border/40">
                       <span className="text-muted-foreground">Established:</span>
