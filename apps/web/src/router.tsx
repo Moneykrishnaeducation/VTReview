@@ -8,6 +8,9 @@ import Compare from "./routes/compare";
 import Search from "./routes/search";
 import AdminDashboard from "./routes/admin";
 import News from "./routes/news";
+import Reviews from "./routes/reviews";
+import Regulators from "./routes/regulators";
+import About from "./routes/about";
 
 function NotFound() {
   return (
@@ -29,6 +32,9 @@ export const router = createBrowserRouter([
       { path: "compare", element: <Compare /> },
       { path: "search", element: <Search /> },
       { path: "news", element: <News /> },
+      { path: "reviews", element: <Reviews /> },
+      { path: "regulators", element: <Regulators /> },
+      { path: "about", element: <About /> },
       { path: "admin", element: <AdminDashboard /> },
       { path: "*", element: <NotFound /> },
     ],

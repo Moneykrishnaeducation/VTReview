@@ -15,9 +15,14 @@ import {
   Minus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { RANKED_BROKERS } from "@/data/rankings-data";
+=======
+import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "react-router";
+>>>>>>> 4448f3a5493171882e068651409b84f2eef8fce6
 
 export default function Compare() {
   const [selectedIds, setSelectedIds] = useState<string[]>([
@@ -114,6 +119,7 @@ export default function Compare() {
                 </Badge>
               </div>
             ))}
+<<<<<<< HEAD
 
             {/* Empty Slot to Add Broker */}
             {selectedBrokers.length < 4 && (
@@ -256,6 +262,24 @@ export default function Compare() {
             </div>
           </div>
         </div>
+=======
+            <tr>
+              <td className="p-6 border-r"></td>
+              <td className="p-6 border-r text-center">
+                <Link to="/broker/ic-markets" className="w-full">
+                  <Button className="w-full">View Details</Button>
+                </Link>
+              </td>
+              <td className="p-6 border-r text-center">
+                <Link to="/broker/exness" className="w-full">
+                  <Button className="w-full">View Details</Button>
+                </Link>
+              </td>
+              <td className="p-6"></td>
+            </tr>
+          </tbody>
+        </table>
+>>>>>>> 4448f3a5493171882e068651409b84f2eef8fce6
       </div>
 
       {/* Add Broker Modal */}

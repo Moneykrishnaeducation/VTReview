@@ -2,7 +2,11 @@ import { Link } from "react-router";
 import { ShieldCheck, Calendar, Globe, Star, ArrowUpRight, Scale, Zap, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import { Badge } from "@/components/ui/badge";
+=======
+import { Link } from "react-router";
+>>>>>>> 4448f3a5493171882e068651409b84f2eef8fce6
 
 export interface BrokerCardData {
   id?: string;
@@ -134,6 +138,7 @@ export default function BrokerCard({ broker }: { broker: BrokerCardData }) {
           </div>
         )}
       </CardContent>
+<<<<<<< HEAD
 
       <CardFooter className="pt-3 border-t bg-muted/10 flex gap-2">
         <Link to={`/broker/${brokerId}`} className="flex-1">
@@ -144,6 +149,12 @@ export default function BrokerCard({ broker }: { broker: BrokerCardData }) {
         <Link to={`/compare`}>
           <Button size="icon" variant="ghost" className="h-9 w-9 text-muted-foreground hover:text-foreground" title="Compare Broker">
             <Scale className="h-4 w-4" />
+=======
+      <CardFooter className="pt-4 border-t">
+        <Link to={`/broker/${broker.name.toLowerCase().replace(/\s+/g, "-")}`} className="w-full">
+          <Button className="w-full" variant="outline">
+            View Review
+>>>>>>> 4448f3a5493171882e068651409b84f2eef8fce6
           </Button>
         </Link>
       </CardFooter>
