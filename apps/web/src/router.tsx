@@ -2,21 +2,31 @@ import { createBrowserRouter } from "react-router";
 
 import AppShell from "./app-shell";
 import Home from "./routes/home";
-import BrokerDetail from "./routes/broker";
-import Rankings from "./routes/rankings";
-import Compare from "./routes/compare";
-import Search from "./routes/search";
-import AdminDashboard from "./routes/admin";
-import News from "./routes/news";
-import Reviews from "./routes/reviews";
-import Regulators from "./routes/regulators";
-import About from "./routes/about";
+import BrokerDirectory from "./routes/broker-directory";
+import BrokerReviewDetail from "./routes/broker-review-detail";
+import ComparisonBuilder from "./routes/comparison-builder";
+import BrokerFinderWizard from "./routes/broker-finder-wizard";
+import BestBrokersCategory from "./routes/best-brokers-category";
+import RegulationHub from "./routes/regulation-hub";
+import RegulatorDetail from "./routes/regulator-detail";
+import UserReviewsHub from "./routes/user-reviews-hub";
+import WriteReviewFlow from "./routes/write-review-flow";
+import GuidesHub from "./routes/guides-hub";
+import ToolsDashboard from "./routes/tools-dashboard";
+import ComplaintsHub from "./routes/complaints-hub";
+import RatingMethodology from "./routes/rating-methodology";
 
 function NotFound() {
   return (
-    <main className="container mx-auto max-w-3xl px-4 py-8">
-      <h1 className="text-2xl font-semibold">404</h1>
-      <p className="text-muted-foreground">The requested page could not be found.</p>
+    <main className="max-w-[1240px] mx-auto px-4 py-16 text-center">
+      <div className="h-12 w-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto mb-3 font-bold text-lg">
+        404
+      </div>
+      <h1 className="text-2xl font-black text-slate-900 dark:text-white mb-2">Page Not Found</h1>
+      <p className="text-xs text-slate-500 mb-6">The requested wireframe screen does not exist.</p>
+      <a href="/" className="px-4 py-2 bg-slate-900 text-white rounded text-xs font-bold">
+        Return to Wireframe Home
+      </a>
     </main>
   );
 }
@@ -27,15 +37,22 @@ export const router = createBrowserRouter([
     element: <AppShell />,
     children: [
       { index: true, element: <Home /> },
-      { path: "broker/:id", element: <BrokerDetail /> },
-      { path: "rankings", element: <Rankings /> },
-      { path: "compare", element: <Compare /> },
-      { path: "search", element: <Search /> },
-      { path: "news", element: <News /> },
-      { path: "reviews", element: <Reviews /> },
-      { path: "regulators", element: <Regulators /> },
-      { path: "about", element: <About /> },
-      { path: "admin", element: <AdminDashboard /> },
+      { path: "brokers", element: <BrokerDirectory /> },
+      { path: "brokers/:id", element: <BrokerReviewDetail /> },
+      { path: "broker/:id", element: <BrokerReviewDetail /> },
+      { path: "compare", element: <ComparisonBuilder /> },
+      { path: "tools/broker-finder", element: <BrokerFinderWizard /> },
+      { path: "best-brokers/:category", element: <BestBrokersCategory /> },
+      { path: "regulation", element: <RegulationHub /> },
+      { path: "regulation/:regulatorId", element: <RegulatorDetail /> },
+      { path: "reviews", element: <UserReviewsHub /> },
+      { path: "reviews/write", element: <WriteReviewFlow /> },
+      { path: "guides", element: <GuidesHub /> },
+      { path: "guides/:slug", element: <GuidesHub /> },
+      { path: "tools", element: <ToolsDashboard /> },
+      { path: "tools/cost-calculator", element: <ToolsDashboard /> },
+      { path: "complaints", element: <ComplaintsHub /> },
+      { path: "how-we-rate", element: <RatingMethodology /> },
       { path: "*", element: <NotFound /> },
     ],
   },

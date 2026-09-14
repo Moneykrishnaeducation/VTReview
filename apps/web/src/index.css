@@ -4,157 +4,208 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* HIGH-FIDELITY FINANCIAL RESEARCH DESIGN SYSTEM TOKENS */
 :root {
-  --background: #132d6f;
-  --foreground: #f8fafc;
-  --card: #183785;
-  --card-foreground: #f8fafc;
-  --popover: #16337a;
-  --popover-foreground: #f8fafc;
-  --primary: #38bdf8;
-  --primary-foreground: #08122d;
-  --secondary: #1c3e94;
-  --secondary-foreground: #f8fafc;
-  --muted: #193887;
-  --muted-foreground: #cbd5e1;
-  --accent: #234cb3;
-  --accent-foreground: #ffffff;
-  --destructive: #ef4444;
+  /* Core Neutrals - Deep Slate / Crisp Editorial */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  /* Brand / Primary - Institutional Navy & Slate Blue */
+  --primary: #0f172a;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #1e293b;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #e2e8f0;
+  --accent-foreground: #0f172a;
+  --destructive: #e11d48;
   --destructive-foreground: #ffffff;
-  --border: rgba(255, 255, 255, 0.14);
-  --input: rgba(255, 255, 255, 0.18);
-  --ring: #38bdf8;
-  --chart-1: #38bdf8;
-  --chart-2: #10b981;
-  --chart-3: #f59e0b;
-  --chart-4: #8b5cf6;
-  --chart-5: #ec4899;
-  --sidebar: #0e2358;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #38bdf8;
-  --sidebar-primary-foreground: #08122d;
-  --sidebar-accent: #183785;
-  --sidebar-accent-foreground: #f8fafc;
-  --sidebar-border: rgba(255, 255, 255, 0.14);
-  --sidebar-ring: #38bdf8;
-  --radius: 0.75rem;
+  --border: #e2e8f0;
+  --input: #cbd5e1;
+  --ring: #2563eb;
+
+  /* Financial Research Semantic Accents */
+  --trust-verified: #059669;
+  --trust-verified-bg: #ecfdf5;
+  --trust-verified-border: #a7f3d0;
+
+  --tier1-reg: #047857;
+  --tier1-reg-bg: #ecfdf5;
+  --tier1-reg-border: #6ee7b7;
+
+  --tier2-reg: #b45309;
+  --tier2-reg-bg: #fffbeb;
+  --tier2-reg-border: #fde68a;
+
+  --risk-warning: #be123c;
+  --risk-warning-bg: #fff1f2;
+  --risk-warning-border: #fecdd3;
+
+  --editorial-accent: #1d4ed8;
+  --editorial-accent-bg: #eff6ff;
+
+  --score-badge: #d97706;
+  --score-badge-bg: #fffbeb;
+
+  --chart-1: #0f172a;
+  --chart-2: #2563eb;
+  --chart-3: #059669;
+  --chart-4: #d97706;
+  --chart-5: #64748b;
+  --radius: 0.5rem;
 }
 
 .dark {
-  --background: #132d6f;
+  --background: #090d16;
   --foreground: #f8fafc;
-  --card: #0e2358;
+  --card: #0f172a;
   --card-foreground: #f8fafc;
-  --popover: #0e2358;
+  --popover: #0f172a;
   --popover-foreground: #f8fafc;
-  --primary: #38bdf8;
-  --primary-foreground: #08122d;
-  --secondary: #183785;
+  --primary: #f8fafc;
+  --primary-foreground: #0f172a;
+  --secondary: #1e293b;
   --secondary-foreground: #f8fafc;
-  --muted: #152f75;
+  --muted: #1e293b;
   --muted-foreground: #94a3b8;
-  --accent: #1c3e94;
-  --accent-foreground: #bae6fd;
-  --destructive: #f87171;
+  --accent: #334155;
+  --accent-foreground: #f8fafc;
+  --destructive: #f43f5e;
   --destructive-foreground: #ffffff;
-  --border: rgba(255, 255, 255, 0.12);
-  --input: rgba(255, 255, 255, 0.16);
-  --ring: #38bdf8;
-  --chart-1: #38bdf8;
-  --chart-2: #34d399;
-  --chart-3: #fbbf24;
-  --chart-4: #a78bfa;
-  --chart-5: #f472b6;
-  --sidebar: #0b1c47;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #38bdf8;
-  --sidebar-primary-foreground: #08122d;
-  --sidebar-accent: #0e2358;
-  --sidebar-accent-foreground: #f8fafc;
-  --sidebar-border: rgba(255, 255, 255, 0.12);
-  --sidebar-ring: #38bdf8;
+  --border: #334155;
+  --input: #334155;
+  --ring: #3b82f6;
+
+  --trust-verified: #10b981;
+  --trust-verified-bg: rgba(6, 78, 59, 0.4);
+  --trust-verified-border: #065f46;
+
+  --tier1-reg: #34d399;
+  --tier1-reg-bg: rgba(6, 78, 59, 0.4);
+  --tier1-reg-border: #047857;
+
+  --tier2-reg: #fbbf24;
+  --tier2-reg-bg: rgba(120, 53, 15, 0.4);
+  --tier2-reg-border: #92400e;
+
+  --risk-warning: #fb7185;
+  --risk-warning-bg: rgba(136, 19, 55, 0.4);
+  --risk-warning-border: #9f1239;
+
+  --editorial-accent: #60a5fa;
+  --editorial-accent-bg: rgba(30, 58, 138, 0.4);
+
+  --score-badge: #f59e0b;
+  --score-badge-bg: rgba(120, 53, 15, 0.3);
+
+  --chart-1: #f8fafc;
+  --chart-2: #60a5fa;
+  --chart-3: #34d399;
+  --chart-4: #fbbf24;
+  --chart-5: #94a3b8;
 }
 
 @theme inline {
-  --font-sans: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --color-foreground: var(--foreground);
-  --color-background: var(--background);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply font-sans bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
-  }
-  html {
-    @apply font-sans scroll-smooth;
-  }
+body {
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.011em;
 }
 
-/* Glassmorphism and Custom Gradients */
-.glass-card {
-  background: rgba(var(--card), 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
+/* Tabular numbers for financial metrics and spread tables */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
 
-.glow-mesh {
-  background-image: 
-    radial-gradient(at 10% 20%, rgba(2, 132, 199, 0.08) 0px, transparent 50%),
-    radial-gradient(at 90% 10%, rgba(16, 185, 129, 0.06) 0px, transparent 50%),
-    radial-gradient(at 50% 80%, rgba(99, 102, 241, 0.07) 0px, transparent 50%);
+/* Hi-Fi Financial Research Badges */
+.badge-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+.dark .badge-verified {
+  background-color: rgba(6, 78, 59, 0.4);
+  color: #34d399;
+  border-color: #065f46;
 }
 
-.dark .glow-mesh {
-  background-image: 
-    radial-gradient(at 10% 20%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
-    radial-gradient(at 90% 10%, rgba(52, 211, 153, 0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 80%, rgba(129, 140, 248, 0.1) 0px, transparent 50%);
+.badge-tier1 {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  background-color: #ecfdf5;
+  color: #047857;
+  border: 1px solid #6ee7b7;
+}
+.dark .badge-tier1 {
+  background-color: rgba(6, 78, 59, 0.4);
+  color: #34d399;
+  border-color: #047857;
 }
 
-.grid-bg {
-  background-size: 32px 32px;
-  background-image: linear-gradient(to right, var(--border) 1px, transparent 1px),
-                    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+/* Wireframe / Prototype Annotation styling (Subtle & Toggleable) */
+.ux-annotation {
+  border: 1px dashed #2563eb;
+  background-color: rgba(37, 99, 235, 0.04);
+  position: relative;
+}
+
+.ux-annotation-tag {
+  position: absolute;
+  top: -0.65rem;
+  left: 0.75rem;
+  background-color: #1d4ed8;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 0.25rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  z-index: 20;
 }
