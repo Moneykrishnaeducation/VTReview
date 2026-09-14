@@ -11,9 +11,9 @@ export interface SeoMetadata {
 }
 
 export function generatePageTitle(pageName?: string): string {
-  const base = "VTReview — Independent Forex Broker Research & Discovery";
+  const base = "WikiiFX — Global Forex Broker Regulatory Inquiry & Safety Research Platform";
   if (!pageName) return base;
-  return `${pageName} | VTReview`;
+  return `${pageName} | WikiiFX`;
 }
 
 /**
@@ -48,7 +48,7 @@ export function generateBrokerJsonLd(broker: {
       worstRating: "1.0",
       ratingCount: broker.reviewCount,
     },
-    url: `https://vtreview.com/brokers/${broker.slug}`,
+    url: `https://wikiifx.com/brokers/${broker.slug}`,
   };
 }
 

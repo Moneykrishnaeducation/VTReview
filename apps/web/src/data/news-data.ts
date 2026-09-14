@@ -76,7 +76,7 @@ export const NEWS_ARTICLES: NewsArticle[] = [
         author: "David K.",
         avatar: "DK",
         date: "15 mins ago",
-        content: "Almost fell for one of these clone domains last month! They had an exact copy of the login portal. Thank goodness VTReview flagged the domain mismatch.",
+        content: "Almost fell for one of these clone domains last month! They had an exact copy of the login portal. Thank goodness WikiiFX flagged the domain mismatch.",
         likes: 14,
       },
       {

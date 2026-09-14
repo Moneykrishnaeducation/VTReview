@@ -85,15 +85,15 @@ export default function GlobalHeader() {
           {/* Logo */}
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center gap-2 group">
-              <div className="h-8 w-8 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-black rounded flex items-center justify-center text-base tracking-tighter shadow-xs">
-                VR
+              <div className="h-8 w-8 bg-amber-500 text-slate-950 font-black rounded-lg flex items-center justify-center text-sm tracking-tighter shadow-xs">
+                WFX
               </div>
               <div className="flex flex-col">
                 <span className="font-extrabold text-slate-900 dark:text-white tracking-tight text-base leading-none">
-                  VT<span className="text-slate-500 font-semibold">REVIEW</span>
+                  Wikii<span className="text-amber-500 font-black">FX</span>
                 </span>
                 <span className="text-[9px] uppercase tracking-wider text-slate-500 font-semibold leading-tight">
-                  Independent Research
+                  Regulatory Inquiry
                 </span>
               </div>
             </Link>
@@ -732,7 +732,7 @@ export default function GlobalHeader() {
             </div>
             <div className="space-y-3 text-slate-600 dark:text-slate-300 leading-relaxed">
               <p>
-                <strong>VTReview</strong> is an independent financial research and comparison platform. We are committed to transparency and objectivity in all our evaluations.
+                <strong>WikiiFX</strong> is an independent financial research and regulatory inquiry platform. We are committed to transparency and objectivity in all our evaluations.
               </p>
               <p>
                 To support our extensive testing and direct regulatory audits, we may receive compensation when you open an account through links on our site.

@@ -52,7 +52,7 @@ export default function AppShell() {
       defaultTheme="light"
       enableSystem
       disableTransitionOnChange
-      storageKey="vtreview-wireframe-theme"
+      storageKey="wikiifx-theme"
     >
       <AuthProvider>
         <ComparisonProvider>

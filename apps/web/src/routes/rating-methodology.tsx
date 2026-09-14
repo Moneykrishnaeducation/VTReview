@@ -96,7 +96,7 @@ export default function RatingMethodology() {
           </h1>
 
           <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
-            Every broker score on VTReview is calculated mathematically from over 120 audited data points across five weighted evaluation pillars. Commercial partnerships never influence our formulas or rankings.
+            Every broker score on WikiiFX is calculated mathematically from over 120 audited data points across five weighted evaluation pillars. Commercial partnerships never influence our formulas or rankings.
           </p>
         </div>
 

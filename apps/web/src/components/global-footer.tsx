@@ -11,11 +11,11 @@ export default function GlobalFooter() {
           {/* Col 1: Platform Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-3">
-              <div className="h-7 w-7 bg-white text-slate-900 font-black rounded flex items-center justify-center text-sm">
-                VR
+              <div className="h-7 w-7 bg-amber-500 text-slate-950 font-black rounded-lg flex items-center justify-center text-xs tracking-tighter">
+                WFX
               </div>
               <span className="font-extrabold text-white text-base tracking-tight">
-                VT<span className="text-slate-400 font-normal">REVIEW</span>
+                Wikii<span className="text-amber-500 font-black">FX</span>
               </span>
             </div>
             <p className="text-[11px] leading-relaxed text-slate-400 mb-3">
@@ -93,11 +93,11 @@ export default function GlobalFooter() {
           </div>
 
           <p>
-            <strong>Advertiser Disclosure:</strong> VTReview is an independent comparison website supported by referral commissions. We may receive financial compensation when visitors click on affiliate links to broker websites. This compensation does not influence our rigorous editorial ratings, test scores, or algorithmic ranking formulas. We do not accept payment to artificially alter broker scores or promote unregulated offshore entities.
+            <strong>Advertiser Disclosure:</strong> WikiiFX is an independent comparison website supported by referral commissions. We may receive financial compensation when visitors click on affiliate links to broker websites. This compensation does not influence our rigorous editorial ratings, test scores, or algorithmic ranking formulas. We do not accept payment to artificially alter broker scores or promote unregulated offshore entities.
           </p>
 
           <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-slate-900 text-slate-500 text-[10px]">
-            <div>© 2026 VTReview Research Media Group. All rights reserved. Independent Financial Research.</div>
+            <div>© 2026 WikiiFX Regulatory Inquiry & Research Media Group. All rights reserved. Independent Financial Research.</div>
             <div className="flex gap-4">
               <span>Security Audited</span>
               <span>•</span>
