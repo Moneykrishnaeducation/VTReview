@@ -11,6 +11,7 @@ export default function WireframeToolbar() {
     { name: "Screen 01: Homepage", path: "/" },
     { name: "Screen 02: Broker Directory", path: "/brokers" },
     { name: "Screen 03: Broker Review (Pepperstone)", path: "/brokers/pepperstone" },
+    { name: "Screen 03b: Broker Review (VTIndex)", path: "/brokers/vtindex" },
     { name: "Screen 04: Comparison Builder", path: "/compare" },
     { name: "Screen 05: Broker Finder (5-Step)", path: "/tools/broker-finder" },
     { name: "Screen 06: Best for Beginners", path: "/best-brokers/beginners" },

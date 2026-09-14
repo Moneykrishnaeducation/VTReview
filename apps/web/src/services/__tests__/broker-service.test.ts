@@ -31,6 +31,11 @@ describe("BrokerService Data Access & Domain Queries", () => {
     expect(broker).not.toBeNull();
     expect(broker?.name).toBe("Pepperstone");
     expect(broker?.ratingsBreakdown).toBeDefined();
+
+    const vtindex = await brokerService.getBrokerBySlug("vtindex");
+    expect(vtindex).not.toBeNull();
+    expect(vtindex?.name).toBe("VTIndex");
+    expect(vtindex?.affiliateUrl).toBe("https://vtindex.com");
   });
 
   it("returns null for non-existent broker slug", async () => {
