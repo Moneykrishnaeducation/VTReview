@@ -33,12 +33,23 @@ pool.connect((err, client, release) => {
   });
 });
 
-// Basic Route
-app.get('/', (req, res) => {
-  res.send('PERN Stack Backend is running!');
+const path = require('path');
+
+// API Routes
+app.get('/api/status', (req, res) => {
+  res.json({ message: 'API is working!', status: 'success' });
+});
+
+// Serve frontend static files
+const frontendDistPath = path.join(__dirname, 'static');
+app.use(express.static(frontendDistPath));
+
+// Catch-all route to serve React app for non-API requests
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendDistPath, 'index.html'));
 });
 
 // Start Server
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Server is running on port: ${port}`);
 });
