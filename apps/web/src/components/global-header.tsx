@@ -18,6 +18,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { BROKERS } from "@/data/broker-directory-data";
+import logo from "@/assets/logo.png";
 
 export default function GlobalHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -31,12 +32,12 @@ export default function GlobalHeader() {
   // Search filtering
   const filteredBrokers = searchQuery.trim()
     ? BROKERS.filter(
-        (b) =>
-          b.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          b.primaryLicense.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          b.platforms.some((p) => p.toLowerCase().includes(searchQuery.toLowerCase())) ||
-          b.executionModel.toLowerCase().includes(searchQuery.toLowerCase())
-      ).slice(0, 5)
+      (b) =>
+        b.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        b.primaryLicense.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        b.platforms.some((p) => p.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        b.executionModel.toLowerCase().includes(searchQuery.toLowerCase())
+    ).slice(0, 5)
     : [];
 
   const handleMouseEnter = (menuName: string) => {
@@ -52,50 +53,17 @@ export default function GlobalHeader() {
 
   return (
     <>
-      <header className="sticky top-[33px] z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-xs">
-        {/* Top Utility Line: Advertiser Disclosure & Regulatory Audit Note */}
-        <div className="bg-slate-100 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 px-4 py-1 text-[11px] text-slate-600 dark:text-slate-400">
-          <div className="max-w-[1240px] mx-auto flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 font-medium text-slate-700 dark:text-slate-300">
-                <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                Independent Financial Research Standard
-              </span>
-              <span className="hidden md:inline text-slate-400">•</span>
-              <span className="hidden md:inline">Audited Spreads & Direct Regulator Register Verification</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setShowAffiliateModal(true)}
-                className="hover:underline text-slate-600 dark:text-slate-400 flex items-center gap-1 cursor-pointer"
-              >
-                <Info className="h-3 w-3" />
-                Advertiser Disclosure
-              </button>
-              <span>•</span>
-              <Link to="/how-we-rate" className="hover:underline font-medium text-slate-700 dark:text-slate-300">
-                Rating Methodology
-              </Link>
-            </div>
-          </div>
-        </div>
-
+      <header className="sticky top-[0px] z-40 bg-slate-950 border-b border-slate-800 shadow-md">
         {/* Main Desktop Header */}
         <div className="max-w-[1240px] mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
           {/* Logo */}
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center gap-2 group">
-              <div className="h-8 w-8 bg-amber-500 text-slate-950 font-black rounded-lg flex items-center justify-center text-sm tracking-tighter shadow-xs">
-                WFX
-              </div>
-              <div className="flex flex-col">
-                <span className="font-extrabold text-slate-900 dark:text-white tracking-tight text-base leading-none">
-                  Wikii<span className="text-amber-500 font-black">FX</span>
-                </span>
-                <span className="text-[9px] uppercase tracking-wider text-slate-500 font-semibold leading-tight">
-                  Regulatory Inquiry
-                </span>
-              </div>
+              <img
+                src={logo}
+                alt="WikiIFX"
+                className="h-10 w-auto object-contain"
+              />
             </Link>
           </div>
 
@@ -110,12 +78,12 @@ export default function GlobalHeader() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
                 onBlur={() => setTimeout(() => setIsSearchFocused(false), 250)}
-                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md pl-9 pr-8 py-1.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all"
+                className="w-full bg-slate-900 border border-slate-800 rounded-md pl-9 pr-8 py-1.5 text-xs text-slate-100 placeholder:text-slate-400 focus:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-all"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-200"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>
@@ -124,7 +92,7 @@ export default function GlobalHeader() {
 
             {/* Typeahead Search Results Dropdown */}
             {isSearchFocused && searchQuery.trim().length > 0 && (
-              <div className="absolute left-0 right-0 top-full mt-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md shadow-xl py-2 z-50 text-xs">
+              <div className="absolute left-0 right-0 top-full mt-1 bg-slate-900 border border-slate-800 rounded-md shadow-2xl py-2 z-50 text-xs">
                 <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                   Matching Verified Brokers
                 </div>
@@ -133,32 +101,32 @@ export default function GlobalHeader() {
                     <Link
                       key={broker.id}
                       to={`/brokers/${broker.slug}`}
-                      className="flex items-center justify-between px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 border-b last:border-0 border-slate-100 dark:border-slate-800"
+                      className="flex items-center justify-between px-3 py-2 hover:bg-slate-800 border-b last:border-0 border-slate-800"
                     >
                       <div>
-                        <div className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                        <div className="font-bold text-slate-100 flex items-center gap-1.5">
                           {broker.name}
-                          <span className="text-[10px] px-1.5 py-0.2 bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 rounded">
+                          <span className="text-[10px] px-1.5 py-0.2 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded">
                             {broker.primaryLicense}
                           </span>
                         </div>
-                        <div className="text-[11px] text-slate-500">
+                        <div className="text-[11px] text-slate-400">
                           Spread: {broker.eurUsdSpread} p | Min: {broker.minDepositFormatted} | {broker.executionModel}
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="font-bold text-slate-900 dark:text-slate-100">★ {broker.editorialRating}</span>
+                        <span className="font-bold text-amber-400">★ {broker.editorialRating}</span>
                         <div className="text-[10px] text-slate-400">{broker.editorialClass}</div>
                       </div>
                     </Link>
                   ))
                 ) : (
-                  <div className="px-3 py-3 text-center text-slate-500">
+                  <div className="px-3 py-3 text-center text-slate-400">
                     No brokers matching "{searchQuery}". Try searching by license number or platform.
                   </div>
                 )}
-                <div className="px-3 pt-2 text-center bg-slate-50 dark:bg-slate-950/50 mt-1">
-                  <Link to={`/brokers?q=${encodeURIComponent(searchQuery)}`} className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+                <div className="px-3 pt-2 text-center bg-slate-950/60 mt-1">
+                  <Link to={`/brokers?q=${encodeURIComponent(searchQuery)}`} className="text-amber-400 font-semibold hover:underline">
                     View all matching results in Directory →
                   </Link>
                 </div>
@@ -167,7 +135,7 @@ export default function GlobalHeader() {
           </div>
 
           {/* Primary Nav Items with Mega-Menu Handlers */}
-          <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-slate-700 dark:text-slate-300">
+          <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-slate-200">
             {/* Brokers Dropdown */}
             <div
               className="relative"
@@ -176,8 +144,8 @@ export default function GlobalHeader() {
             >
               <Link
                 to="/brokers"
-                className={`flex items-center gap-1 px-2.5 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors ${
-                  activeMegaMenu === "brokers" ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white" : ""
+                className={`flex items-center gap-1 px-2.5 py-2 rounded-md hover:bg-slate-900 hover:text-white transition-colors ${
+                  activeMegaMenu === "brokers" ? "bg-slate-900 text-amber-400" : ""
                 }`}
               >
                 Brokers
@@ -188,7 +156,7 @@ export default function GlobalHeader() {
             {/* Compare Direct Link */}
             <Link
               to="/compare"
-              className="flex items-center gap-1 px-2.5 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="flex items-center gap-1 px-2.5 py-2 rounded-md hover:bg-slate-900 hover:text-white transition-colors"
             >
               <Scale className="h-3.5 w-3.5 text-slate-400" />
               Compare
@@ -202,8 +170,8 @@ export default function GlobalHeader() {
             >
               <Link
                 to="/best-brokers/overall"
-                className={`flex items-center gap-1 px-2.5 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors ${
-                  activeMegaMenu === "best-brokers" ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white" : ""
+                className={`flex items-center gap-1 px-2.5 py-2 rounded-md hover:bg-slate-900 hover:text-white transition-colors ${
+                  activeMegaMenu === "best-brokers" ? "bg-slate-900 text-amber-400" : ""
                 }`}
               >
                 Best Brokers
@@ -214,7 +182,7 @@ export default function GlobalHeader() {
             {/* Reviews */}
             <Link
               to="/reviews"
-              className="px-2.5 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="px-2.5 py-2 rounded-md hover:bg-slate-900 hover:text-white transition-colors"
             >
               Reviews
             </Link>
@@ -227,8 +195,8 @@ export default function GlobalHeader() {
             >
               <Link
                 to="/regulation"
-                className={`flex items-center gap-1 px-2.5 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors ${
-                  activeMegaMenu === "regulation" ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white" : ""
+                className={`flex items-center gap-1 px-2.5 py-2 rounded-md hover:bg-slate-900 hover:text-white transition-colors ${
+                  activeMegaMenu === "regulation" ? "bg-slate-900 text-amber-400" : ""
                 }`}
               >
                 Regulation
@@ -239,7 +207,7 @@ export default function GlobalHeader() {
             {/* Guides */}
             <Link
               to="/guides/trading-costs"
-              className="px-2.5 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="px-2.5 py-2 rounded-md hover:bg-slate-900 hover:text-white transition-colors"
             >
               Guides
             </Link>
@@ -247,7 +215,7 @@ export default function GlobalHeader() {
             {/* Tools */}
             <Link
               to="/tools"
-              className="flex items-center gap-1 px-2.5 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="flex items-center gap-1 px-2.5 py-2 rounded-md hover:bg-slate-900 hover:text-white transition-colors"
             >
               <Calculator className="h-3.5 w-3.5 text-slate-400" />
               Tools
@@ -256,7 +224,7 @@ export default function GlobalHeader() {
             {/* Complaints Exposure */}
             <Link
               to="/complaints"
-              className="px-2.5 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-600 dark:text-amber-400 font-semibold"
+              className="px-2.5 py-2 rounded-md hover:bg-slate-900 text-amber-400 font-semibold"
             >
               Complaints
             </Link>
@@ -266,16 +234,16 @@ export default function GlobalHeader() {
           <div className="flex items-center gap-2">
             <Link
               to="/tools/broker-finder"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 text-xs font-bold shadow-xs transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-xs transition-colors"
             >
-              <Sparkles className="h-3.5 w-3.5 text-amber-400 dark:text-amber-600" />
+              <Sparkles className="h-3.5 w-3.5 text-slate-950" />
               Find My Broker
             </Link>
 
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-1.5 rounded-md text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="lg:hidden p-1.5 rounded-md text-slate-200 hover:bg-slate-900"
               aria-label="Toggle navigation drawer"
             >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -286,7 +254,7 @@ export default function GlobalHeader() {
         {/* DESKTOP MEGA MENU OVERLAY */}
         {activeMegaMenu && (
           <div
-            className="absolute left-0 right-0 top-full bg-white dark:bg-slate-900 border-b border-slate-300 dark:border-slate-800 shadow-2xl z-50 animate-in fade-in slide-in-from-top-1 duration-150"
+            className="absolute left-0 right-0 top-full bg-slate-950 border-b border-slate-800 text-slate-200 shadow-2xl z-50 animate-in fade-in slide-in-from-top-1 duration-150"
             onMouseEnter={() => handleMouseEnter(activeMegaMenu)}
             onMouseLeave={handleMouseLeave}
           >
@@ -581,7 +549,7 @@ export default function GlobalHeader() {
 
         {/* MOBILE NAVIGATION DRAWER */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden fixed inset-0 top-[80px] bg-white dark:bg-slate-900 z-50 overflow-y-auto px-4 py-6 border-t border-slate-200 dark:border-slate-800 animate-in slide-in-from-right duration-200">
+          <div className="lg:hidden fixed inset-0 top-[60px] bg-slate-950 text-slate-100 z-50 overflow-y-auto px-4 py-6 border-t border-slate-800 animate-in slide-in-from-right duration-200">
             {/* Search Input for Mobile */}
             <div className="relative mb-5">
               <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
@@ -590,12 +558,12 @@ export default function GlobalHeader() {
                 placeholder="Search brokers, licenses, platforms..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm"
+                className="w-full bg-slate-900 border border-slate-800 text-slate-100 placeholder:text-slate-400 rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-amber-500"
               />
             </div>
 
             {/* Quick Action Finder CTA */}
-            <div className="mb-6 p-4 rounded-lg bg-slate-900 dark:bg-slate-800 text-white">
+            <div className="mb-6 p-4 rounded-lg bg-slate-900 text-white border border-slate-800">
               <div className="font-bold text-sm mb-1 flex items-center gap-1.5">
                 <Sparkles className="h-4 w-4 text-amber-400" />
                 Find My Broker (60-Sec Quiz)
@@ -606,7 +574,7 @@ export default function GlobalHeader() {
               <Link
                 to="/tools/broker-finder"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-center bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold py-2 rounded text-xs"
+                className="block text-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2 rounded text-xs"
               >
                 Launch Wizard Now →
               </Link>
@@ -620,22 +588,22 @@ export default function GlobalHeader() {
                   <Link
                     to="/brokers"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-slate-200"
                   >
                     All Brokers Directory (140+)
                   </Link>
                   <Link
                     to="/compare"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between"
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-slate-200 flex items-center justify-between"
                   >
                     <span>Side-by-Side Comparison</span>
-                    <span className="text-xs px-2 py-0.5 bg-slate-200 dark:bg-slate-700 rounded">Tool</span>
+                    <span className="text-xs px-2 py-0.5 bg-slate-800 text-slate-300 rounded">Tool</span>
                   </Link>
                   <Link
                     to="/reviews"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-slate-200"
                   >
                     User Reviews & Ratings
                   </Link>
@@ -648,28 +616,28 @@ export default function GlobalHeader() {
                   <Link
                     to="/best-brokers/overall"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-slate-200"
                   >
                     Best Overall Forex Brokers (2026)
                   </Link>
                   <Link
                     to="/best-brokers/beginners"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-slate-200"
                   >
                     Best for Beginners
                   </Link>
                   <Link
                     to="/best-brokers/low-spreads"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-slate-200"
                   >
                     Lowest Spread Brokers
                   </Link>
                   <Link
                     to="/best-brokers/tradingview"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-slate-200"
                   >
                     Best TradingView Brokers
                   </Link>
@@ -682,28 +650,28 @@ export default function GlobalHeader() {
                   <Link
                     to="/regulation"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-slate-200"
                   >
                     Regulation & Safety Hub
                   </Link>
                   <Link
                     to="/tools"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-slate-200"
                   >
                     Trading Calculators
                   </Link>
                   <Link
                     to="/complaints"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-600"
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-amber-400"
                   >
                     Complaints & Exposure
                   </Link>
                   <Link
                     to="/how-we-rate"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 px-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-slate-200"
                   >
                     Editorial Methodology
                   </Link>

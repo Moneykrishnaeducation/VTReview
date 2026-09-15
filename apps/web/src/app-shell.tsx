@@ -29,7 +29,7 @@ function LayoutContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-100 dark:bg-slate-950">
-      <WireframeToolbar />
+      {/* <WireframeToolbar /> */}
       <div className={getViewportContainerClass()}>
         <GlobalHeader />
         <main className="flex-1">
