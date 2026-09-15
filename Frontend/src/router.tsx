@@ -15,6 +15,8 @@ import GuidesHub from "./routes/guides-hub";
 import ToolsDashboard from "./routes/tools-dashboard";
 import ComplaintsHub from "./routes/complaints-hub";
 import RatingMethodology from "./routes/rating-methodology";
+import Login from "./ControlCenter/Login";
+import AdminDashboard from "./routes/admin";
 
 function NotFound() {
   return (
@@ -37,6 +39,12 @@ export const router = createBrowserRouter([
     element: <AppShell />,
     children: [
       { index: true, element: <Home /> },
+      { path: "login", element: <Login /> },
+      { path: "control-center/login", element: <Login /> },
+      { path: "signup", element: <Login initialMode="signup" /> },
+      { path: "register", element: <Login initialMode="signup" /> },
+      { path: "forgot-password", element: <Login initialMode="forgot" /> },
+      { path: "admin", element: <AdminDashboard /> },
       { path: "brokers", element: <BrokerDirectory /> },
       { path: "brokers/:id", element: <BrokerReviewDetail /> },
       { path: "broker/:id", element: <BrokerReviewDetail /> },

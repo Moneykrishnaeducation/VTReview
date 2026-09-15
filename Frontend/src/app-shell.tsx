@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 
 import GlobalHeader from "@/components/global-header";
 import GlobalFooter from "@/components/global-footer";
@@ -13,6 +13,15 @@ import { Toaster } from "@/components/ui/sonner";
 
 function LayoutContent() {
   const { viewportMode } = useComparison();
+  const location = useLocation();
+
+  const isAuthPage = [
+    "/login",
+    "/control-center/login",
+    "/signup",
+    "/register",
+    "/forgot-password",
+  ].includes(location.pathname);
 
   const getViewportContainerClass = () => {
     switch (viewportMode) {
@@ -31,15 +40,15 @@ function LayoutContent() {
     <div className="min-h-screen flex flex-col bg-slate-100 dark:bg-slate-950">
       {/* <WireframeToolbar /> */}
       <div className={getViewportContainerClass()}>
-        <GlobalHeader />
+        {!isAuthPage && <GlobalHeader />}
         <main className="flex-1">
           <ErrorBoundary>
             <Outlet />
           </ErrorBoundary>
         </main>
-        <GlobalFooter />
+        {!isAuthPage && <GlobalFooter />}
       </div>
-      <StickyComparisonTray />
+      {!isAuthPage && <StickyComparisonTray />}
       <Toaster richColors />
     </div>
   );
