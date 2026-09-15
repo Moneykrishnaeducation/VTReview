@@ -35,7 +35,14 @@ pool.connect((err, client, release) => {
 
 const path = require('path');
 
-// API Routes
+const adminRoutes = require('./routes/adminRoutes');
+const viewerRoutes = require('./routes/viewerRoutes');
+
+// API Routes - Split Panels
+app.use('/api/admin', adminRoutes);
+app.use('/api/viewer', viewerRoutes);
+
+// General status route
 app.get('/api/status', (req, res) => {
   res.json({ message: 'API is working!', status: 'success' });
 });
