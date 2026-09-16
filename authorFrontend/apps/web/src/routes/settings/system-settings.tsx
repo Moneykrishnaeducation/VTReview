@@ -33,18 +33,18 @@ export default function SystemSettings() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-slate-900 text-slate-400 font-mono text-[11px] mb-1">
-            <Settings className="h-3.5 w-3.5 text-amber-400" />
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 font-mono text-[11px] mb-1">
+            <Settings className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
             <span>PLATFORM GOVERNANCE & LEGAL SETTINGS</span>
           </div>
-          <h1 className="text-xl md:text-2xl font-black text-white tracking-tight">
+          <h1 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             System Configuration, Disclosures & Risk Warnings
           </h1>
         </div>
       </div>
 
       {saveSuccess && (
-        <div className="p-3 bg-emerald-950/80 border border-emerald-800 rounded-xl text-emerald-300 text-xs flex items-center gap-2 animate-in fade-in">
+        <div className="p-3 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 rounded-xl text-emerald-800 dark:text-emerald-300 text-xs flex items-center gap-2 animate-in fade-in">
           <CheckCircle2 className="h-4 w-4" />
           <span>System configuration updated and synced across public web nodes.</span>
         </div>
@@ -52,43 +52,43 @@ export default function SystemSettings() {
 
       <form onSubmit={handleSave} className="space-y-6">
         {/* Risk Warning Section */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-          <div className="flex items-center gap-2 font-bold text-white text-sm">
-            <AlertTriangle className="h-4 w-4 text-amber-400" />
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-4 shadow-xs">
+          <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm">
+            <AlertTriangle className="h-4 w-4 text-amber-500 dark:text-amber-400" />
             <span>Mandatory Statutory High-Risk Investment Warning (ESMA / FCA / ASIC)</span>
           </div>
-          <p className="text-slate-400 text-[11px]">
+          <p className="text-slate-600 dark:text-slate-400 text-[11px]">
             This disclosure is rendered persistently on the public platform footer and all broker comparison pages.
           </p>
           <textarea
             value={riskWarning}
             onChange={(e) => setRiskWarning(e.target.value)}
             rows={4}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-xs text-slate-200 leading-relaxed focus:ring-1 focus:ring-amber-500"
+            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 text-xs text-slate-900 dark:text-slate-200 leading-relaxed focus:ring-1 focus:ring-amber-500"
           />
         </div>
 
         {/* Advertiser Disclosure Section */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-          <div className="flex items-center gap-2 font-bold text-white text-sm">
-            <ShieldCheck className="h-4 w-4 text-emerald-400" />
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-4 shadow-xs">
+          <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm">
+            <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             <span>Editorial Independence & Advertiser Compensation Disclosure</span>
           </div>
-          <p className="text-slate-400 text-[11px]">
+          <p className="text-slate-600 dark:text-slate-400 text-[11px]">
             Guarantees operational decoupling between commercial referral links and algorithmic 120-point broker ratings.
           </p>
           <textarea
             value={disclosureText}
             onChange={(e) => setDisclosureText(e.target.value)}
             rows={4}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-xs text-slate-200 leading-relaxed focus:ring-1 focus:ring-amber-500"
+            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 text-xs text-slate-900 dark:text-slate-200 leading-relaxed focus:ring-1 focus:ring-amber-500"
           />
         </div>
 
         {/* Feature Flags */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-          <div className="flex items-center gap-2 font-bold text-white text-sm">
-            <Sliders className="h-4 w-4 text-purple-400" />
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-4 shadow-xs">
+          <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm">
+            <Sliders className="h-4 w-4 text-purple-600 dark:text-purple-400" />
             <span>Global Operational Feature Toggles</span>
           </div>
 
@@ -117,10 +117,10 @@ export default function SystemSettings() {
             ].map((f) => (
               <label
                 key={f.key}
-                className="p-3.5 bg-slate-950 rounded-xl border border-slate-800 flex items-start justify-between gap-3 cursor-pointer hover:border-slate-700 transition-colors"
+                className="p-3.5 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 flex items-start justify-between gap-3 cursor-pointer hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
               >
                 <div className="space-y-0.5">
-                  <div className="font-bold text-slate-200">{f.label}</div>
+                  <div className="font-bold text-slate-900 dark:text-slate-200">{f.label}</div>
                   <div className="text-[11px] text-slate-500">{f.desc}</div>
                 </div>
                 <input
@@ -142,7 +142,7 @@ export default function SystemSettings() {
         {/* Submit */}
         <div className="flex items-center justify-between pt-2">
           <div className="text-slate-500 font-mono text-[11px]">
-            Governance Actor: <strong className="text-slate-300">{activeRoleDef.name}</strong>
+            Governance Actor: <strong className="text-slate-800 dark:text-slate-300">{activeRoleDef.name}</strong>
           </div>
           <button
             type="submit"

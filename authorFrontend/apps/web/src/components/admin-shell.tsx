@@ -14,7 +14,7 @@ export function AdminShell() {
   const pathParts = location.pathname.split("/").filter(Boolean);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col selection:bg-amber-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-amber-500 selection:text-slate-950">
       <AdminSidebar isCollapsed={isSidebarCollapsed} setIsCollapsed={setIsSidebarCollapsed} />
       <AdminHeader isSidebarCollapsed={isSidebarCollapsed} />
 
@@ -25,8 +25,8 @@ export function AdminShell() {
         }`}
       >
         {/* Breadcrumbs Toolbar */}
-        <div className="bg-slate-950/80 border-b border-slate-800/80 px-4 md:px-8 py-2.5 flex items-center gap-1.5 text-xs text-slate-400 overflow-x-auto">
-          <Link to="/dashboard" className="hover:text-white flex items-center gap-1">
+        <div className="bg-white/90 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-4 md:px-8 py-2.5 flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 overflow-x-auto">
+          <Link to="/dashboard" className="hover:text-amber-600 dark:hover:text-white flex items-center gap-1">
             <Home className="h-3.5 w-3.5" />
             <span>Admin</span>
           </Link>

@@ -20,18 +20,18 @@ export default function RolesPermissions() {
 
   const getPill = (val: string) => {
     if (val.includes("Full") || val === "Verify & Stamp" || val === "Approve / Reject") {
-      return <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 font-mono text-[10px] font-bold">{val}</span>;
+      return <span className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-mono text-[10px] font-bold">{val}</span>;
     }
     if (val.includes("Propose") || val.includes("Submit") || val.includes("Edit") || val.includes("Arbitrate") || val.includes("Authoring")) {
-      return <span className="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800 font-mono text-[10px] font-bold">{val}</span>;
+      return <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 text-[10px] font-mono font-bold">{val}</span>;
     }
     if (val === "Read") {
-      return <span className="px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800 font-mono text-[10px]">Read-Only</span>;
+      return <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 font-mono text-[10px]">Read-Only</span>;
     }
     if (val === "—") {
-      return <span className="text-slate-600 font-mono text-[11px]">—</span>;
+      return <span className="text-slate-400 dark:text-slate-600 font-mono text-[11px]">—</span>;
     }
-    return <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px]">{val}</span>;
+    return <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-mono text-[10px]">{val}</span>;
   };
 
   return (
@@ -39,11 +39,11 @@ export default function RolesPermissions() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-purple-950/60 border border-purple-800 text-purple-300 font-mono text-[11px] mb-1">
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-700 dark:text-purple-300 font-mono text-[11px] mb-1">
             <KeyRound className="h-3.5 w-3.5" />
             <span>ACCESS GOVERNANCE & RBAC</span>
           </div>
-          <h1 className="text-xl md:text-2xl font-black text-white tracking-tight">
+          <h1 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             Role-Based Access Control (RBAC) Permission Matrix
           </h1>
         </div>
@@ -55,33 +55,33 @@ export default function RolesPermissions() {
           <div
             key={role.id}
             onClick={() => setActiveRole(role.id)}
-            className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2 ${
+            className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2 shadow-xs ${
               activeRole === role.id
-                ? "bg-slate-900 border-amber-500 ring-1 ring-amber-500/30 shadow-md"
-                : "bg-slate-900/60 border-slate-800 hover:border-slate-700"
+                ? "bg-white dark:bg-slate-900 border-amber-500 ring-2 ring-amber-500/30"
+                : "bg-white dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="font-bold text-white text-sm">{role.name}</span>
-              {activeRole === role.id && <CheckCircle2 className="h-4 w-4 text-amber-400" />}
+              <span className="font-bold text-slate-900 dark:text-white text-sm">{role.name}</span>
+              {activeRole === role.id && <CheckCircle2 className="h-4 w-4 text-amber-500" />}
             </div>
-            <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-2">{role.description}</p>
-            <div className="pt-2 text-[10px] font-mono text-slate-500">Click to simulate role</div>
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2">{role.description}</p>
+            <div className="pt-2 text-[10px] font-mono text-slate-400 dark:text-slate-500">Click to simulate role</div>
           </div>
         ))}
       </div>
 
       {/* Full Permission Matrix Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xs text-xs">
-        <div className="p-4 bg-slate-950 border-b border-slate-800 font-bold text-white text-sm flex items-center gap-2">
-          <ShieldCheck className="h-4 w-4 text-amber-400" />
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs text-xs">
+        <div className="p-4 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+          <ShieldCheck className="h-4 w-4 text-amber-500 dark:text-amber-400" />
           <span>Operational Module Authorization Scope</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-950 text-slate-400 uppercase tracking-wider text-[10px] font-bold">
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 uppercase tracking-wider text-[10px] font-bold">
                 <th className="p-3.5">Functional Module</th>
                 <th className="p-3.5">Super Admin</th>
                 <th className="p-3.5">Admin</th>
@@ -92,10 +92,10 @@ export default function RolesPermissions() {
                 <th className="p-3.5">Support / Ops</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {permissionMatrix.map((row, idx) => (
-                <tr key={idx} className="hover:bg-slate-850/60 transition-colors">
-                  <td className="p-3.5 font-bold text-slate-200">{row.module}</td>
+                <tr key={idx} className="hover:bg-slate-50/80 dark:hover:bg-slate-850/60 transition-colors">
+                  <td className="p-3.5 font-bold text-slate-800 dark:text-slate-200">{row.module}</td>
                   <td className="p-3.5">{getPill(row.superAdmin)}</td>
                   <td className="p-3.5">{getPill(row.admin)}</td>
                   <td className="p-3.5">{getPill(row.analyst)}</td>

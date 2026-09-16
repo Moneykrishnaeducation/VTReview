@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { BROKERS } from "@/data/broker-directory-data";
 import logo from "@/assets/logo.png";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default function GlobalHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -230,8 +231,10 @@ export default function GlobalHeader() {
             </Link>
           </nav>
 
-          {/* Right Action: Find My Broker CTA */}
+          {/* Right Action: ModeToggle & Find My Broker CTA */}
           <div className="flex items-center gap-2">
+            <ModeToggle />
+
             <Link
               to="/tools/broker-finder"
               className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-xs transition-colors"

@@ -8,7 +8,8 @@ export default function AppShell() {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="dark"
+      defaultTheme="light"
+      enableSystem
       disableTransitionOnChange
       storageKey="wikifx-admin-theme"
     >

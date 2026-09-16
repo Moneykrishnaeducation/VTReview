@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { useAdmin } from "../context/admin-context";
 import { ROLES } from "../data/admin-data";
 import type { AdminRole } from "../types/admin";
+import { ModeToggle } from "./mode-toggle";
 import {
   Search,
   Bell,
@@ -42,7 +43,7 @@ export function AdminHeader({ isSidebarCollapsed }: AdminHeaderProps) {
 
   return (
     <header
-      className={`fixed top-0 right-0 z-20 h-14 bg-slate-950 border-b border-slate-800 text-slate-200 flex items-center justify-between px-4 md:px-6 transition-all duration-200 ${
+      className={`fixed top-0 right-0 z-20 h-14 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-between px-4 md:px-6 transition-all duration-200 ${
         isSidebarCollapsed ? "left-16" : "left-64"
       }`}
     >
@@ -204,13 +205,16 @@ export function AdminHeader({ isSidebarCollapsed }: AdminHeaderProps) {
           )}
         </div>
 
+        {/* Theme Toggle (Light / Dark) */}
+        <ModeToggle />
+
         {/* User Profile Avatar */}
-        <div className="flex items-center gap-2 pl-2 border-l border-slate-800">
-          <div className="h-8 w-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-slate-200">
+        <div className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-slate-800">
+          <div className="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-xs font-bold text-slate-700 dark:text-slate-200">
             MV
           </div>
           <div className="hidden md:flex flex-col">
-            <span className="text-xs font-bold text-slate-200 leading-tight">Marcus Vance</span>
+            <span className="text-xs font-bold text-slate-900 dark:text-slate-200 leading-tight">Marcus Vance</span>
             <span className="text-[10px] text-slate-500 leading-tight">Lead Compliance</span>
           </div>
         </div>

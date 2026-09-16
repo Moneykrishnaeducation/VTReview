@@ -30,13 +30,13 @@ export default function BrokerList() {
             {row.logo}
           </div>
           <div>
-            <div className="font-bold text-white flex items-center gap-1.5">
+            <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
               <span>{row.name}</span>
               {row.verificationStatus === "verified" && (
-                <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
               )}
             </div>
-            <div className="text-[11px] text-slate-400 line-clamp-1">{row.legalEntity}</div>
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">{row.legalEntity}</div>
           </div>
         </div>
       ),
@@ -51,7 +51,7 @@ export default function BrokerList() {
       header: "Primary Regulator",
       accessorKey: "primaryRegulator",
       sortable: true,
-      cell: (row) => <span className="font-mono text-xs font-semibold text-slate-300">{row.primaryRegulator}</span>,
+      cell: (row) => <span className="font-mono text-xs font-semibold text-slate-700 dark:text-slate-300">{row.primaryRegulator}</span>,
     },
     {
       header: "Editorial Score",
@@ -59,8 +59,8 @@ export default function BrokerList() {
       sortable: true,
       cell: (row) => (
         <div className="flex items-center gap-1.5">
-          <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
-          <span className="font-mono font-bold text-slate-200">{row.editorialScore.toFixed(1)}</span>
+          <Star className="h-3.5 w-3.5 text-amber-500 dark:text-amber-400 fill-amber-500 dark:fill-amber-400" />
+          <span className="font-mono font-bold text-slate-900 dark:text-slate-200">{row.editorialScore.toFixed(1)}</span>
           <span className="text-[10px] text-slate-500">({row.starRating}★)</span>
         </div>
       ),
@@ -70,8 +70,8 @@ export default function BrokerList() {
       accessorKey: "eurUsdSpread",
       sortable: true,
       cell: (row) => (
-        <div className="font-mono text-[11px] text-slate-300">
-          <div>EUR/USD: <strong className="text-emerald-400">{row.eurUsdSpread} p</strong></div>
+        <div className="font-mono text-[11px] text-slate-700 dark:text-slate-300">
+          <div>EUR/USD: <strong className="text-emerald-600 dark:text-emerald-400">{row.eurUsdSpread} p</strong></div>
           <div className="text-[10px] text-slate-500">${row.commissionPerLot}/lot</div>
         </div>
       ),
@@ -87,7 +87,7 @@ export default function BrokerList() {
       accessorKey: "lastVerifiedDate",
       sortable: true,
       cell: (row) => (
-        <div className="text-[11px] font-mono text-slate-400">
+        <div className="text-[11px] font-mono text-slate-600 dark:text-slate-400">
           <div>{row.lastVerifiedDate}</div>
           <div className="text-[10px] text-slate-500 truncate max-w-[100px]">{row.verifiedBy}</div>
         </div>
@@ -100,7 +100,7 @@ export default function BrokerList() {
           <Link
             to={`/brokers/${row.slug}`}
             onClick={(e) => e.stopPropagation()}
-            className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded font-semibold text-xs transition-colors"
+            className="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded font-semibold text-xs transition-colors"
           >
             Manage →
           </Link>
@@ -114,17 +114,17 @@ export default function BrokerList() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-slate-900 text-slate-400 font-mono text-[11px] mb-1">
-            <Building2 className="h-3 w-3 text-amber-400" />
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 font-mono text-[11px] mb-1">
+            <Building2 className="h-3 w-3 text-amber-500 dark:text-amber-400" />
             <span>RESEARCH DATABASE ({brokers.length} Verified Brokers)</span>
           </div>
-          <h1 className="text-xl md:text-2xl font-black text-white tracking-tight">
+          <h1 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             Broker Profile & Governance Directory
           </h1>
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold border border-slate-800 flex items-center gap-1.5 transition-colors cursor-pointer">
+          <button className="px-3.5 py-1.5 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold border border-slate-300 dark:border-slate-800 flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs">
             <Download className="h-3.5 w-3.5" />
             <span>Export CSV</span>
           </button>
@@ -150,7 +150,7 @@ export default function BrokerList() {
             <select
               value={tierFilter}
               onChange={(e) => setTierFilter(e.target.value)}
-              className="bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:ring-1 focus:ring-amber-500"
+              className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-300 focus:ring-1 focus:ring-amber-500"
             >
               <option value="all">All Tiers</option>
               <option value="Tier-1">Tier-1 (FCA / ASIC / BaFin)</option>
@@ -161,7 +161,7 @@ export default function BrokerList() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:ring-1 focus:ring-amber-500"
+              className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-300 focus:ring-1 focus:ring-amber-500"
             >
               <option value="all">All Verification Statuses</option>
               <option value="verified">Verified</option>

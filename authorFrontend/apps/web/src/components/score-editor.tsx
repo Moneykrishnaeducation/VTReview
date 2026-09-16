@@ -71,36 +71,36 @@ export function ScoreEditor({ broker, onSuccess }: ScoreEditorProps) {
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-xs space-y-6">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 text-xs space-y-6">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="font-mono text-amber-400 font-bold bg-amber-950/60 border border-amber-800 px-2 py-0.5 rounded text-[11px]">
+            <span className="font-mono text-amber-700 dark:text-amber-400 font-bold bg-amber-500/10 dark:bg-amber-950/60 border border-amber-500/25 dark:border-amber-800 px-2 py-0.5 rounded text-[11px]">
               120-POINT FRAMEWORK
             </span>
-            <span className="text-slate-400 font-medium">Weighted Editorial Audit</span>
+            <span className="text-slate-500 dark:text-slate-400 font-medium">Weighted Editorial Audit</span>
           </div>
-          <h3 className="text-base font-bold text-white">Score Calculation & Proposal Studio</h3>
+          <h3 className="text-base font-bold text-slate-900 dark:text-white">Score Calculation & Proposal Studio</h3>
         </div>
 
         {/* Live Score Comparison Card */}
-        <div className="flex items-center gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
+        <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
           <div className="text-center">
             <div className="text-[10px] uppercase font-bold text-slate-500">Current Score</div>
-            <div className="font-mono text-base font-black text-slate-300">{currentTotal.toFixed(1)}</div>
+            <div className="font-mono text-base font-black text-slate-700 dark:text-slate-300">{currentTotal.toFixed(1)}</div>
           </div>
-          <ArrowRight className="h-4 w-4 text-slate-600" />
+          <ArrowRight className="h-4 w-4 text-slate-400 dark:text-slate-600" />
           <div className="text-center">
-            <div className="text-[10px] uppercase font-bold text-amber-400">Proposed Score</div>
-            <div className="font-mono text-base font-black text-amber-400">{proposedTotal.toFixed(1)}</div>
+            <div className="text-[10px] uppercase font-bold text-amber-600 dark:text-amber-400">Proposed Score</div>
+            <div className="font-mono text-base font-black text-amber-600 dark:text-amber-400">{proposedTotal.toFixed(1)}</div>
           </div>
           {totalDelta !== 0 && (
             <span
               className={`px-2 py-0.5 rounded font-mono font-bold text-xs ${
                 totalDelta > 0
-                  ? "bg-emerald-950 text-emerald-300 border border-emerald-800"
-                  : "bg-rose-950 text-rose-300 border border-rose-800"
+                  ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800"
+                  : "bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-800"
               }`}
             >
               {totalDelta > 0 ? `+${totalDelta}` : totalDelta} pts
@@ -110,10 +110,10 @@ export function ScoreEditor({ broker, onSuccess }: ScoreEditorProps) {
       </div>
 
       {isSubmitted ? (
-        <div className="p-6 text-center space-y-3 bg-emerald-950/30 border border-emerald-800/80 rounded-xl animate-in fade-in duration-200">
-          <CheckCircle2 className="h-10 w-10 text-emerald-400 mx-auto" />
-          <h4 className="text-sm font-bold text-emerald-200">Rating Change Proposal Dispatched</h4>
-          <p className="text-slate-400 max-w-md mx-auto">
+        <div className="p-6 text-center space-y-3 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/80 rounded-xl animate-in fade-in duration-200">
+          <CheckCircle2 className="h-10 w-10 text-emerald-600 dark:text-emerald-400 mx-auto" />
+          <h4 className="text-sm font-bold text-emerald-900 dark:text-emerald-200">Rating Change Proposal Dispatched</h4>
+          <p className="text-slate-600 dark:text-slate-400 max-w-md mx-auto">
             The proposed score change has been submitted to the compliance verification queue and logged in the immutable audit registry.
           </p>
           <button
@@ -138,25 +138,27 @@ export function ScoreEditor({ broker, onSuccess }: ScoreEditorProps) {
                   onClick={() => setSelectedPillarId(pillar.pillarId)}
                   className={`p-4 rounded-xl border transition-all cursor-pointer ${
                     isSelected
-                      ? "bg-slate-950 border-amber-500/50 shadow-lg ring-1 ring-amber-500/20"
-                      : "bg-slate-950/60 border-slate-800 hover:border-slate-700"
+                      ? "bg-amber-500/5 dark:bg-slate-950 border-amber-500/50 shadow-md ring-1 ring-amber-500/20"
+                      : "bg-slate-50/80 dark:bg-slate-950/60 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div>
-                      <div className="font-bold text-slate-200">{pillar.name}</div>
+                      <div className="font-bold text-slate-900 dark:text-slate-200">{pillar.name}</div>
                       <div className="text-[10px] text-slate-500">
                         Weight: {pillar.weightPercentage}% • Max: {pillar.maxPoints} pts
                       </div>
                     </div>
 
                     <div className="flex items-center gap-1.5">
-                      <span className="font-mono text-sm font-black text-amber-400">{score.toFixed(1)}</span>
-                      <span className="text-slate-500 font-mono">/ {pillar.maxPoints}</span>
+                      <span className="font-mono text-sm font-black text-amber-600 dark:text-amber-400">{score.toFixed(1)}</span>
+                      <span className="text-slate-400 dark:text-slate-500 font-mono">/ {pillar.maxPoints}</span>
                       {delta !== 0 && (
                         <span
                           className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded ${
-                            delta > 0 ? "bg-emerald-950 text-emerald-300" : "bg-rose-950 text-rose-300"
+                            delta > 0
+                              ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
+                              : "bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800"
                           }`}
                         >
                           {delta > 0 ? `+${delta}` : delta}
@@ -173,7 +175,7 @@ export function ScoreEditor({ broker, onSuccess }: ScoreEditorProps) {
                     step="0.1"
                     value={score}
                     onChange={(e) => handleScoreChange(pillar.pillarId, parseFloat(e.target.value))}
-                    className="w-full accent-amber-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+                    className="w-full accent-amber-500 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg cursor-pointer"
                   />
                 </div>
               );
@@ -181,21 +183,21 @@ export function ScoreEditor({ broker, onSuccess }: ScoreEditorProps) {
           </div>
 
           {/* Justification & Evidence Area */}
-          <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-4">
-            <h4 className="font-bold text-slate-200 text-xs flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-amber-400" />
+          <div className="p-4 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <h4 className="font-bold text-slate-900 dark:text-slate-200 text-xs flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-amber-500 dark:text-amber-400" />
               <span>Mandatory Rationale & Linked Evidence for Proposal</span>
             </h4>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[11px] font-medium text-slate-400 mb-1.5">
+                <label className="block text-[11px] font-medium text-slate-600 dark:text-slate-400 mb-1.5">
                   Attach Supporting Evidence Vault Record *
                 </label>
                 <select
                   value={selectedEvidenceId}
                   onChange={(e) => setSelectedEvidenceId(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 focus:ring-1 focus:ring-amber-500"
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg p-2 text-xs text-slate-900 dark:text-slate-200 focus:ring-1 focus:ring-amber-500"
                 >
                   {evidenceList.map((ev) => (
                     <option key={ev.id} value={ev.id}>
@@ -206,13 +208,13 @@ export function ScoreEditor({ broker, onSuccess }: ScoreEditorProps) {
               </div>
 
               <div>
-                <label className="block text-[11px] font-medium text-slate-400 mb-1.5">
+                <label className="block text-[11px] font-medium text-slate-600 dark:text-slate-400 mb-1.5">
                   Selected Pillar to Formalize Delta *
                 </label>
                 <select
                   value={selectedPillarId}
                   onChange={(e) => setSelectedPillarId(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 focus:ring-1 focus:ring-amber-500"
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg p-2 text-xs text-slate-900 dark:text-slate-200 focus:ring-1 focus:ring-amber-500"
                 >
                   {broker.pillars.map((p) => (
                     <option key={p.pillarId} value={p.pillarId}>
@@ -224,7 +226,7 @@ export function ScoreEditor({ broker, onSuccess }: ScoreEditorProps) {
             </div>
 
             <div>
-              <label className="block text-[11px] font-medium text-slate-400 mb-1.5">
+              <label className="block text-[11px] font-medium text-slate-600 dark:text-slate-400 mb-1.5">
                 Audit Rationale & Methodological Justification *
               </label>
               <textarea
@@ -233,13 +235,13 @@ export function ScoreEditor({ broker, onSuccess }: ScoreEditorProps) {
                 placeholder="Explain the quantitative metrics or verified regulatory facts justifying this rating adjustment (e.g. 10,000 tick live account test confirmed spread narrowing to 0.1 pips)..."
                 rows={3}
                 required
-                className="w-full bg-slate-900 border border-slate-800 rounded-lg p-3 text-xs text-slate-200 placeholder:text-slate-500 focus:ring-1 focus:ring-amber-500"
+                className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg p-3 text-xs text-slate-900 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-1 focus:ring-amber-500"
               />
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
               <div className="text-[11px] text-slate-500">
-                Proposer: <strong className="text-slate-300">{activeRoleDef.name}</strong> • Emits immutable audit log
+                Proposer: <strong className="text-slate-800 dark:text-slate-300">{activeRoleDef.name}</strong> • Emits immutable audit log
               </div>
 
               <button

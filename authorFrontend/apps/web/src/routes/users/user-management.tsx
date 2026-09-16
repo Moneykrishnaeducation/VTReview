@@ -14,19 +14,19 @@ export default function UserManagement() {
       sortable: true,
       cell: (row) => (
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-slate-200 text-xs shrink-0">
+          <div className="h-8 w-8 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 text-xs shrink-0">
             {row.name.substring(0, 2).toUpperCase()}
           </div>
           <div>
-            <div className="font-bold text-white flex items-center gap-1.5">
+            <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
               <span>{row.name}</span>
               {row.isVerifiedTrader && (
                 <span title="Verified Trader">
-                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                 </span>
               )}
             </div>
-            <div className="text-[11px] text-slate-400">{row.email}</div>
+            <div className="text-[11px] text-slate-500 dark:text-slate-400">{row.email}</div>
           </div>
         </div>
       ),
@@ -36,7 +36,7 @@ export default function UserManagement() {
       accessorKey: "role",
       sortable: true,
       cell: (row) => (
-        <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-amber-400 uppercase">
+        <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-amber-700 dark:text-amber-400 uppercase">
           {row.role.replace("_", " ")}
         </span>
       ),
@@ -46,7 +46,7 @@ export default function UserManagement() {
       accessorKey: "isVerifiedTrader",
       cell: (row) => (
         row.isVerifiedTrader ? (
-          <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-300 font-bold bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+          <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-800 dark:text-emerald-300 font-bold bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
             <ShieldCheck className="h-3 w-3" />
             Verified Trader
           </span>
@@ -59,7 +59,7 @@ export default function UserManagement() {
       header: "Country / Exp",
       accessorKey: "country",
       cell: (row) => (
-        <div className="text-[11px] text-slate-300 font-mono">
+        <div className="text-[11px] text-slate-700 dark:text-slate-300 font-mono">
           <div>{row.country}</div>
           <div className="text-slate-500 text-[10px]">{row.tradingExperienceYears} yrs experience</div>
         </div>
@@ -69,11 +69,11 @@ export default function UserManagement() {
       header: "Contributions",
       cell: (row) => (
         <div className="flex items-center gap-3 font-mono text-[11px]">
-          <span className="text-cyan-400 flex items-center gap-1" title="Reviews">
+          <span className="text-cyan-600 dark:text-cyan-400 flex items-center gap-1 font-semibold" title="Reviews">
             <MessageSquare className="h-3 w-3" />
             {row.reviewsCount}
           </span>
-          <span className="text-rose-400 flex items-center gap-1" title="Complaints">
+          <span className="text-rose-600 dark:text-rose-400 flex items-center gap-1 font-semibold" title="Complaints">
             <AlertTriangle className="h-3 w-3" />
             {row.complaintsCount}
           </span>
@@ -90,7 +90,7 @@ export default function UserManagement() {
       header: "Last Active",
       accessorKey: "lastActiveAt",
       sortable: true,
-      cell: (row) => <span className="font-mono text-[11px] text-slate-400">{row.lastActiveAt}</span>,
+      cell: (row) => <span className="font-mono text-[11px] text-slate-500 dark:text-slate-400">{row.lastActiveAt}</span>,
     },
   ];
 
@@ -99,16 +99,16 @@ export default function UserManagement() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-slate-900 text-slate-400 font-mono text-[11px] mb-1">
-            <Users className="h-3.5 w-3.5 text-amber-400" />
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 font-mono text-[11px] mb-1">
+            <Users className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
             <span>USER & TRADER IDENTITY ({users.length} Accounts)</span>
           </div>
-          <h1 className="text-xl md:text-2xl font-black text-white tracking-tight">
+          <h1 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             User Directory & Trader Verification
           </h1>
         </div>
 
-        <button className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold border border-slate-800 flex items-center gap-1.5 transition-colors cursor-pointer">
+        <button className="px-3.5 py-1.5 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-800 flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs">
           <Download className="h-3.5 w-3.5" />
           <span>Export Users</span>
         </button>
