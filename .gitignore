@@ -1,2 +1,5 @@
 Backend/bun.lock
 Backend/static
+authorBackend/config/__pycache__/
+
+authorBackend/.env
