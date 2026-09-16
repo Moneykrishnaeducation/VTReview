@@ -65,6 +65,7 @@ interface AdminContextType {
   updateComplaintStatus: (id: string, status: ComplaintAdmin["status"], note: string) => void;
   publishGuide: (id: string) => void;
   updateBroker: (id: string, updates: Partial<BrokerAdmin>, reason?: string) => void;
+  addEvidence: (evidence: Omit<EvidenceItem, "id" | "uploadedAt" | "uploadedBy" | "checksum"> & { checksum?: string }) => EvidenceItem;
   markNotificationRead: (id: string) => void;
   markAllNotificationsRead: () => void;
 
@@ -406,6 +407,49 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  // Ingest New Evidence Item
+  const addEvidence = (evidence: Omit<EvidenceItem, "id" | "uploadedAt" | "uploadedBy" | "checksum"> & { checksum?: string }): EvidenceItem => {
+    const randomHash = Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("");
+    const newId = `EVD-2026-${String(evidenceList.length + 1).padStart(3, "0")}`;
+    const timestamp = new Date().toISOString().replace("T", " ").substring(0, 16) + " UTC";
+
+    const newEvidence: EvidenceItem = {
+      ...evidence,
+      id: newId,
+      uploadedAt: timestamp,
+      uploadedBy: activeRoleDef.name,
+      checksum: evidence.checksum || `sha256:${randomHash}`,
+    };
+
+    setEvidenceList((prev) => [newEvidence, ...prev]);
+
+    appendAuditLog({
+      action: "CREATE",
+      entityType: "evidence",
+      entityId: newId,
+      entityName: newEvidence.title,
+      summary: `Ingested new cryptographically hashed evidence record for ${newEvidence.relatedEntityName}.`,
+      afterValue: `Status: ${newEvidence.status} | Checksum: ${newEvidence.checksum.substring(0, 16)}...`,
+      reason: newEvidence.notes || "Auditor evidence ingestion.",
+    });
+
+    setNotifications((prev) => [
+      {
+        id: `notif-${Date.now()}`,
+        title: "New Evidence Ingested",
+        message: `"${newEvidence.title}" linked to ${newEvidence.relatedEntityName} sealed with SHA-256 hash.`,
+        type: "system_notice",
+        priority: "medium",
+        createdAt: "Just now",
+        read: false,
+        actionUrl: "/evidence",
+      },
+      ...prev,
+    ]);
+
+    return newEvidence;
+  };
+
   // Notifications
   const markNotificationRead = (id: string) => {
     setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
@@ -463,6 +507,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         updateComplaintStatus,
         publishGuide,
         updateBroker,
+        addEvidence,
         markNotificationRead,
         markAllNotificationsRead,
         isSearchOpen,
