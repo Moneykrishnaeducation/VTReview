@@ -324,11 +324,10 @@ export default function EvidenceLibrary() {
               <select
                 value={brokerFilter}
                 onChange={(e) => setBrokerFilter(e.target.value)}
-                className={`w-full bg-slate-50 dark:bg-slate-950 border rounded-xl pl-8 pr-3 py-2 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all cursor-pointer font-medium ${
-                  brokerFilter !== "all"
-                    ? "border-amber-500 bg-amber-50/50 dark:bg-amber-950/20 text-amber-900 dark:text-amber-200 font-bold"
-                    : "border-slate-200 dark:border-slate-800"
-                }`}
+                className={`w-full bg-slate-50 dark:bg-slate-950 border rounded-xl pl-8 pr-3 py-2 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all cursor-pointer font-medium ${brokerFilter !== "all"
+                  ? "border-amber-500 bg-amber-50/50 dark:bg-amber-950/20 text-amber-900 dark:text-amber-200 font-bold"
+                  : "border-slate-200 dark:border-slate-800"
+                  }`}
               >
                 <option value="all">🏢 All Brokers ({evidenceList.length} docs)</option>
                 {brokerOptions.map((broker) => (
@@ -345,11 +344,10 @@ export default function EvidenceLibrary() {
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className={`w-full bg-slate-50 dark:bg-slate-950 border rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all cursor-pointer font-medium ${
-                typeFilter !== "all"
-                  ? "border-amber-500 bg-amber-50/50 dark:bg-amber-950/20 text-amber-900 dark:text-amber-200 font-bold"
-                  : "border-slate-200 dark:border-slate-800"
-              }`}
+              className={`w-full bg-slate-50 dark:bg-slate-950 border rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all cursor-pointer font-medium ${typeFilter !== "all"
+                ? "border-amber-500 bg-amber-50/50 dark:bg-amber-950/20 text-amber-900 dark:text-amber-200 font-bold"
+                : "border-slate-200 dark:border-slate-800"
+                }`}
             >
               <option value="all">📁 All Evidence Types</option>
               <option value="regulatory_register">Regulatory Register Snapshot</option>
@@ -367,11 +365,10 @@ export default function EvidenceLibrary() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className={`w-full bg-slate-50 dark:bg-slate-950 border rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all cursor-pointer font-medium ${
-                statusFilter !== "all"
-                  ? "border-amber-500 bg-amber-50/50 dark:bg-amber-950/20 text-amber-900 dark:text-amber-200 font-bold"
-                  : "border-slate-200 dark:border-slate-800"
-              }`}
+              className={`w-full bg-slate-50 dark:bg-slate-950 border rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all cursor-pointer font-medium ${statusFilter !== "all"
+                ? "border-amber-500 bg-amber-50/50 dark:bg-amber-950/20 text-amber-900 dark:text-amber-200 font-bold"
+                : "border-slate-200 dark:border-slate-800"
+                }`}
             >
               <option value="all">⚡ All Statuses</option>
               <option value="verified">Verified</option>
@@ -394,12 +391,12 @@ export default function EvidenceLibrary() {
         </div>
 
         {/* Filter Summary & Active Chips Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800/80 text-[11px] text-slate-500 dark:text-slate-400">
+        <div className="flex flex-wrap items-center justify-between gap-2 dark:border-slate-800/80 text-[11px] text-slate-500 dark:text-slate-400">
           <div className="flex items-center gap-2">
-            <span>
+            {/* <span>
               Showing <strong className="text-slate-900 dark:text-white font-bold">{filteredEvidence.length}</strong> of{" "}
               <strong>{evidenceList.length}</strong> evidence assets
-            </span>
+            </span> */}
 
             {brokerFilter !== "all" && (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/20 font-medium">
@@ -538,13 +535,12 @@ export default function EvidenceLibrary() {
                   onDragLeave={() => setIsDragging(false)}
                   onDrop={handleDrop}
                   onClick={() => fileInputRef.current?.click()}
-                  className={`border-2 border-dashed rounded-2xl p-5 text-center cursor-pointer transition-all ${
-                    isDragging
-                      ? "border-amber-500 bg-amber-500/10"
-                      : fileName
+                  className={`border-2 border-dashed rounded-2xl p-5 text-center cursor-pointer transition-all ${isDragging
+                    ? "border-amber-500 bg-amber-500/10"
+                    : fileName
                       ? "border-emerald-500/50 bg-emerald-500/5 dark:bg-emerald-950/20"
                       : "border-slate-200 dark:border-slate-800 hover:border-amber-500/50 bg-slate-50/50 dark:bg-slate-900/50"
-                  }`}
+                    }`}
                 >
                   {fileName ? (
                     <div className="flex flex-col items-center justify-center space-y-2">
