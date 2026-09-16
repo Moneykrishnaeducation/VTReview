@@ -3,39 +3,102 @@ import { describe, it, expect } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { AdminProvider } from "../../../context/admin-context";
-import UserManagement from "../user-management";
+import AdminUsersPage from "../admin-users";
+import TraderUsersPage from "../trader-users";
 import RolesPermissions from "../roles-permissions";
 
-describe("User Directory & Trader Verification (Screen 11)", () => {
-  it("renders user directory with header, stats, and user table", () => {
+describe("Admin Staff & Security Officers Page (/users, /users/admins)", () => {
+  it("renders admin staff directory with governance header, KPI stats, and officer table", () => {
     render(
       <MemoryRouter>
         <AdminProvider>
-          <UserManagement />
+          <AdminUsersPage />
         </AdminProvider>
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/USER & TRADER IDENTITY/i)).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /User Directory & Trader Verification/i })).toBeInTheDocument();
-    expect(screen.getByText(/Verified Live Traders/i)).toBeInTheDocument();
+    expect(screen.getByText(/ADMINISTRATIVE GOVERNANCE/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Admin Staff & Security Officers/i })).toBeInTheDocument();
     expect(screen.getByText(/Marcus Vance/i)).toBeInTheDocument();
-    expect(screen.getByText(/SimonB_FX/i)).toBeInTheDocument();
+    expect(screen.getByText(/Elena Rostova/i)).toBeInTheDocument();
+    expect(screen.getByText(/Open Platform Traders Directory/i)).toBeInTheDocument();
   });
 
-  it("filters users by search query", () => {
+  it("filters admin officers by search query", () => {
     render(
       <MemoryRouter>
         <AdminProvider>
-          <UserManagement />
+          <AdminUsersPage />
         </AdminProvider>
       </MemoryRouter>
     );
 
-    const searchInput = screen.getByPlaceholderText(/Search user name, email, role, country/i);
+    const searchInput = screen.getByPlaceholderText(/Search officer name, email, role, or country/i);
     fireEvent.change(searchInput, { target: { value: "Elena Rostova" } });
 
     expect(screen.getByText(/Elena Rostova/i)).toBeInTheDocument();
+  });
+
+  it("opens invite admin officer modal", () => {
+    render(
+      <MemoryRouter>
+        <AdminProvider>
+          <AdminUsersPage />
+        </AdminProvider>
+      </MemoryRouter>
+    );
+
+    const inviteBtn = screen.getByRole("button", { name: /Invite Admin Officer/i });
+    fireEvent.click(inviteBtn);
+
+    expect(screen.getByText(/Invite Administrative Staff/i)).toBeInTheDocument();
+  });
+});
+
+describe("Platform Traders & Public Viewers Page (/users/traders, /traders)", () => {
+  it("renders platform traders directory with header, stats, and trader rows", () => {
+    render(
+      <MemoryRouter>
+        <AdminProvider>
+          <TraderUsersPage />
+        </AdminProvider>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole("heading", { name: /Platform Traders & Public Viewers/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/PLATFORM TRADERS/i)[0]).toBeInTheDocument();
+    expect(screen.getByText(/SimonB_FX/i)).toBeInTheDocument();
+    expect(screen.getByText(/Open Admin Staff Directory/i)).toBeInTheDocument();
+  });
+
+  it("filters traders by search query", () => {
+    render(
+      <MemoryRouter>
+        <AdminProvider>
+          <TraderUsersPage />
+        </AdminProvider>
+      </MemoryRouter>
+    );
+
+    const searchInput = screen.getByPlaceholderText(/Search trader name, email, or country/i);
+    fireEvent.change(searchInput, { target: { value: "SimonB_FX" } });
+
+    expect(screen.getByText(/SimonB_FX/i)).toBeInTheDocument();
+  });
+
+  it("opens register trader modal", () => {
+    render(
+      <MemoryRouter>
+        <AdminProvider>
+          <TraderUsersPage />
+        </AdminProvider>
+      </MemoryRouter>
+    );
+
+    const registerBtn = screen.getByRole("button", { name: /Register Trader/i });
+    fireEvent.click(registerBtn);
+
+    expect(screen.getByText(/Register Platform Trader/i)).toBeInTheDocument();
   });
 });
 

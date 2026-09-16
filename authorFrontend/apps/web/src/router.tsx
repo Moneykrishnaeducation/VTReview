@@ -13,7 +13,8 @@ import ReviewModeration from "./routes/reviews/review-moderation";
 import ComplaintManagement from "./routes/complaints/complaint-management";
 import ConvocationManagement from "./routes/community/convocation-management";
 import EditorialCms from "./routes/editorial/editorial-cms";
-import UserManagement from "./routes/users/user-management";
+import AdminUsersPage from "./routes/users/admin-users";
+import TraderUsersPage from "./routes/users/trader-users";
 import RolesPermissions from "./routes/users/roles-permissions";
 import AnalyticsDashboard from "./routes/analytics/analytics-dashboard";
 import DataQualityDashboard from "./routes/data-quality/data-quality-dashboard";
@@ -64,8 +65,11 @@ export const router = createBrowserRouter([
       { path: "editorial/guides", element: <EditorialCms /> },
       { path: "editorial/guides/:id", element: <EditorialCms /> },
 
-      // Users & RBAC
-      { path: "users", element: <UserManagement /> },
+      // Users & RBAC (Dedicated Pages for Admin Staff vs Platform Traders)
+      { path: "users", element: <AdminUsersPage /> },
+      { path: "users/admins", element: <AdminUsersPage /> },
+      { path: "users/traders", element: <TraderUsersPage /> },
+      { path: "traders", element: <TraderUsersPage /> },
       { path: "roles", element: <RolesPermissions /> },
 
       // Intelligence & Quality

@@ -13,6 +13,7 @@ import {
   Settings,
   ArrowRight,
   ShieldCheck,
+  Shield,
   AlertTriangle,
   CornerDownLeft,
   ArrowUp,
@@ -138,15 +139,16 @@ export function GlobalSearchModal() {
       (u) => u.name.toLowerCase().includes(trimmed) || u.email.toLowerCase().includes(trimmed) || u.role.toLowerCase().includes(trimmed)
     );
     matchingUsers.forEach((u) => {
+      const isTrader = u.role === "trader";
       list.push({
         id: u.id,
         group: "user",
-        groupLabel: "User Directory",
+        groupLabel: isTrader ? "Platform Traders" : "Admin Staff",
         title: `${u.name} (${u.role.replace("_", " ")})`,
         subtitle: `${u.email} • ${u.country}`,
-        url: `/users`,
+        url: isTrader ? `/users/traders` : `/users`,
         badge: u.isVerifiedTrader ? "Verified" : undefined,
-        icon: <Users className="h-4 w-4 text-purple-500" />,
+        icon: isTrader ? <Users className="h-4 w-4 text-amber-500" /> : <Shield className="h-4 w-4 text-purple-500" />,
       });
     });
 

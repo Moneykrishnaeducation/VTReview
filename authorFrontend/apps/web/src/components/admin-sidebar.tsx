@@ -6,6 +6,7 @@ import {
   Building2,
   Scale,
   ShieldCheck,
+  Shield,
   Star,
   FileText,
   MessageSquare,
@@ -135,7 +136,8 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
     {
       title: "Identity & RBAC",
       items: [
-        { label: "User Directory", to: "/users", icon: <Users className="h-4 w-4" /> },
+        { label: "Admin Staff", to: "/users/admins", icon: <Shield className="h-4 w-4" /> },
+        { label: "Platform Traders", to: "/users/traders", icon: <Users className="h-4 w-4" /> },
         { label: "Roles & Permissions", to: "/roles", icon: <KeyRound className="h-4 w-4" /> },
       ],
     },
@@ -181,11 +183,10 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
 
       {/* 2. SIDEBAR CONTAINER */}
       <aside
-        className={`fixed left-0 top-0 bottom-0 z-50 lg:z-30 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 flex flex-col transition-all duration-300 ease-in-out shadow-2xl lg:shadow-xs overflow-x-hidden ${
-          isMobileSidebarOpen
+        className={`fixed left-0 top-0 bottom-0 z-50 lg:z-30 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 flex flex-col transition-all duration-300 ease-in-out shadow-2xl lg:shadow-xs overflow-x-hidden ${isMobileSidebarOpen
             ? "translate-x-0 w-72"
             : "-translate-x-full lg:translate-x-0"
-        } ${isCollapsed ? "lg:w-20" : "lg:w-64"}`}
+          } ${isCollapsed ? "lg:w-20" : "lg:w-64"}`}
       >
         {/* BRAND HEADER */}
         <div className="h-14 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-3.5 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md shrink-0">
@@ -265,9 +266,8 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
 
         {/* NAVIGATION GROUPS SCROLL AREA */}
         <div
-          className={`flex-1 overflow-y-auto overflow-x-hidden space-y-4 text-xs no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
-            isCollapsed && !isMobileSidebarOpen ? "px-2 py-3" : "px-2.5 py-3"
-          }`}
+          className={`flex-1 overflow-y-auto overflow-x-hidden space-y-4 text-xs no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${isCollapsed && !isMobileSidebarOpen ? "px-2 py-3" : "px-2.5 py-3"
+            }`}
         >
           {navGroups.map((group, gIdx) => (
             <div key={gIdx} className="space-y-1">
@@ -292,23 +292,20 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
                       to={item.to}
                       onClick={() => setIsMobileSidebarOpen(false)}
                       title={isCollapsed && !isMobileSidebarOpen ? `${item.label}${item.badge !== undefined ? ` (${item.badge})` : ""}` : undefined}
-                      className={`relative group flex items-center rounded-xl font-medium transition-all ${
-                        isCollapsed && !isMobileSidebarOpen
+                      className={`relative group flex items-center rounded-xl font-medium transition-all ${isCollapsed && !isMobileSidebarOpen
                           ? "justify-center p-2.5"
                           : "justify-between px-3 py-2"
-                      } ${
-                        isActive
+                        } ${isActive
                           ? "bg-amber-500/10 text-amber-900 dark:text-amber-300 border-l-4 border-amber-500 font-bold shadow-2xs"
                           : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-900/80"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center gap-2.5 truncate">
                         <span
-                          className={`transition-colors shrink-0 ${
-                            isActive
+                          className={`transition-colors shrink-0 ${isActive
                               ? "text-amber-600 dark:text-amber-400"
                               : "text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200"
-                          }`}
+                            }`}
                         >
                           {item.icon}
                         </span>
@@ -321,9 +318,8 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
                       {item.badge !== undefined && (
                         (!isCollapsed || isMobileSidebarOpen) ? (
                           <span
-                            className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full font-bold shrink-0 ${
-                              item.badgeColor || "bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200"
-                            }`}
+                            className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full font-bold shrink-0 ${item.badgeColor || "bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200"
+                              }`}
                           >
                             {item.badge}
                           </span>
