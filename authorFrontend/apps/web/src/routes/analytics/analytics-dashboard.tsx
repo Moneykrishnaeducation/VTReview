@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   BarChart3,
   TrendingUp,
-  Users,
   ExternalLink,
   Search,
   Sparkles,
@@ -10,7 +9,6 @@ import {
   ShieldCheck,
   Calendar,
   ChevronDown,
-  MousePointerClick,
   PieChart,
   Activity,
   Filter,
@@ -18,9 +16,15 @@ import {
   Layers,
   Clock,
   RefreshCw,
+  Download,
+  FileCode,
+  CheckCircle2,
+  Globe2,
+  ArrowRight,
+  Zap,
 } from "lucide-react";
 
-// --- Mock Datasets for Timeframes ---
+// --- Datasets for Timeframes ---
 const TIMEFRAME_DATA = {
   "7d": {
     labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -33,6 +37,7 @@ const TIMEFRAME_DATA = {
     comparesChange: "+5.2%",
     totalFinder: "9,400",
     disputeRate: "95.2%",
+    avgLatency: "24ms",
   },
   "30d": {
     labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
@@ -45,6 +50,7 @@ const TIMEFRAME_DATA = {
     comparesChange: "+8.6%",
     totalFinder: "34,180",
     disputeRate: "94.8%",
+    avgLatency: "22ms",
   },
   "90d": {
     labels: ["Month 1", "Month 2", "Month 3"],
@@ -57,15 +63,16 @@ const TIMEFRAME_DATA = {
     comparesChange: "+12.1%",
     totalFinder: "98,400",
     disputeRate: "96.1%",
+    avgLatency: "20ms",
   },
 };
 
 // Donut Chart Data
 const DONUT_DATA = [
-  { broker: "IC Markets", clicks: 28400, percentage: 34.8, color: "#3b82f6", lightColor: "#93c5fd" },
-  { broker: "Pepperstone", clicks: 26100, percentage: 31.9, color: "#f59e0b", lightColor: "#fcd34d" },
-  { broker: "VTIndex", clicks: 14800, percentage: 18.1, color: "#10b981", lightColor: "#6ee7b7" },
-  { broker: "XM Group", clicks: 12400, percentage: 15.2, color: "#8b5cf6", lightColor: "#c4b5fd" },
+  { broker: "IC Markets", clicks: 28400, percentage: 34.8, color: "#3b82f6" },
+  { broker: "Pepperstone", clicks: 26100, percentage: 31.9, color: "#f59e0b" },
+  { broker: "VTIndex", clicks: 14800, percentage: 18.1, color: "#10b981" },
+  { broker: "XM Group", clicks: 12400, percentage: 15.2, color: "#8b5cf6" },
 ];
 
 // Jurisdictions Data
@@ -86,9 +93,9 @@ export default function AnalyticsDashboard() {
   const currentData = TIMEFRAME_DATA[timeRange];
 
   // SVG Line Chart Coordinate Generator
-  const chartWidth = 700;
-  const chartHeight = 220;
-  const padding = 30;
+  const chartWidth = 800;
+  const chartHeight = 240;
+  const padding = 35;
 
   const maxVal = Math.max(...currentData.searches) * 1.15;
   const stepX = (chartWidth - padding * 2) / (currentData.labels.length - 1);
@@ -108,7 +115,6 @@ export default function AnalyticsDashboard() {
 
     let path = `M ${first.x} ${first.y}`;
     for (let i = 1; i < points.length; i++) {
-      // Smooth bezier curves
       const prev = points[i - 1];
       const curr = points[i];
       const cpX = (prev.x + curr.x) / 2;
@@ -140,26 +146,60 @@ export default function AnalyticsDashboard() {
     setTimeout(() => setIsRefreshing(false), 600);
   };
 
+  const handleExportCSV = () => {
+    const headers = ["Timeframe", "Period", "Searches", "Comparisons", "Outbound Clicks"];
+    const rows = currentData.labels.map((label, idx) => [
+      timeRange,
+      label,
+      currentData.searches[idx],
+      currentData.compares[idx],
+      currentData.clicks[idx],
+    ]);
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `telemetry-analytics-${timeRange}-${new Date().toISOString().substring(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleExportJSON = () => {
+    const blob = new Blob([JSON.stringify({ timeframe: timeRange, metrics: currentData, marketShare: DONUT_DATA }, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `telemetry-analytics-${timeRange}-${new Date().toISOString().substring(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <div className="space-y-6 text-xs font-sans pb-12">
-      {/* Header Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-6 text-xs font-sans w-full pb-16">
+      {/* ── Top Header Bar ── */}
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-slate-200 dark:border-slate-800">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 font-mono text-[11px] mb-1.5 font-bold">
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 font-mono text-[11px] mb-1 font-semibold">
             <BarChart3 className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
-            <span>PLATFORM RESEARCH & DISCOVERY ANALYTICS</span>
+            <span>PLATFORM RESEARCH &amp; DISCOVERY ANALYTICS</span>
           </div>
           <h1 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-            Telemetry & Conversion Dashboard
+            Telemetry &amp; Conversion Analytics Dashboard
           </h1>
+          <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
+            Real-time telemetry across broker searches, comparison tool runs, quiz conversions, and decoupled outbound affiliate referrals.
+          </p>
         </div>
 
-        {/* Top Controls: Timeframe Switcher & Refresh */}
+        {/* Top Controls */}
         <div className="flex items-center gap-2 flex-wrap">
+          {/* Timeframe Switcher */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 rounded-xl flex items-center gap-1 shadow-xs">
             {(["7d", "30d", "90d"] as const).map((tf) => (
               <button
                 key={tf}
+                type="button"
                 onClick={() => setTimeRange(tf)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   timeRange === tf
@@ -172,7 +212,29 @@ export default function AnalyticsDashboard() {
             ))}
           </div>
 
+          {/* Export JSON */}
           <button
+            type="button"
+            onClick={handleExportJSON}
+            className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer shadow-xs"
+            title="Export JSON"
+          >
+            <FileCode className="h-4 w-4" />
+          </button>
+
+          {/* Export CSV */}
+          <button
+            type="button"
+            onClick={handleExportCSV}
+            className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer shadow-xs"
+            title="Export CSV"
+          >
+            <Download className="h-4 w-4" />
+          </button>
+
+          {/* Refresh */}
+          <button
+            type="button"
             onClick={handleRefresh}
             className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer shadow-xs"
             title="Refresh Telemetry"
@@ -182,84 +244,72 @@ export default function AnalyticsDashboard() {
         </div>
       </div>
 
-      {/* Top 4 KPI Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Metric 1 */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-2 shadow-xs relative overflow-hidden group hover:border-amber-500/40 transition-all">
-          <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 flex items-center justify-between">
-            <span>Broker Directory Views</span>
-            <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
-              <Search className="h-4 w-4" />
-            </div>
+      {/* ── Executive KPI Metric Cards ── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs">
+          <div className="flex items-center justify-between text-slate-500 text-[11px] font-semibold uppercase tracking-wider">
+            <span>Directory Impressions</span>
+            <Search className="h-4 w-4 text-amber-500" />
           </div>
-          <div className="font-mono text-3xl font-black text-slate-900 dark:text-white">
+          <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">
             {currentData.totalViews}
           </div>
-          <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+          <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1 mt-0.5">
             <TrendingUp className="h-3.5 w-3.5" />
-            <span>{currentData.viewsChange} vs previous period</span>
+            <span>{currentData.viewsChange} vs prev period</span>
           </div>
         </div>
 
-        {/* Metric 2 */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-2 shadow-xs relative overflow-hidden group hover:border-blue-500/40 transition-all">
-          <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 flex items-center justify-between">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs">
+          <div className="flex items-center justify-between text-slate-500 text-[11px] font-semibold uppercase tracking-wider">
             <span>Comparison Runs</span>
-            <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
-              <Scale className="h-4 w-4" />
-            </div>
+            <Scale className="h-4 w-4 text-blue-500" />
           </div>
-          <div className="font-mono text-3xl font-black text-slate-900 dark:text-white">
+          <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">
             {currentData.totalCompares}
           </div>
-          <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+          <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1 mt-0.5">
             <TrendingUp className="h-3.5 w-3.5" />
-            <span>{currentData.comparesChange} conversion rate</span>
+            <span>{currentData.comparesChange} engagement rate</span>
           </div>
         </div>
 
-        {/* Metric 3 */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-2 shadow-xs relative overflow-hidden group hover:border-purple-500/40 transition-all">
-          <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 flex items-center justify-between">
-            <span>Broker Finder Quiz</span>
-            <div className="p-1.5 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400">
-              <Sparkles className="h-4 w-4" />
-            </div>
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs">
+          <div className="flex items-center justify-between text-slate-500 text-[11px] font-semibold uppercase tracking-wider">
+            <span>Finder Quiz Runs</span>
+            <Sparkles className="h-4 w-4 text-purple-500" />
           </div>
-          <div className="font-mono text-3xl font-black text-slate-900 dark:text-white">
+          <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">
             {currentData.totalFinder}
           </div>
-          <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+          <div className="text-[10px] text-purple-600 dark:text-purple-400 font-medium mt-0.5">
             88.4% completion rate
           </div>
         </div>
 
-        {/* Metric 4 */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-2 shadow-xs relative overflow-hidden group hover:border-emerald-500/40 transition-all">
-          <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 flex items-center justify-between">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs">
+          <div className="flex items-center justify-between text-slate-500 text-[11px] font-semibold uppercase tracking-wider">
             <span>Dispute Settlement</span>
-            <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-              <ShieldCheck className="h-4 w-4" />
-            </div>
+            <ShieldCheck className="h-4 w-4 text-emerald-500" />
           </div>
-          <div className="font-mono text-3xl font-black text-emerald-600 dark:text-emerald-400">
+          <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
             {currentData.disputeRate}
           </div>
-          <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+          <div className="text-[10px] text-slate-500 font-mono mt-0.5">
             Avg resolution: 4.2 days
           </div>
         </div>
       </div>
 
-      {/* Main Feature Graph: Interactive Multi-Series Area & Line Chart */}
+      {/* ── Main Feature Graph: Interactive Vector Telemetry Chart ── */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-4 shadow-xs">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <Activity className="h-4 w-4 text-amber-500" />
-              <span>Discovery & Conversion Telemetry Trends</span>
+              <span>Discovery &amp; Conversion Telemetry Trends</span>
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Real-time user engagement timeline across broker directory searches, comparison tool runs, and outbound referral clicks.
             </p>
           </div>
@@ -267,6 +317,7 @@ export default function AnalyticsDashboard() {
           {/* Series Legend Filter Buttons */}
           <div className="flex items-center gap-2 flex-wrap">
             <button
+              type="button"
               onClick={() => setSelectedSeries("all")}
               className={`px-3 py-1 rounded-lg text-[11px] font-bold border transition-all cursor-pointer ${
                 selectedSeries === "all"
@@ -277,6 +328,7 @@ export default function AnalyticsDashboard() {
               All Metrics
             </button>
             <button
+              type="button"
               onClick={() => setSelectedSeries("searches")}
               className={`px-3 py-1 rounded-lg text-[11px] font-bold border flex items-center gap-1.5 transition-all cursor-pointer ${
                 selectedSeries === "searches"
@@ -288,6 +340,7 @@ export default function AnalyticsDashboard() {
               <span>Searches</span>
             </button>
             <button
+              type="button"
               onClick={() => setSelectedSeries("compares")}
               className={`px-3 py-1 rounded-lg text-[11px] font-bold border flex items-center gap-1.5 transition-all cursor-pointer ${
                 selectedSeries === "compares"
@@ -299,6 +352,7 @@ export default function AnalyticsDashboard() {
               <span>Compares</span>
             </button>
             <button
+              type="button"
               onClick={() => setSelectedSeries("clicks")}
               className={`px-3 py-1 rounded-lg text-[11px] font-bold border flex items-center gap-1.5 transition-all cursor-pointer ${
                 selectedSeries === "clicks"
@@ -319,19 +373,14 @@ export default function AnalyticsDashboard() {
             className="w-full h-auto overflow-visible"
           >
             <defs>
-              {/* Amber Area Gradient */}
               <linearGradient id="amberGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.35" />
                 <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.0" />
               </linearGradient>
-
-              {/* Blue Area Gradient */}
               <linearGradient id="blueGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.30" />
                 <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
               </linearGradient>
-
-              {/* Emerald Area Gradient */}
               <linearGradient id="emeraldGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#10b981" stopOpacity="0.30" />
                 <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
@@ -414,7 +463,6 @@ export default function AnalyticsDashboard() {
 
               return (
                 <g key={idx} onMouseEnter={() => setHoveredPoint(idx)} onMouseLeave={() => setHoveredPoint(null)}>
-                  {/* Vertical Guideline on Hover */}
                   {isHovered && (
                     <line
                       x1={sp.x}
@@ -427,7 +475,6 @@ export default function AnalyticsDashboard() {
                     />
                   )}
 
-                  {/* Searches Circle */}
                   {(selectedSeries === "all" || selectedSeries === "searches") && (
                     <circle
                       cx={sp.x}
@@ -440,7 +487,6 @@ export default function AnalyticsDashboard() {
                     />
                   )}
 
-                  {/* Compares Circle */}
                   {(selectedSeries === "all" || selectedSeries === "compares") && (
                     <circle
                       cx={cp.x}
@@ -453,7 +499,6 @@ export default function AnalyticsDashboard() {
                     />
                   )}
 
-                  {/* Clicks Circle */}
                   {(selectedSeries === "all" || selectedSeries === "clicks") && (
                     <circle
                       cx={clp.x}
@@ -466,7 +511,6 @@ export default function AnalyticsDashboard() {
                     />
                   )}
 
-                  {/* X Axis Label */}
                   <text
                     x={sp.x}
                     y={chartHeight - 8}
@@ -513,7 +557,7 @@ export default function AnalyticsDashboard() {
         </div>
       </div>
 
-      {/* Middle Grid: Outbound Distribution Donut Chart & Conversion Funnel */}
+      {/* ── Middle Grid: Outbound Distribution Donut & Funnel ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Outbound Referral Market Share Donut Chart (7 cols) */}
         <div className="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-5 shadow-xs">
@@ -559,7 +603,6 @@ export default function AnalyticsDashboard() {
                 })()}
               </svg>
 
-              {/* Donut Center Display */}
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
                 <span className="font-mono text-xl font-black text-slate-900 dark:text-white">
                   81.7K
@@ -643,14 +686,14 @@ export default function AnalyticsDashboard() {
         </div>
       </div>
 
-      {/* Bottom Grid: Search Queries & Regional Jurisdiction Breakdown */}
+      {/* ── Bottom Grid: Search Queries & Regional Breakdown ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Top Research Search Queries Horizontal Bar Chart */}
+        {/* Top Research Search Queries */}
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-4 shadow-xs">
           <div className="flex items-center justify-between">
             <h3 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
               <Search className="h-4 w-4 text-amber-500" />
-              <span>Top Research Search Queries (Volume & Share)</span>
+              <span>Top Research Search Queries (Volume &amp; Share)</span>
             </h3>
           </div>
 
