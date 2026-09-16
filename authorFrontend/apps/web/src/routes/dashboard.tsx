@@ -506,59 +506,7 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* SECTION 4: LIVE DATA SYNCHRONIZATION QUEUES */}
-          {(activeTab === "all" || activeTab === "jobs") && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-xs space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">
-                    <Server className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h2 className="text-base font-bold text-slate-900 dark:text-white">
-                      Live Data Sync & Crawler Monitors
-                    </h2>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Automated background synchronization jobs & regulatory register scrapers
-                    </p>
-                  </div>
-                </div>
-
-                <Link to="/operations" className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline">
-                  Job Console →
-                </Link>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {jobQueues.map((job) => (
-                  <div
-                    key={job.id}
-                    className="p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 space-y-2"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-xs text-slate-900 dark:text-white truncate">
-                        {job.jobName}
-                      </span>
-                      <span
-                        className={`h-2.5 w-2.5 rounded-full shrink-0 ${
-                          job.status === "running"
-                            ? "bg-amber-500 animate-ping"
-                            : job.status === "completed"
-                            ? "bg-emerald-500"
-                            : "bg-rose-500"
-                        }`}
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between font-mono text-[11px] text-slate-500">
-                      <span>{job.recordsProcessed ? `${job.recordsProcessed.toLocaleString()} records` : "Queued"}</span>
-                      <StatusBadge status={job.status} size="sm" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+      
         </div>
 
         {/* RIGHT COLUMN: DATA QUALITY & IMMUTABLE AUDIT STREAM */}
@@ -647,9 +595,7 @@ export default function Dashboard() {
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                   Live Audit Ledger
                 </h3>
-                <p className="text-[11px] text-slate-500">
-                  Immutable stream of compliance actions & score edits
-                </p>
+                
               </div>
 
               <Link to="/audit-logs" className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline">
@@ -657,7 +603,7 @@ export default function Dashboard() {
               </Link>
             </div>
 
-            <AuditTimeline entries={auditLogs} limit={5} />
+            <AuditTimeline entries={auditLogs} limit={5} variant="timeline" threeDataOnly={true} />
           </div>
         </div>
       </div>
