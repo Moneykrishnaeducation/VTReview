@@ -272,7 +272,7 @@ export default function SystemSettings() {
   };
 
   return (
-    <div className="space-y-6 text-xs max-w-6xl pb-16">
+    <div className="space-y-6 text-xs w-full pb-16">
       {/* ── Top Header Bar with Context Ribbon ── */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-slate-200 dark:border-slate-800">
         <div>
