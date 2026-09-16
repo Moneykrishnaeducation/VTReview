@@ -77,9 +77,8 @@ export function AdminHeader({ isSidebarCollapsed }: AdminHeaderProps) {
 
   return (
     <header
-      className={`fixed top-0 right-0 z-20 h-14 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-between px-3 md:px-6 transition-all duration-300 left-0 ${
-        isSidebarCollapsed ? "lg:left-20" : "lg:left-64"
-      }`}
+      className={`fixed top-0 right-0 z-20 h-14 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-between px-3 md:px-6 transition-all duration-300 left-0 ${isSidebarCollapsed ? "lg:left-20" : "lg:left-64"
+        }`}
     >
       {/* Left: Mobile Drawer Trigger & Global Search Button */}
       <div className="flex items-center gap-2.5 flex-1 max-w-lg">
@@ -176,11 +175,10 @@ export function AdminHeader({ isSidebarCollapsed }: AdminHeaderProps) {
                         setActiveRole(role.id as AdminRole);
                         setIsRoleMenuOpen(false);
                       }}
-                      className={`w-full text-left p-2.5 rounded-xl flex items-start justify-between gap-2 transition-all cursor-pointer ${
-                        isSelected
+                      className={`w-full text-left p-2.5 rounded-xl flex items-start justify-between gap-2 transition-all cursor-pointer ${isSelected
                           ? "bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-semibold"
                           : "hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-300"
-                      }`}
+                        }`}
                     >
                       <div className="space-y-0.5">
                         <div className="font-bold text-slate-900 dark:text-white text-xs">{role.name}</div>
@@ -269,11 +267,10 @@ export function AdminHeader({ isSidebarCollapsed }: AdminHeaderProps) {
                           navigate(n.actionUrl);
                         }
                       }}
-                      className={`p-3 rounded-xl border transition-all cursor-pointer space-y-1 ${
-                        n.read
+                      className={`p-3 rounded-xl border transition-all cursor-pointer space-y-1 ${n.read
                           ? "bg-slate-50/50 dark:bg-slate-900/40 border-slate-200/60 dark:border-slate-800/80 text-slate-500"
                           : "bg-slate-50 dark:bg-slate-900 border-amber-500/30 text-slate-800 dark:text-slate-200 shadow-2xs"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 text-xs">
@@ -357,7 +354,7 @@ export function AdminHeader({ isSidebarCollapsed }: AdminHeaderProps) {
                 </Link>
 
                 <Link
-                  to="/audit"
+                  to="/audit-logs"
                   onClick={() => setIsUserMenuOpen(false)}
                   className="w-full flex items-center gap-2 p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 font-medium transition-colors"
                 >
