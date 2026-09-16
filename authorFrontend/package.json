@@ -1,0 +1,33 @@
+{
+  "name": "authorFrontend",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "catalog": {
+      "dotenv": "^17.4.2",
+      "zod": "^4.4.3"
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "check-types": "turbo check-types",
+    "dev:web": "turbo -F web dev",
+    "test": "bun run --filter web test"
+  },
+  "dependencies": {
+    "@authorFrontend/env": "workspace:*",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@authorFrontend/config": "workspace:*",
+    "turbo": "2.10.11",
+    "typescript": "^6.0.3"
+  },
+  "packageManager": "bun@1.3.14"
+}
