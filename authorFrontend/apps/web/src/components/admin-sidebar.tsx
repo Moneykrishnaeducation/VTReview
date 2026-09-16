@@ -81,20 +81,6 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
       ],
     },
     {
-      title: "Research & Ratings",
-      items: [
-        { label: "Broker Directory", to: "/brokers", icon: <Building2 className="h-4 w-4" /> },
-        {
-          label: "120-Point Ratings",
-          to: "/ratings",
-          icon: <Star className="h-4 w-4" />,
-          badge: pendingRatingsCount > 0 ? pendingRatingsCount : undefined,
-          badgeColor: "bg-amber-500 text-slate-950 font-black",
-        },
-        { label: "Evidence Vault", to: "/evidence", icon: <FileText className="h-4 w-4" /> },
-      ],
-    },
-    {
       title: "Regulation & Safety",
       items: [
         {

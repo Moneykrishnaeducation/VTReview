@@ -8,7 +8,6 @@ import BrokerDetail from "./routes/brokers/broker-detail";
 import VerificationQueue from "./routes/regulation/verification-queue";
 import RegulatorsList from "./routes/regulation/regulators-list";
 import EvidenceLibrary from "./routes/evidence/evidence-library";
-import RatingManagement from "./routes/ratings/rating-management";
 import ReviewModeration from "./routes/reviews/review-moderation";
 import ComplaintManagement from "./routes/complaints/complaint-management";
 import ConvocationManagement from "./routes/community/convocation-management";
@@ -47,7 +46,6 @@ export const router = createBrowserRouter([
       // Research & Brokers
       { path: "brokers", element: <BrokerList /> },
       { path: "brokers/:id", element: <BrokerDetail /> },
-      { path: "ratings", element: <RatingManagement /> },
       { path: "evidence", element: <EvidenceLibrary /> },
 
       // Regulation
