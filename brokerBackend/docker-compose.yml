@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: vtreview
+      POSTGRES_USER: vtreview
+      POSTGRES_PASSWORD: vtreview
+    ports:
+      - "5432:5432"
+    volumes:
+      - vtreview_postgres:/var/lib/postgresql/data
+
+volumes:
+  vtreview_postgres:

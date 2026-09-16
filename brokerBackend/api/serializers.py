@@ -1,0 +1,53 @@
+from rest_framework import serializers
+
+from .models import Broker, Review
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    broker_id = serializers.PrimaryKeyRelatedField(source="broker", read_only=True)
+    review = serializers.CharField(source="body")
+
+    class Meta:
+        model = Review
+        fields = [
+            "id", "broker_id", "author_name", "country", "rating", "headline",
+            "review", "platform", "experience", "status", "moderator_notes", "created_at",
+        ]
+        read_only_fields = ["id", "broker_id", "status", "moderator_notes", "created_at"]
+
+
+class BrokerSerializer(serializers.ModelSerializer):
+    user_reviews = serializers.SerializerMethodField()
+    min_deposit_formatted = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Broker
+        fields = [
+            "id", "slug", "name", "logo_text", "logo_url", "affiliate_url", "hq", "founded",
+            "parent_company", "primary_license", "editorial_rating", "editorial_score_100",
+            "editorial_class", "user_rating", "review_count", "eur_usd_spread", "min_deposit",
+            "min_deposit_formatted", "max_leverage_retail", "execution_model", "platforms",
+            "ratings_breakdown", "regulations", "spreads_table", "account_types", "pros", "cons",
+            "best_for_summary", "not_ideal_for_summary", "verdict_summary", "fact_checked_date",
+            "is_regulated_tier1", "user_reviews",
+        ]
+
+    def get_user_reviews(self, broker: Broker) -> list[dict]:
+        return ReviewSerializer(broker.reviews.filter(status=Review.Status.APPROVED), many=True).data
+
+    def get_min_deposit_formatted(self, broker: Broker) -> str:
+        return f"${broker.min_deposit:,.2f}"
+
+
+class ReviewSubmissionSerializer(serializers.ModelSerializer):
+    broker_id = serializers.PrimaryKeyRelatedField(source="broker", queryset=Broker.objects.all())
+    review = serializers.CharField(source="body")
+
+    class Meta:
+        model = Review
+        fields = ["broker_id", "author_name", "country", "rating", "headline", "review", "platform", "experience"]
+
+    def validate_rating(self, value: int) -> int:
+        if not 1 <= value <= 5:
+            raise serializers.ValidationError("Rating must be between 1 and 5.")
+        return value

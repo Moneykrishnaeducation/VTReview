@@ -1,0 +1,68 @@
+from django.db import migrations, models
+import django.db.models.deletion
+
+
+class Migration(migrations.Migration):
+    initial = True
+    dependencies = []
+    operations = [
+        migrations.CreateModel(
+            name="Broker",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("slug", models.SlugField(unique=True)),
+                ("name", models.CharField(max_length=160)),
+                ("logo_text", models.CharField(blank=True, max_length=80)),
+                ("logo_url", models.URLField(blank=True)),
+                ("affiliate_url", models.URLField(blank=True)),
+                ("hq", models.CharField(blank=True, max_length=120)),
+                ("founded", models.PositiveIntegerField(blank=True, null=True)),
+                ("parent_company", models.CharField(blank=True, max_length=160)),
+                ("primary_license", models.CharField(blank=True, max_length=160)),
+                ("editorial_rating", models.DecimalField(decimal_places=2, default=0, max_digits=3)),
+                ("editorial_score_100", models.DecimalField(decimal_places=2, default=0, max_digits=5)),
+                ("editorial_class", models.CharField(default="Average", max_length=40)),
+                ("user_rating", models.DecimalField(decimal_places=2, default=0, max_digits=3)),
+                ("review_count", models.PositiveIntegerField(default=0)),
+                ("eur_usd_spread", models.DecimalField(decimal_places=4, default=0, max_digits=8)),
+                ("min_deposit", models.DecimalField(decimal_places=2, default=0, max_digits=12)),
+                ("max_leverage_retail", models.CharField(blank=True, max_length=40)),
+                ("execution_model", models.CharField(blank=True, max_length=80)),
+                ("platforms", models.JSONField(default=list)),
+                ("ratings_breakdown", models.JSONField(default=dict)),
+                ("regulations", models.JSONField(default=list)),
+                ("spreads_table", models.JSONField(default=list)),
+                ("account_types", models.JSONField(default=list)),
+                ("pros", models.JSONField(default=list)),
+                ("cons", models.JSONField(default=list)),
+                ("best_for_summary", models.JSONField(default=list)),
+                ("not_ideal_for_summary", models.JSONField(default=list)),
+                ("verdict_summary", models.TextField(blank=True)),
+                ("fact_checked_date", models.DateField(blank=True, null=True)),
+                ("is_regulated_tier1", models.BooleanField(default=False)),
+                ("published", models.BooleanField(default=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+            ],
+            options={"ordering": ["-editorial_score_100", "name"]},
+        ),
+        migrations.CreateModel(
+            name="Review",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("author_name", models.CharField(max_length=120)),
+                ("country", models.CharField(blank=True, max_length=80)),
+                ("rating", models.PositiveSmallIntegerField()),
+                ("headline", models.CharField(max_length=180)),
+                ("body", models.TextField()),
+                ("platform", models.CharField(blank=True, max_length=80)),
+                ("experience", models.CharField(blank=True, max_length=80)),
+                ("status", models.CharField(choices=[("pending_moderation", "Pending moderation"), ("approved", "Approved"), ("rejected", "Rejected")], default="pending_moderation", max_length=30)),
+                ("moderator_notes", models.TextField(blank=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("broker", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="reviews", to="api.broker")),
+            ],
+            options={"ordering": ["-created_at"]},
+        ),
+    ]
