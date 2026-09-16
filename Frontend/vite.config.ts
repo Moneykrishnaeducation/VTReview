@@ -9,7 +9,9 @@ export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '../Backend');
   const env = loadEnv(mode, envDir, '');
   const backendUrl = env.API_URL || 'http://localhost:5000';
-  const allowedHostsEnv = env.ALLOWED_HOSTS ? env.ALLOWED_HOSTS.split(',') : ["process.localhost", "localhost"];
+  const allowedHostsEnv = env.ALLOWED_HOSTS
+    ? env.ALLOWED_HOSTS.split(',')
+    : ["process.localhost", "author.localhost", "localhost", ".localhost"];
 
   return {
     plugins: [tailwindcss(), react()],

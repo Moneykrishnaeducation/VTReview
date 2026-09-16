@@ -233,13 +233,14 @@ export default function GlobalHeader() {
 
           {/* Right Action: Find My Broker & Sign In CTA */}
           <div className="flex items-center gap-2">
-            <Link
-              to="/login"
+
+            <a
+              href="http://author.localhost:5173/login"
               className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-slate-700 hover:border-slate-500 text-slate-200 text-xs font-semibold hover:text-white transition-colors"
             >
               <User className="h-3.5 w-3.5 text-amber-400" />
               Sign In
-            </Link>
+            </a>
 
             <Link
               to="/tools/broker-finder"

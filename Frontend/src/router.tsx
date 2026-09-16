@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, type RouteObject } from "react-router";
 
 import AppShell from "./app-shell";
 import Home from "./routes/home";
@@ -15,8 +15,7 @@ import GuidesHub from "./routes/guides-hub";
 import ToolsDashboard from "./routes/tools-dashboard";
 import ComplaintsHub from "./routes/complaints-hub";
 import RatingMethodology from "./routes/rating-methodology";
-import Login from "./ControlCenter/Login";
-import AdminDashboard from "./routes/admin";
+import { controlCenterChildRoutes } from "./ControlCenter/Components/routes";
 
 function NotFound() {
   return (
@@ -33,18 +32,19 @@ function NotFound() {
   );
 }
 
-export const router = createBrowserRouter([
+const isAuthorHost =
+  typeof window !== "undefined" &&
+  (window.location.hostname.startsWith("author.") ||
+    window.location.hostname.includes("author.localhost"));
+
+const mainAppRoutes: RouteObject[] = [
   {
     path: "/",
     element: <AppShell />,
     children: [
       { index: true, element: <Home /> },
-      { path: "login", element: <Login /> },
-      { path: "control-center/login", element: <Login /> },
-      { path: "signup", element: <Login initialMode="signup" /> },
-      { path: "register", element: <Login initialMode="signup" /> },
-      { path: "forgot-password", element: <Login initialMode="forgot" /> },
-      { path: "admin", element: <AdminDashboard /> },
+
+      // Main Portal routes
       { path: "brokers", element: <BrokerDirectory /> },
       { path: "brokers/:id", element: <BrokerReviewDetail /> },
       { path: "broker/:id", element: <BrokerReviewDetail /> },
@@ -64,4 +64,18 @@ export const router = createBrowserRouter([
       { path: "*", element: <NotFound /> },
     ],
   },
-]);
+];
+
+const authorHostRoutes: RouteObject[] = [
+  {
+    path: "/",
+    element: <AppShell />,
+    children: [
+      ...controlCenterChildRoutes,
+      { path: "*", element: <NotFound /> },
+    ],
+  },
+];
+
+export const router = createBrowserRouter(isAuthorHost ? authorHostRoutes : mainAppRoutes);
+

@@ -15,13 +15,25 @@ function LayoutContent() {
   const { viewportMode } = useComparison();
   const location = useLocation();
 
-  const isAuthPage = [
-    "/login",
-    "/control-center/login",
-    "/signup",
-    "/register",
-    "/forgot-password",
-  ].includes(location.pathname);
+  const isAuthorSubdomain =
+    typeof window !== "undefined" &&
+    (window.location.hostname.startsWith("author.") ||
+      window.location.hostname.includes("author.localhost"));
+
+  const isAuthPage =
+    isAuthorSubdomain ||
+    [
+      "/login",
+      "/control-center",
+      "/control-center/login",
+      "/control-center/signup",
+      "/control-center/admin",
+      "/signup",
+      "/register",
+      "/forgot-password",
+    ].some(
+      (path) => location.pathname === path || location.pathname.startsWith("/control-center")
+    );
 
   const getViewportContainerClass = () => {
     switch (viewportMode) {
