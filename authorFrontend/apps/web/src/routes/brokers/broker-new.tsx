@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAdmin } from "../../context/admin-context";
 import { StatusBadge } from "../../components/status-badge";
+import { BrokerLogo } from "../../components/broker-logo";
+import { LogoUpload } from "../../components/logo-upload";
 import type { BrokerAdmin, BrokerLicenseAdmin } from "../../types/admin";
 import {
   Building2,
@@ -19,6 +21,7 @@ import {
   CheckCircle2,
   X,
   AlertCircle,
+  Image as ImageIcon,
 } from "lucide-react";
 
 // ─── Shared style tokens (identical to broker-detail.tsx) ─────────────────────
@@ -89,6 +92,7 @@ export default function BrokerNew() {
   const [name, setName] = useState("");
   const [legalEntity, setLegalEntity] = useState("");
   const [logo, setLogo] = useState("");
+  const [logoAbbr, setLogoAbbr] = useState("");
   const [website, setWebsite] = useState("");
   const [foundedYear, setFoundedYear] = useState<number>(2010);
   const [hqCountry, setHqCountry] = useState("");
@@ -134,7 +138,7 @@ export default function BrokerNew() {
 
   // ── Derived live-preview values
   const displayLogo =
-    logo.trim() || (name.trim() ? name.trim().slice(0, 2).toUpperCase() : "??");
+    logo.trim() || logoAbbr.trim() || (name.trim() ? name.trim().slice(0, 2).toUpperCase() : "??");
 
   // ── License helpers
   const updateLicense = (idx: number, key: keyof BrokerLicenseAdmin, value: unknown) =>
@@ -295,10 +299,13 @@ export default function BrokerNew() {
 
           {/* Logo + Name + Badges */}
           <div className="flex items-center gap-4">
-            {/* Logo box — identical to broker-detail's h-14 w-14 rounded-2xl */}
-            <div className="h-14 w-14 rounded-2xl bg-amber-500 text-slate-950 font-black text-xl flex items-center justify-center shrink-0 shadow-md select-none">
-              {displayLogo}
-            </div>
+            {/* Logo box */}
+            <BrokerLogo
+              logo={displayLogo}
+              name={name}
+              size="lg"
+              className="h-14 w-14 rounded-2xl shrink-0 shadow-md select-none"
+            />
 
             <div>
               <div className="flex flex-wrap items-center gap-2.5 mb-1">
@@ -392,6 +399,39 @@ export default function BrokerNew() {
               </span>
             </div>
 
+            {/* Logo Asset Upload Section */}
+            <div className="p-4 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-xs">
+                    <ImageIcon className="h-4 w-4 text-amber-500" />
+                    Broker Brand Logo
+                  </h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Upload an official brand icon (PNG, JPG, SVG, WebP) or enter an image web URL.
+                  </p>
+                </div>
+                <div className="w-full sm:w-48">
+                  <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase mb-0.5">
+                    Fallback Abbreviation
+                  </label>
+                  <input
+                    className={inputCls}
+                    value={logoAbbr}
+                    maxLength={4}
+                    onChange={(e) => setLogoAbbr(e.target.value.toUpperCase())}
+                    placeholder="e.g. PP (auto if blank)"
+                  />
+                </div>
+              </div>
+
+              <LogoUpload
+                value={logo}
+                onChange={setLogo}
+                brokerName={name}
+              />
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               <Field label="Broker Name" required error={errors.name}>
                 <input
@@ -408,16 +448,6 @@ export default function BrokerNew() {
                   value={legalEntity}
                   onChange={(e) => setLegalEntity(e.target.value)}
                   placeholder="e.g. Pepperstone Group Limited"
-                />
-              </Field>
-
-              <Field label="Logo Abbreviation">
-                <input
-                  className={inputCls}
-                  value={logo}
-                  maxLength={4}
-                  onChange={(e) => setLogo(e.target.value.toUpperCase())}
-                  placeholder="e.g. PP  (auto if blank)"
                 />
               </Field>
 

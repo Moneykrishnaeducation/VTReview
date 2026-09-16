@@ -4,6 +4,7 @@ import { useAdmin } from "../../context/admin-context";
 import type { BrokerAdmin } from "../../types/admin";
 import { DataTable, type Column } from "../../components/data-table";
 import { StatusBadge } from "../../components/status-badge";
+import { BrokerLogo } from "../../components/broker-logo";
 import {
   Building2,
   Plus,
@@ -118,9 +119,7 @@ export default function BrokerList() {
       sortable: true,
       cell: (row) => (
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center shrink-0 shadow-2xs">
-            {row.logo}
-          </div>
+          <BrokerLogo logo={row.logo} name={row.name} size="sm" />
           <div>
             <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-xs">
               <span>{row.name}</span>
@@ -406,9 +405,7 @@ export default function BrokerList() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="h-11 w-11 rounded-2xl bg-amber-500 text-slate-950 font-black text-sm flex items-center justify-center shrink-0 shadow-2xs">
-                    {b.logo}
-                  </div>
+                  <BrokerLogo logo={b.logo} name={b.name} size="md" />
                   <div>
                     <h3 className="font-black text-slate-900 dark:text-white text-base flex items-center gap-1.5 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                       <span>{b.name}</span>
