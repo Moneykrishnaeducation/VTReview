@@ -206,7 +206,7 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
                 <img
                   src={logo}
                   alt="WikiFX Admin"
-                  className="h-8 w-auto max-w-[130px] object-contain group-hover:scale-102 transition-transform"
+                  className="h-8 w-auto max-w-[130px] object-contain rounded-lg p-0.5 bg-blue-900/90 group-hover:scale-102 transition-transform"
                 />
                 <span className="text-[9px] px-1.5 py-0.5 bg-amber-500/10 text-amber-700 dark:text-amber-400 font-mono font-bold rounded border border-amber-500/20 uppercase">
                   Admin
