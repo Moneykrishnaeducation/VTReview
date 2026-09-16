@@ -17,19 +17,38 @@ import {
   Flame,
   CheckCircle2,
   Users,
+  User,
+  LogOut,
+  LogIn,
+  FileText,
+  ShieldAlert,
 } from "lucide-react";
 import { BROKERS } from "@/data/broker-directory-data";
 import logo from "@/assets/logo.png";
 import { ModeToggle } from "@/components/mode-toggle";
+import { useAuth } from "@/lib/auth-context";
 
 export default function GlobalHeader() {
+  const { session, login, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [showAffiliateModal, setShowAffiliateModal] = useState(false);
   const megaMenuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const userMenuRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Search filtering
   const filteredBrokers = searchQuery.trim()
@@ -242,16 +261,43 @@ export default function GlobalHeader() {
             </Link>
           </nav>
 
-          {/* Right Action: ModeToggle & Find My Broker CTA */}
+          {/* Right Action: ModeToggle, User Profile & Find My Broker CTA */}
           <div className="flex items-center gap-2">
             <ModeToggle />
 
+            {/* User Profile Icon Dropdown (Matching image.png UI Design - No Outer Border, Inner Circular Ring) */}
+            <div className="relative" ref={userMenuRef}>
+              <button
+                
+                className="group p-2 rounded-2xl bg-slate-900/90 hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-center focus:outline-none"
+                title="Login"
+                aria-label="Login"
+              >
+                <div className="relative h-8 w-8 rounded-full border border-slate-700/40 bg-slate-800/40 flex items-center justify-center transition-all group-hover:border-slate-600/60">
+                  {session.isAuthenticated && session.user ? (
+                    <span className="font-black text-[11px] text-amber-400">
+                      {session.user.displayName.substring(0, 2).toUpperCase()}
+                    </span>
+                  ) : (
+                    <User className="h-4 w-4 text-slate-200 group-hover:text-amber-400 transition-colors" />
+                  )}
+
+                  {session.isAuthenticated && (
+                    <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-slate-950 animate-pulse" />
+                  )}
+                </div>
+              </button>
+
+             
+            </div>
+
+            {/* Single-Line Find My Broker Button */}
             <Link
               to="/tools/broker-finder"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-xs transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-xs transition-colors whitespace-nowrap shrink-0 leading-none"
             >
-              <Sparkles className="h-3.5 w-3.5 text-slate-950" />
-              Find My Broker
+              <Sparkles className="h-3.5 w-3.5 text-slate-950 shrink-0" />
+              <span className="whitespace-nowrap">Find My Broker</span>
             </Link>
 
             {/* Mobile Hamburger Toggle */}
