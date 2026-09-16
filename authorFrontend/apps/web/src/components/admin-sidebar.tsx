@@ -81,6 +81,13 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
       ],
     },
     {
+      title: "Research & Ratings",
+      items: [
+        { label: "Broker Directory", to: "/brokers", icon: <Building2 className="h-4 w-4" /> },
+        { label: "Evidence Vault", to: "/evidence", icon: <FileText className="h-4 w-4" /> },
+      ],
+    },
+    {
       title: "Regulation & Safety",
       items: [
         {
