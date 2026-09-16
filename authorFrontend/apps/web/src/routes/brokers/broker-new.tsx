@@ -334,8 +334,8 @@ export default function BrokerNew() {
           </div>
         </div>
 
-        {/* ── Tab bar — identical to broker-detail ── */}
-        <div className="flex items-center gap-1 overflow-x-auto border-t border-slate-200 dark:border-slate-800 pt-3 custom-scrollbar">
+        {/* ── Tab bar — polished with no-scrollbar and matching badge & active tab styling ── */}
+        <div className="flex items-center gap-1.5 overflow-x-auto border-t border-slate-200 dark:border-slate-800 pt-3 pb-1 no-scrollbar">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             const hasError =
@@ -347,19 +347,25 @@ export default function BrokerNew() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3 py-2 rounded-lg font-medium whitespace-nowrap flex items-center gap-2 transition-all cursor-pointer text-xs ${
+                className={`px-3.5 py-2 rounded-xl font-medium whitespace-nowrap flex items-center gap-2 transition-all cursor-pointer ${
                   isActive
-                    ? "bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30 font-bold"
+                    ? "bg-amber-500 text-slate-950 font-bold shadow-xs"
                     : hasError
-                    ? "text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
+                    ? "text-rose-600 dark:text-rose-400 bg-rose-50/50 dark:bg-rose-950/20 hover:bg-rose-50 dark:hover:bg-rose-950/40"
                     : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60"
                 }`}
               >
                 <span>{tab.icon}</span>
                 <span>{tab.label}</span>
-                {hasError && <AlertCircle className="h-3 w-3 text-rose-500" />}
+                {hasError && <AlertCircle className={`h-3 w-3 ${isActive ? "text-slate-950" : "text-rose-500"}`} />}
                 {tab.badge !== undefined && !hasError && (
-                  <span className="text-[10px] font-mono px-1.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-300 font-bold">
+                  <span
+                    className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full font-bold ${
+                      isActive
+                        ? "bg-slate-950/20 text-slate-950"
+                        : "bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-300"
+                    }`}
+                  >
                     {tab.badge}
                   </span>
                 )}

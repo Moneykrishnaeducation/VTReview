@@ -573,23 +573,29 @@ export default function BrokerDetail() {
         </div>
 
         {/* ── 12-Tab Horizontal Scroller ── */}
-        <div className="flex items-center gap-1 overflow-x-auto border-t border-slate-200 dark:border-slate-800 pt-3 custom-scrollbar">
+        <div className="flex items-center gap-1.5 overflow-x-auto border-t border-slate-200 dark:border-slate-800 pt-3 pb-1 no-scrollbar">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3 py-2 rounded-lg font-medium whitespace-nowrap flex items-center gap-2 transition-all cursor-pointer ${
+                className={`px-3.5 py-2 rounded-xl font-medium whitespace-nowrap flex items-center gap-2 transition-all cursor-pointer ${
                   isActive
-                    ? "bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30 font-bold"
+                    ? "bg-amber-500 text-slate-950 font-bold shadow-xs"
                     : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60"
                 }`}
               >
                 <span>{tab.icon}</span>
                 <span>{tab.label}</span>
                 {tab.badge !== undefined && (
-                  <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-300 font-bold">
+                  <span
+                    className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full font-bold ${
+                      isActive
+                        ? "bg-slate-950/20 text-slate-950"
+                        : "bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-300"
+                    }`}
+                  >
                     {tab.badge}
                   </span>
                 )}
