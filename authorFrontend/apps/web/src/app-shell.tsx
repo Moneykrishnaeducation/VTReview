@@ -1,10 +1,13 @@
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 
 import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 function RoutedLayout() {
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/" || location.pathname === "/login";
+
   return (
     <ThemeProvider
       attribute="class"
@@ -12,8 +15,8 @@ function RoutedLayout() {
       disableTransitionOnChange
       storageKey="vite-ui-theme"
     >
-      <div className="grid h-svh grid-rows-[auto_1fr]">
-        <Header />
+      <div className={isLoginPage ? "h-svh" : "grid h-svh grid-rows-[auto_1fr]"}>
+        {!isLoginPage && <Header />}
         <Outlet />
       </div>
       <Toaster richColors />
@@ -24,3 +27,4 @@ function RoutedLayout() {
 export default function AppShell() {
   return <RoutedLayout />;
 }
+
