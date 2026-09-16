@@ -66,6 +66,7 @@ interface AdminContextType {
   publishGuide: (id: string) => void;
   updateBroker: (id: string, updates: Partial<BrokerAdmin>, reason?: string) => void;
   addEvidence: (evidence: Omit<EvidenceItem, "id" | "uploadedAt" | "uploadedBy" | "checksum"> & { checksum?: string }) => EvidenceItem;
+  addRegulator: (regulator: Omit<RegulatorAdmin, "id" | "lastVerifiedDate" | "verificationOwner">) => RegulatorAdmin;
   markNotificationRead: (id: string) => void;
   markAllNotificationsRead: () => void;
 
@@ -93,7 +94,7 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined);
 export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [activeRole, setActiveRole] = useState<AdminRole>("super_admin");
   const [brokers, setBrokers] = useState<BrokerAdmin[]>(INITIAL_BROKERS);
-  const [regulators] = useState<RegulatorAdmin[]>(INITIAL_REGULATORS);
+  const [regulators, setRegulators] = useState<RegulatorAdmin[]>(INITIAL_REGULATORS);
   const [evidenceList, setEvidenceList] = useState<EvidenceItem[]>(INITIAL_EVIDENCE);
   const [verifications, setVerifications] = useState<LicenseVerificationItem[]>(INITIAL_VERIFICATIONS);
   const [ratingProposals, setRatingProposals] = useState<RatingChangeProposal[]>(INITIAL_RATING_PROPOSALS);
@@ -450,6 +451,48 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     return newEvidence;
   };
 
+  // Register New Statutory Regulator Authority
+  const addRegulator = (regulator: Omit<RegulatorAdmin, "id" | "lastVerifiedDate" | "verificationOwner">): RegulatorAdmin => {
+    const cleanCode = regulator.code.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const newId = `reg-${cleanCode}-${Date.now().toString().slice(-4)}`;
+    const today = new Date().toISOString().split("T")[0];
+
+    const newRegulator: RegulatorAdmin = {
+      ...regulator,
+      id: newId,
+      lastVerifiedDate: today,
+      verificationOwner: activeRoleDef.name,
+    };
+
+    setRegulators((prev) => [newRegulator, ...prev]);
+
+    appendAuditLog({
+      action: "CREATE",
+      entityType: "regulator" as any,
+      entityId: newId,
+      entityName: `${newRegulator.code} (${newRegulator.name})`,
+      summary: `Registered new statutory regulatory authority in ${newRegulator.jurisdiction} (${newRegulator.tier}).`,
+      afterValue: `Tier: ${newRegulator.tier} | Scheme: ${newRegulator.compensationScheme}`,
+      reason: "Statutory jurisdiction catalog expansion.",
+    });
+
+    setNotifications((prev) => [
+      {
+        id: `notif-${Date.now()}`,
+        title: "New Regulatory Authority Registered",
+        message: `${newRegulator.code} (${newRegulator.jurisdiction}) added to the global regulatory registry.`,
+        type: "system_notice",
+        priority: "medium",
+        createdAt: "Just now",
+        read: false,
+        actionUrl: "/regulation/regulators",
+      },
+      ...prev,
+    ]);
+
+    return newRegulator;
+  };
+
   // Notifications
   const markNotificationRead = (id: string) => {
     setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
@@ -508,6 +551,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         publishGuide,
         updateBroker,
         addEvidence,
+        addRegulator,
         markNotificationRead,
         markAllNotificationsRead,
         isSearchOpen,
