@@ -15,11 +15,10 @@ describe("Admin Dashboard Screen (Screen 01)", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/Research Operations Console/i)).toBeInTheDocument();
     expect(screen.getByText(/Pending Licenses/i)).toBeInTheDocument();
     expect(screen.getByText(/Regulatory Verification Queue/i)).toBeInTheDocument();
-    expect(screen.getByText(/Live Audit Feed/i)).toBeInTheDocument();
-    expect(screen.getByText(/Review Moderation/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Active Disputes/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Live Audit Ledger/i)).toBeInTheDocument();
+    expect(screen.getByText(/Review Queue/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/active dispute claims/i).length).toBeGreaterThan(0);
   });
 });

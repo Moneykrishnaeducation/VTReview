@@ -30,6 +30,9 @@ import {
   ChevronDown
 } from "lucide-react";
 
+import logo from "../assets/logo.png";
+import favicon from "../assets/favicon.png";
+
 interface AdminSidebarProps {
   isCollapsed: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
@@ -197,21 +200,23 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
           <Link
             to="/dashboard"
             onClick={() => setIsMobileSidebarOpen(false)}
-            className="flex items-center gap-2.5 overflow-hidden group"
+            className="flex items-center gap-2 overflow-hidden group"
           >
-            <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 font-black text-sm flex items-center justify-center shrink-0 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
-              WFX
-            </div>
-            {(!isCollapsed || isMobileSidebarOpen) && (
-              <div className="flex flex-col min-w-0">
-                <span className="font-extrabold text-slate-900 dark:text-white text-sm tracking-tight leading-tight flex items-center gap-1">
-                  Wiki<span className="text-amber-500 font-black">FX</span>
-                  <span className="text-[9px] px-1 py-0.2 bg-amber-500/10 text-amber-700 dark:text-amber-400 font-mono font-bold rounded">
-                    ADMIN
-                  </span>
-                </span>
-                <span className="text-[9px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold leading-tight truncate">
-                  Research Operations
+            {isCollapsed && !isMobileSidebarOpen ? (
+              <img
+                src={favicon}
+                alt="WikiFX"
+                className="h-8 w-8 object-contain rounded-lg p-0.5 bg-amber-500/10 border border-amber-500/20 group-hover:scale-105 transition-transform"
+              />
+            ) : (
+              <div className="flex items-center gap-2">
+                <img
+                  src={logo}
+                  alt="WikiFX Admin"
+                  className="h-8 w-auto max-w-[130px] object-contain group-hover:scale-102 transition-transform"
+                />
+                <span className="text-[9px] px-1.5 py-0.5 bg-amber-500/10 text-amber-700 dark:text-amber-400 font-mono font-bold rounded border border-amber-500/20 uppercase">
+                  Admin
                 </span>
               </div>
             )}

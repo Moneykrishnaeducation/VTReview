@@ -18,6 +18,7 @@ import {
   Clock,
   Menu,
 } from "lucide-react";
+import favicon from "../assets/favicon.png";
 
 interface AdminHeaderProps {
   isSidebarCollapsed: boolean;
@@ -60,6 +61,10 @@ export function AdminHeader({ isSidebarCollapsed }: AdminHeaderProps) {
         >
           <Menu className="h-4 w-4" />
         </button>
+
+        <Link to="/" className="lg:hidden flex items-center gap-1.5 shrink-0" title="WikiFX Admin">
+          <img src={favicon} alt="WikiFX" className="h-7 w-7 rounded-lg object-contain" />
+        </Link>
 
         <button
           onClick={() => setIsSearchOpen(true)}
