@@ -1,0 +1,211 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* HIGH-FIDELITY FINANCIAL RESEARCH DESIGN SYSTEM TOKENS */
+:root {
+  /* Core Neutrals - Deep Slate / Crisp Editorial */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  /* Brand / Primary - Institutional Navy & Slate Blue */
+  --primary: #0f172a;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #1e293b;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #e2e8f0;
+  --accent-foreground: #0f172a;
+  --destructive: #e11d48;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #cbd5e1;
+  --ring: #2563eb;
+
+  /* Financial Research Semantic Accents */
+  --trust-verified: #059669;
+  --trust-verified-bg: #ecfdf5;
+  --trust-verified-border: #a7f3d0;
+
+  --tier1-reg: #047857;
+  --tier1-reg-bg: #ecfdf5;
+  --tier1-reg-border: #6ee7b7;
+
+  --tier2-reg: #b45309;
+  --tier2-reg-bg: #fffbeb;
+  --tier2-reg-border: #fde68a;
+
+  --risk-warning: #be123c;
+  --risk-warning-bg: #fff1f2;
+  --risk-warning-border: #fecdd3;
+
+  --editorial-accent: #1d4ed8;
+  --editorial-accent-bg: #eff6ff;
+
+  --score-badge: #d97706;
+  --score-badge-bg: #fffbeb;
+
+  --chart-1: #0f172a;
+  --chart-2: #2563eb;
+  --chart-3: #059669;
+  --chart-4: #d97706;
+  --chart-5: #64748b;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: #090d16;
+  --foreground: #f8fafc;
+  --card: #0f172a;
+  --card-foreground: #f8fafc;
+  --popover: #0f172a;
+  --popover-foreground: #f8fafc;
+  --primary: #f8fafc;
+  --primary-foreground: #0f172a;
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #334155;
+  --accent-foreground: #f8fafc;
+  --destructive: #f43f5e;
+  --destructive-foreground: #ffffff;
+  --border: #334155;
+  --input: #334155;
+  --ring: #3b82f6;
+
+  --trust-verified: #10b981;
+  --trust-verified-bg: rgba(6, 78, 59, 0.4);
+  --trust-verified-border: #065f46;
+
+  --tier1-reg: #34d399;
+  --tier1-reg-bg: rgba(6, 78, 59, 0.4);
+  --tier1-reg-border: #047857;
+
+  --tier2-reg: #fbbf24;
+  --tier2-reg-bg: rgba(120, 53, 15, 0.4);
+  --tier2-reg-border: #92400e;
+
+  --risk-warning: #fb7185;
+  --risk-warning-bg: rgba(136, 19, 55, 0.4);
+  --risk-warning-border: #9f1239;
+
+  --editorial-accent: #60a5fa;
+  --editorial-accent-bg: rgba(30, 58, 138, 0.4);
+
+  --score-badge: #f59e0b;
+  --score-badge-bg: rgba(120, 53, 15, 0.3);
+
+  --chart-1: #f8fafc;
+  --chart-2: #60a5fa;
+  --chart-3: #34d399;
+  --chart-4: #fbbf24;
+  --chart-5: #94a3b8;
+}
+
+@theme inline {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.011em;
+}
+
+/* Tabular numbers for financial metrics and spread tables */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hi-Fi Financial Research Badges */
+.badge-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+.dark .badge-verified {
+  background-color: rgba(6, 78, 59, 0.4);
+  color: #34d399;
+  border-color: #065f46;
+}
+
+.badge-tier1 {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  background-color: #ecfdf5;
+  color: #047857;
+  border: 1px solid #6ee7b7;
+}
+.dark .badge-tier1 {
+  background-color: rgba(6, 78, 59, 0.4);
+  color: #34d399;
+  border-color: #047857;
+}
+
+/* Wireframe / Prototype Annotation styling (Subtle & Toggleable) */
+.ux-annotation {
+  border: 1px dashed #2563eb;
+  background-color: rgba(37, 99, 235, 0.04);
+  position: relative;
+}
+
+.ux-annotation-tag {
+  position: absolute;
+  top: -0.65rem;
+  left: 0.75rem;
+  background-color: #1d4ed8;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 0.25rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  z-index: 20;
+}
