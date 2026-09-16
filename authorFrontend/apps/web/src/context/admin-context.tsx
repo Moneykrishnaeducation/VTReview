@@ -64,6 +64,8 @@ interface AdminContextType {
   moderateReview: (id: string, action: "approve" | "reject" | "flag" | "needs_clarification", notes?: string) => void;
   updateComplaintStatus: (id: string, status: ComplaintAdmin["status"], note: string) => void;
   publishGuide: (id: string) => void;
+  createGuide: (guide: Omit<EditorialGuide, "id" | "createdAt" | "updatedAt">) => EditorialGuide;
+  updateGuide: (id: string, updates: Partial<EditorialGuide>) => void;
   updateBroker: (id: string, updates: Partial<BrokerAdmin>, reason?: string) => void;
   addEvidence: (evidence: Omit<EvidenceItem, "id" | "uploadedAt" | "uploadedBy" | "checksum"> & { checksum?: string }) => EvidenceItem;
   addRegulator: (regulator: Omit<RegulatorAdmin, "id" | "lastVerifiedDate" | "verificationOwner">) => RegulatorAdmin;
@@ -389,6 +391,50 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  // Create Guide
+  const createGuide = (guideData: Omit<EditorialGuide, "id" | "createdAt" | "updatedAt">): EditorialGuide => {
+    const newId = `gd-${String(guides.length + 1).padStart(3, "0")}`;
+    const now = new Date().toISOString().replace("T", " ").substring(0, 16) + " UTC";
+    const newGuide: EditorialGuide = {
+      ...guideData,
+      id: newId,
+      createdAt: now,
+      updatedAt: now,
+    };
+    setGuides((prev) => [newGuide, ...prev]);
+    appendAuditLog({
+      action: "CREATE",
+      entityType: "guide",
+      entityId: newId,
+      entityName: newGuide.title,
+      summary: `Created new editorial guide (${newGuide.category}).`,
+      beforeValue: "N/A",
+      afterValue: `Status: ${newGuide.status}`,
+      reason: "Editorial workflow drafting initialized.",
+    });
+    return newGuide;
+  };
+
+  // Update Guide
+  const updateGuide = (id: string, updates: Partial<EditorialGuide>) => {
+    const gd = guides.find((g) => g.id === id);
+    if (!gd) return;
+    const now = new Date().toISOString().replace("T", " ").substring(0, 16) + " UTC";
+    setGuides((prev) =>
+      prev.map((g) => (g.id === id ? { ...g, ...updates, updatedAt: now } : g))
+    );
+    appendAuditLog({
+      action: "UPDATE",
+      entityType: "guide",
+      entityId: id,
+      entityName: gd.title,
+      summary: `Updated editorial research guide content/metadata.`,
+      beforeValue: `Status: ${gd.status}`,
+      afterValue: `Status: ${updates.status || gd.status}`,
+      reason: "Editorial revision saved.",
+    });
+  };
+
   // Update Broker
   const updateBroker = (id: string, updates: Partial<BrokerAdmin>, reason?: string) => {
     const b = brokers.find((brk) => brk.id === id);
@@ -549,6 +595,8 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         moderateReview,
         updateComplaintStatus,
         publishGuide,
+        createGuide,
+        updateGuide,
         updateBroker,
         addEvidence,
         addRegulator,
