@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router";
 
 import AppShell from "./app-shell";
+import Login from "./routes/login";
 import Dashboard from "./routes/dashboard";
 import BrokerList from "./routes/brokers/broker-list";
 import BrokerDetail from "./routes/brokers/broker-detail";
@@ -32,10 +33,14 @@ function NotFound() {
 
 export const router = createBrowserRouter([
   {
+    path: "/login",
+    element: <Login />,
+  },
+  {
     path: "/",
     element: <AppShell />,
     children: [
-      { index: true, element: <Navigate to="/dashboard" replace /> },
+      { index: true, element: <Navigate to="/login" replace /> },
       { path: "dashboard", element: <Dashboard /> },
 
       // Research & Brokers
