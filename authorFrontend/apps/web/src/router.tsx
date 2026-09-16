@@ -17,7 +17,6 @@ import UserManagement from "./routes/users/user-management";
 import RolesPermissions from "./routes/users/roles-permissions";
 import AnalyticsDashboard from "./routes/analytics/analytics-dashboard";
 import DataQualityDashboard from "./routes/data-quality/data-quality-dashboard";
-import JobQueues from "./routes/operations/job-queues";
 import AuditLogs from "./routes/audit-logs/audit-logs";
 import NotificationsCenter from "./routes/notifications/notifications-center";
 import SystemSettings from "./routes/settings/system-settings";
@@ -72,7 +71,6 @@ export const router = createBrowserRouter([
       // Intelligence & Quality
       { path: "analytics", element: <AnalyticsDashboard /> },
       { path: "data-quality", element: <DataQualityDashboard /> },
-      { path: "operations", element: <JobQueues /> },
 
       // Governance
       { path: "audit-logs", element: <AuditLogs /> },

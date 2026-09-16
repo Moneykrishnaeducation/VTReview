@@ -150,7 +150,6 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
           badge: criticalIssuesCount > 0 ? criticalIssuesCount : undefined,
           badgeColor: "bg-orange-500 text-slate-950 font-bold",
         },
-        { label: "Job Queues & Sync", to: "/operations", icon: <Server className="h-4 w-4" /> },
       ],
     },
     {
