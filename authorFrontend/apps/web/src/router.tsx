@@ -11,6 +11,7 @@ import EvidenceLibrary from "./routes/evidence/evidence-library";
 import RatingManagement from "./routes/ratings/rating-management";
 import ReviewModeration from "./routes/reviews/review-moderation";
 import ComplaintManagement from "./routes/complaints/complaint-management";
+import ConvocationManagement from "./routes/community/convocation-management";
 import EditorialCms from "./routes/editorial/editorial-cms";
 import UserManagement from "./routes/users/user-management";
 import RolesPermissions from "./routes/users/roles-permissions";
@@ -56,6 +57,8 @@ export const router = createBrowserRouter([
       // Community & Disputes
       { path: "reviews", element: <ReviewModeration /> },
       { path: "complaints", element: <ComplaintManagement /> },
+      { path: "convocation", element: <ConvocationManagement /> },
+      { path: "community/convocation", element: <ConvocationManagement /> },
 
       // Editorial
       { path: "editorial", element: <EditorialCms /> },

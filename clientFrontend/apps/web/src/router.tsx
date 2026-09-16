@@ -15,6 +15,7 @@ import GuidesHub from "./routes/guides-hub";
 import ToolsDashboard from "./routes/tools-dashboard";
 import ComplaintsHub from "./routes/complaints-hub";
 import RatingMethodology from "./routes/rating-methodology";
+import CommunityConvocation from "./routes/community-convocation";
 
 function NotFound() {
   return (
@@ -47,6 +48,9 @@ export const router = createBrowserRouter([
       { path: "regulation/:regulatorId", element: <RegulatorDetail /> },
       { path: "reviews", element: <UserReviewsHub /> },
       { path: "reviews/write", element: <WriteReviewFlow /> },
+      { path: "community", element: <CommunityConvocation /> },
+      { path: "community/convocation", element: <CommunityConvocation /> },
+      { path: "convocation", element: <CommunityConvocation /> },
       { path: "guides", element: <GuidesHub /> },
       { path: "guides/:slug", element: <GuidesHub /> },
       { path: "tools", element: <ToolsDashboard /> },

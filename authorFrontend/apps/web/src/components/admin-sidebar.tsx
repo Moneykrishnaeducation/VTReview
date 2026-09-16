@@ -22,6 +22,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Sparkles,
+  Radio,
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -89,6 +90,13 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
           to: "/complaints",
           icon: <AlertTriangle className="h-4 w-4" />,
           badge: pendingComplaintsCount > 0 ? pendingComplaintsCount : undefined,
+          badgeColor: "bg-rose-500 text-white font-bold",
+        },
+        {
+          label: "Global Convocation",
+          to: "/convocation",
+          icon: <Radio className="h-4 w-4 text-amber-500" />,
+          badge: "LIVE",
           badgeColor: "bg-rose-500 text-white font-bold",
         },
       ],

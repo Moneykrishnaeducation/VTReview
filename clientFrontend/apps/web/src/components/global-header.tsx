@@ -16,6 +16,7 @@ import {
   SlidersHorizontal,
   Flame,
   CheckCircle2,
+  Users,
 } from "lucide-react";
 import { BROKERS } from "@/data/broker-directory-data";
 import logo from "@/assets/logo.png";
@@ -222,10 +223,20 @@ export default function GlobalHeader() {
               Tools
             </Link>
 
+            {/* Community Convocation */}
+            <Link
+              to="/community/convocation"
+              className="flex items-center gap-1.5 px-2.5 py-2 rounded-md hover:bg-slate-900 text-amber-400 hover:text-amber-300 font-bold transition-colors"
+            >
+              <Users className="h-3.5 w-3.5" />
+              <span>Convocation</span>
+              <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping" />
+            </Link>
+
             {/* Complaints Exposure */}
             <Link
               to="/complaints"
-              className="px-2.5 py-2 rounded-md hover:bg-slate-900 text-amber-400 font-semibold"
+              className="px-2.5 py-2 rounded-md hover:bg-slate-900 text-slate-200 font-semibold"
             >
               Complaints
             </Link>
@@ -665,9 +676,17 @@ export default function GlobalHeader() {
                     Trading Calculators
                   </Link>
                   <Link
+                    to="/community/convocation"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-amber-400 font-bold flex items-center justify-between"
+                  >
+                    <span>Global Convocation 2026</span>
+                    <span className="text-[10px] px-1.5 py-0.2 bg-rose-500 text-white rounded font-mono">LIVE</span>
+                  </Link>
+                  <Link
                     to="/complaints"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-amber-400"
+                    className="block py-2 px-3 rounded-md hover:bg-slate-900 text-slate-200"
                   >
                     Complaints & Exposure
                   </Link>

@@ -61,6 +61,7 @@ export default function GlobalFooter() {
               <li><Link to="/compare" className="hover:text-white">Side-by-Side Comparison</Link></li>
               <li><Link to="/tools" className="hover:text-white">Forex All-In Cost Calculator</Link></li>
               <li><Link to="/tools" className="hover:text-white">Pip Value & Risk Estimator</Link></li>
+              <li><Link to="/community/convocation" className="hover:text-amber-300 font-bold text-amber-400">🌐 Global Convocation 2026</Link></li>
               <li><Link to="/reviews" className="hover:text-white">User Community Reviews</Link></li>
               <li><Link to="/reviews/write" className="hover:text-white">Submit a Review</Link></li>
             </ul>
