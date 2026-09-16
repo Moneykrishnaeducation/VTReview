@@ -70,6 +70,9 @@ interface AdminContextType {
   updateBroker: (id: string, updates: Partial<BrokerAdmin>, reason?: string) => void;
   addEvidence: (evidence: Omit<EvidenceItem, "id" | "uploadedAt" | "uploadedBy" | "checksum"> & { checksum?: string }) => EvidenceItem;
   addRegulator: (regulator: Omit<RegulatorAdmin, "id" | "lastVerifiedDate" | "verificationOwner">) => RegulatorAdmin;
+  addReview: (review: Omit<ReviewModerationItem, "id" | "submittedAt">) => void;
+  addComplaint: (complaint: Omit<ComplaintAdmin, "id" | "caseNumber" | "submittedAt" | "updatedAt" | "timeline">) => void;
+  addAuditLogEntry: (entry: Omit<AuditLogEntry, "id" | "timestamp" | "actorId" | "actorName" | "actorRole" | "ipAddress">) => void;
   markNotificationRead: (id: string) => void;
   markAllNotificationsRead: () => void;
 
@@ -566,6 +569,60 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     return newRegulator;
   };
 
+  // Add Trader Review
+  const addReview = (reviewData: Omit<ReviewModerationItem, "id" | "submittedAt">) => {
+    const newRev: ReviewModerationItem = {
+      ...reviewData,
+      id: `rev-${Date.now().toString().slice(-4)}`,
+      submittedAt: new Date().toISOString().replace("T", " ").substring(0, 16) + " UTC",
+    };
+    setReviews((prev) => [newRev, ...prev]);
+    appendAuditLog({
+      action: "CREATE",
+      entityType: "review",
+      entityId: newRev.id,
+      entityName: `Review by ${newRev.userName} on ${newRev.brokerName}`,
+      summary: `Logged community review: "${newRev.title}" (${newRev.rating}★).`,
+      afterValue: `Status: ${newRev.status}`,
+    });
+  };
+
+  // Add Dispute / Complaint Case
+  const addComplaint = (
+    complaintData: Omit<ComplaintAdmin, "id" | "caseNumber" | "submittedAt" | "updatedAt" | "timeline">
+  ) => {
+    const caseNum = `CMP-2026-${Math.floor(100 + Math.random() * 900)}`;
+    const now = new Date().toISOString().replace("T", " ").substring(0, 16) + " UTC";
+    const newCmp: ComplaintAdmin = {
+      ...complaintData,
+      id: `cmp-${Date.now().toString().slice(-4)}`,
+      caseNumber: caseNum,
+      submittedAt: now,
+      updatedAt: now,
+      timeline: [
+        {
+          id: `t-${Date.now()}`,
+          timestamp: now,
+          actor: activeRoleDef.name,
+          role: activeRoleDef.id,
+          title: "Dispute Case Logged",
+          description: `Dispute claim of ${complaintData.currency} ${complaintData.claimAmount} filed against ${complaintData.brokerName}.`,
+        },
+      ],
+    };
+    setComplaints((prev) => [newCmp, ...prev]);
+    appendAuditLog({
+      action: "CREATE",
+      entityType: "complaint",
+      entityId: newCmp.id,
+      entityName: `Complaint Case ${caseNum} against ${newCmp.brokerName}`,
+      summary: `Logged dispute case: ${newCmp.claimTitle}`,
+      afterValue: `Status: ${newCmp.status}`,
+    });
+  };
+
+  const addAuditLogEntry = appendAuditLog;
+
   // Notifications
   const markNotificationRead = (id: string) => {
     setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
@@ -628,6 +685,9 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         updateBroker,
         addEvidence,
         addRegulator,
+        addReview,
+        addComplaint,
+        addAuditLogEntry,
         markNotificationRead,
         markAllNotificationsRead,
         isSearchOpen,

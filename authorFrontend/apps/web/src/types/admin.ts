@@ -55,6 +55,17 @@ export interface RatingPillarBreakdown {
   }[];
 }
 
+export interface BrokerAccountType {
+  id: string;
+  name: string;
+  minDeposit: number;
+  spreadFrom: number;
+  commission: number;
+  maxLeverage: string;
+  executionType: string;
+  currencies: string[];
+}
+
 export interface BrokerAdmin {
   id: string;
   slug: string;
@@ -94,6 +105,16 @@ export interface BrokerAdmin {
   platforms: string[];
   depositMethods: string[];
   tradableAssetsCount: number;
+
+  // Platforms & Latency Extras
+  executionSpeedMs?: number;
+  dataCenterLocation?: string;
+  vpsAvailable?: boolean;
+  copyTradingSupported?: boolean;
+  fixApiSupported?: boolean;
+
+  // Account Types
+  accountTypes?: BrokerAccountType[];
   
   // Editorial & SEO
   pros: string[];
@@ -101,6 +122,8 @@ export interface BrokerAdmin {
   summary: string;
   seoTitle: string;
   seoDescription: string;
+  schemaType?: string;
+  targetKeywords?: string[];
   
   // Admin Meta
   updatedAt: string;
