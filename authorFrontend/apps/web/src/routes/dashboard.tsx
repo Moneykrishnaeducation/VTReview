@@ -27,10 +27,13 @@ import {
   ExternalLink,
   ChevronRight,
   Filter,
+  Building2,
 } from "lucide-react";
 
 export default function Dashboard() {
   const {
+    brokers,
+    users,
     verifications,
     ratingProposals,
     reviews,
@@ -77,12 +80,11 @@ export default function Dashboard() {
         </div>
       )}
 
-     
-
-      {/* TOP KPI CARDS GRID (5 Cards) */}
+      {/* TOP KPI CARDS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* KPI 1: Broker Directory */}
         <Link
-          to="/regulation/verification"
+          to="/brokers"
           className="group relative overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 p-5 rounded-2xl shadow-xs transition-all hover:shadow-lg hover:-translate-y-0.5"
         >
           <div className="flex items-center justify-between mb-3">
@@ -90,19 +92,41 @@ export default function Dashboard() {
               Broker Directory
             </span>
             <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-              <ShieldCheck className="h-5 w-5" />
+              <Building2 className="h-5 w-5" />
             </div>
           </div>
           <div className="font-mono text-3xl font-black text-slate-900 dark:text-white mb-1">
-            {pendingVerificationsCount}
+            {brokers.length}
           </div>
           <div className="flex items-center gap-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
             <TrendingUp className="h-3.5 w-3.5" />
-            <span>FCA / ASIC audit priority</span>
+            <span>Monitored trading brokers</span>
           </div>
         </Link>
 
-        {/* KPI 1: Pending Verifications */}
+        {/* KPI 2: User Directory */}
+        <Link
+          to="/users"
+          className="group relative overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-purple-500/50 p-5 rounded-2xl shadow-xs transition-all hover:shadow-lg hover:-translate-y-0.5"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+              User Directory
+            </span>
+            <div className="p-2 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+              <Users className="h-5 w-5" />
+            </div>
+          </div>
+          <div className="font-mono text-3xl font-black text-slate-900 dark:text-white mb-1">
+            {users.length}
+          </div>
+          <div className="flex items-center gap-1.5 text-[11px] text-purple-600 dark:text-purple-400 font-medium">
+            <Users className="h-3.5 w-3.5" />
+            <span>Active trader accounts & RBAC</span>
+          </div>
+        </Link>
+
+        {/* KPI 3: Pending Licenses */}
         <Link
           to="/regulation/verification"
           className="group relative overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 p-5 rounded-2xl shadow-xs transition-all hover:shadow-lg hover:-translate-y-0.5"
@@ -124,29 +148,9 @@ export default function Dashboard() {
           </div>
         </Link>
 
-        {/* KPI 2: Rating Proposals */}
-        <Link
-          to="/ratings"
-          className="group relative overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-amber-500/50 p-5 rounded-2xl shadow-xs transition-all hover:shadow-lg hover:-translate-y-0.5"
-        >
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-              Score Audits
-            </span>
-            <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-              <Star className="h-5 w-5" />
-            </div>
-          </div>
-          <div className="font-mono text-3xl font-black text-slate-900 dark:text-white mb-1">
-            {pendingRatingsCount}
-          </div>
-          <div className="flex items-center gap-1.5 text-[11px] text-amber-600 dark:text-amber-400 font-medium">
-            <Clock className="h-3.5 w-3.5" />
-            <span>Pending compliance sign-off</span>
-          </div>
-        </Link>
+      
 
-        {/* KPI 3: Active Dispute Claims */}
+        {/* KPI 5: Active Dispute Claims */}
         <Link
           to="/complaints"
           className="group relative overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-rose-500/50 p-5 rounded-2xl shadow-xs transition-all hover:shadow-lg hover:-translate-y-0.5"
@@ -167,7 +171,7 @@ export default function Dashboard() {
           </div>
         </Link>
 
-        {/* KPI 4: Review Moderation */}
+        {/* KPI 6: Review Moderation */}
         <Link
           to="/reviews"
           className="group relative overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/50 p-5 rounded-2xl shadow-xs transition-all hover:shadow-lg hover:-translate-y-0.5"
@@ -217,7 +221,6 @@ export default function Dashboard() {
           {[
             { id: "all", label: "All Operations", icon: Layers },
             { id: "verifications", label: `Verifications (${pendingVerificationsCount})`, icon: ShieldCheck },
-            { id: "ratings", label: `Score Audits (${pendingRatingsCount})`, icon: Star },
             { id: "disputes", label: `Disputes (${pendingComplaintsCount})`, icon: AlertTriangle },
             { id: "jobs", label: "Live System Sync", icon: Server },
           ].map((tab) => (
@@ -554,14 +557,14 @@ export default function Dashboard() {
               </Link>
 
               <Link
-                to="/ratings"
+                to="/users"
                 className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 hover:border-amber-500/40 text-left transition-all group"
               >
                 <Star className="h-4 w-4 text-amber-500 mb-1" />
                 <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-amber-500">
-                  Score Audit
+                  Users
                 </div>
-                <div className="text-[10px] text-slate-500">Pillar recalculation</div>
+                <div className="text-[10px] text-slate-500">Admin User</div>
               </Link>
 
               <Link
