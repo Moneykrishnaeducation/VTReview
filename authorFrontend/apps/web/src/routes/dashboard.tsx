@@ -557,14 +557,14 @@ export default function Dashboard() {
               </Link>
 
               <Link
-                to="/users"
+                to="/brokers"
                 className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 hover:border-amber-500/40 text-left transition-all group"
               >
                 <Star className="h-4 w-4 text-amber-500 mb-1" />
                 <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-amber-500">
-                  Users
+                  Broker
                 </div>
-                <div className="text-[10px] text-slate-500">Admin User</div>
+                <div className="text-[10px] text-slate-500">Client User</div>
               </Link>
 
               <Link
