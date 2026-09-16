@@ -4,6 +4,7 @@ import AppShell from "./app-shell";
 import Login from "./routes/login";
 import Dashboard from "./routes/dashboard";
 import BrokerList from "./routes/brokers/broker-list";
+import BrokerNew from "./routes/brokers/broker-new";
 import BrokerDetail from "./routes/brokers/broker-detail";
 import VerificationQueue from "./routes/regulation/verification-queue";
 import RegulatorsList from "./routes/regulation/regulators-list";
@@ -45,6 +46,7 @@ export const router = createBrowserRouter([
 
       // Research & Brokers
       { path: "brokers", element: <BrokerList /> },
+      { path: "brokers/new", element: <BrokerNew /> },
       { path: "brokers/:id", element: <BrokerDetail /> },
       { path: "evidence", element: <EvidenceLibrary /> },
 

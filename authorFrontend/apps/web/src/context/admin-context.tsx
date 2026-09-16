@@ -64,6 +64,7 @@ interface AdminContextType {
   moderateReview: (id: string, action: "approve" | "reject" | "flag" | "needs_clarification", notes?: string) => void;
   updateComplaintStatus: (id: string, status: ComplaintAdmin["status"], note: string) => void;
   publishGuide: (id: string) => void;
+  addBroker: (broker: Omit<BrokerAdmin, "id" | "updatedAt" | "updatedBy">) => void;
   updateBroker: (id: string, updates: Partial<BrokerAdmin>, reason?: string) => void;
   addEvidence: (evidence: Omit<EvidenceItem, "id" | "uploadedAt" | "uploadedBy" | "checksum"> & { checksum?: string }) => EvidenceItem;
   addRegulator: (regulator: Omit<RegulatorAdmin, "id" | "lastVerifiedDate" | "verificationOwner">) => RegulatorAdmin;
@@ -389,6 +390,32 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  // Add New Broker
+  const addBroker = (brokerData: Omit<BrokerAdmin, "id" | "updatedAt" | "updatedBy">) => {
+    const slug = brokerData.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+    const newBroker: BrokerAdmin = {
+      ...brokerData,
+      id: `brk-${slug}-${Math.floor(1000 + Math.random() * 9000)}`,
+      slug: brokerData.slug || slug,
+      updatedAt: new Date().toISOString().replace("T", " ").substring(0, 16) + " UTC",
+      updatedBy: activeRoleDef.name,
+    };
+    setBrokers((prev) => [newBroker, ...prev]);
+
+    appendAuditLog({
+      action: "CREATE",
+      entityType: "broker",
+      entityId: newBroker.id,
+      entityName: newBroker.name,
+      summary: `New broker research record created: ${newBroker.name}`,
+      afterValue: `Status: ${newBroker.status} | Tier: ${newBroker.tier}`,
+      reason: "Manual broker record creation by research team.",
+    });
+  };
+
   // Update Broker
   const updateBroker = (id: string, updates: Partial<BrokerAdmin>, reason?: string) => {
     const b = brokers.find((brk) => brk.id === id);
@@ -549,6 +576,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         moderateReview,
         updateComplaintStatus,
         publishGuide,
+        addBroker,
         updateBroker,
         addEvidence,
         addRegulator,
