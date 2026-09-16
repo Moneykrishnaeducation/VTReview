@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { useAdmin } from "../../context/admin-context";
 import type { NotificationItem } from "../../types/admin";
@@ -17,513 +17,660 @@ import {
   FileText,
   Wrench,
   ArrowRight,
+  ShieldAlert,
+  Zap,
+  Clock,
+  Filter,
+  CheckCheck,
+  Trash2,
+  ExternalLink,
+  Layers,
+  Sparkles,
+  Inbox,
+  RotateCcw,
+  Radio,
+  Tag,
 } from "lucide-react";
 
 export default function NotificationsCenter() {
   const { notifications, markNotificationRead, markAllNotificationsRead } = useAdmin();
   const navigate = useNavigate();
 
+  // State
   const [selectedNotif, setSelectedNotif] = useState<NotificationItem | null>(null);
+  const [activeTab, setActiveTab] = useState<"all" | "unread" | "high" | "verification" | "compliance">("all");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
   const [priorityFilter, setPriorityFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [timeRange] = useState<string>("Last 7 Days");
+  const [timeRange, setTimeRange] = useState<string>("all");
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Counts
-  const unreadCount = notifications.filter((n) => !n.read).length;
-  const criticalCount = notifications.filter((n) => n.priority === "high").length;
-  const highCount = notifications.filter((n) => n.priority === "high").length;
-  const mediumCount = notifications.filter((n) => n.priority === "medium").length;
-  const lowCount = notifications.filter((n) => n.priority === "low").length;
+  // Counts & Metrics
+  const metrics = useMemo(() => {
+    const total = notifications.length;
+    const unread = notifications.filter((n) => !n.read).length;
+    const high = notifications.filter((n) => n.priority === "high").length;
+    const resolved = notifications.filter((n) => n.read).length;
+    return { total, unread, high, resolved };
+  }, [notifications]);
 
-  const filteredNotifications = notifications.filter((n) => {
-    if (priorityFilter !== "all" && n.priority !== priorityFilter) return false;
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      return (
-        n.title.toLowerCase().includes(q) ||
-        n.message.toLowerCase().includes(q) ||
-        n.type.toLowerCase().includes(q)
-      );
+  // Filtered Notifications
+  const filteredNotifications = useMemo(() => {
+    return notifications.filter((n) => {
+      // 1. Tab filter
+      if (activeTab === "unread" && n.read) return false;
+      if (activeTab === "high" && n.priority !== "high") return false;
+      if (activeTab === "verification" && n.type !== "verification_request") return false;
+      if (activeTab === "compliance" && n.type !== "compliance_alert") return false;
+
+      // 2. Priority filter
+      if (priorityFilter !== "all" && n.priority !== priorityFilter) return false;
+
+      // 3. Type filter
+      if (typeFilter !== "all" && n.type !== typeFilter) return false;
+
+      // 4. Search query
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        return (
+          n.id.toLowerCase().includes(q) ||
+          n.title.toLowerCase().includes(q) ||
+          n.message.toLowerCase().includes(q) ||
+          n.type.toLowerCase().includes(q)
+        );
+      }
+
+      return true;
+    });
+  }, [notifications, activeTab, priorityFilter, typeFilter, searchQuery]);
+
+  // Batch actions
+  const handleSelectAll = () => {
+    if (selectedIds.length === filteredNotifications.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(filteredNotifications.map((n) => n.id));
     }
-    return true;
-  });
+  };
+
+  const handleToggleSelect = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const handleBatchMarkRead = () => {
+    selectedIds.forEach((id) => markNotificationRead(id));
+    setToastMessage(`Marked ${selectedIds.length} notifications as read.`);
+    setSelectedIds([]);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const handleMarkAllRead = () => {
+    markAllNotificationsRead();
+    setToastMessage("All notifications marked as read.");
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const resetFilters = () => {
+    setActiveTab("all");
+    setTypeFilter("all");
+    setPriorityFilter("all");
+    setSearchQuery("");
+    setTimeRange("all");
+    setSelectedIds([]);
+  };
 
   const getPriorityBadge = (priority: NotificationItem["priority"]) => {
     switch (priority) {
       case "high":
         return (
-          <span className="px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-700 dark:text-rose-400 border border-rose-500/30 font-bold text-[10px] flex items-center gap-1.5 shrink-0">
+          <span className="px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-700 dark:text-rose-400 border border-rose-500/30 font-bold text-[10px] inline-flex items-center gap-1.5 shrink-0">
             <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse" />
-            <span>HIGH</span>
+            <span>CRITICAL</span>
           </span>
         );
       case "medium":
         return (
-          <span className="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-700 dark:text-blue-400 border border-blue-500/30 font-bold text-[10px] flex items-center gap-1.5 shrink-0">
-            <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-            <span>MEDIUM</span>
+          <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 font-bold text-[10px] inline-flex items-center gap-1.5 shrink-0">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+            <span>HIGH</span>
           </span>
         );
       case "low":
         return (
-          <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-bold text-[10px] flex items-center gap-1.5 shrink-0">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            <span>LOW</span>
+          <span className="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-700 dark:text-blue-400 border border-blue-500/30 font-bold text-[10px] inline-flex items-center gap-1.5 shrink-0">
+            <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+            <span>INFO</span>
           </span>
         );
     }
   };
 
-  const getIconForPriority = (priority: NotificationItem["priority"]) => {
-    switch (priority) {
-      case "high":
+  const getTypeIcon = (type: NotificationItem["type"], priority: NotificationItem["priority"]) => {
+    switch (type) {
+      case "compliance_alert":
         return (
-          <div className="h-8 w-8 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-500 border border-rose-500/30 flex items-center justify-center shrink-0 font-black text-sm">
-            !
+          <div className="h-9 w-9 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 flex items-center justify-center shrink-0">
+            <ShieldAlert className="h-4 w-4" />
           </div>
         );
-      case "medium":
+      case "verification_request":
         return (
-          <div className="h-8 w-8 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-500 border border-amber-500/30 flex items-center justify-center shrink-0">
+          <div className="h-9 w-9 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0">
+            <Zap className="h-4 w-4" />
+          </div>
+        );
+      case "evidence_expired":
+        return (
+          <div className="h-9 w-9 rounded-xl bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0">
+            <Clock className="h-4 w-4" />
+          </div>
+        );
+      case "moderation_task":
+        return (
+          <div className="h-9 w-9 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30 flex items-center justify-center shrink-0">
+            <FileText className="h-4 w-4" />
+          </div>
+        );
+      case "job_failed":
+        return (
+          <div className="h-9 w-9 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 flex items-center justify-center shrink-0">
             <AlertTriangle className="h-4 w-4" />
           </div>
         );
-      case "low":
+      default:
         return (
-          <div className="h-8 w-8 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30 flex items-center justify-center shrink-0 font-bold text-xs font-serif italic">
-            i
+          <div className="h-9 w-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0">
+            <Bell className="h-4 w-4" />
           </div>
         );
     }
   };
 
   return (
-    <div className="space-y-6 text-xs font-sans">
-      {/* Top Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="h-11 w-11 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center shadow-xs relative">
+    <div className="space-y-6 text-xs font-sans w-full pb-16">
+      {/* ── Top Header Bar ── */}
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center gap-3.5">
+          <div className="h-12 w-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-xs relative">
             <Bell className="h-6 w-6" />
-            {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-white font-black text-[10px] flex items-center justify-center border-2 border-white dark:border-slate-900 animate-pulse">
-                {unreadCount}
+            {metrics.unread > 0 && (
+              <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] flex items-center justify-center border-2 border-white dark:border-slate-900 animate-pulse">
+                {metrics.unread}
               </span>
             )}
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                Notification Center
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                Notifications &amp; Operations Alert Hub
               </h1>
-              {unreadCount > 0 && (
-                <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 font-bold text-[11px]">
-                  {unreadCount} New
+              {metrics.unread > 0 && (
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-bold text-[10px] shadow-xs">
+                  {metrics.unread} Unread
                 </span>
               )}
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Stay informed with real-time alerts, system updates and critical events.
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Real-time operational alerts, license verification milestones, critical dispute escalations, and system integrity notices.
             </p>
           </div>
         </div>
 
+        {/* Global Header Actions */}
         <div className="flex items-center gap-2">
           <button
-            onClick={markAllNotificationsRead}
+            type="button"
+            onClick={handleMarkAllRead}
             className="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer shadow-xs"
           >
-            <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <CheckCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             <span>Mark All As Read</span>
           </button>
-
-          <div className="relative">
-            <button className="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer shadow-xs">
-              <Calendar className="h-4 w-4 text-slate-400" />
-              <span>{timeRange}</span>
-              <ChevronDown className="h-4 w-4 text-slate-400" />
-            </button>
-          </div>
         </div>
       </div>
 
-      {/* Top 4 KPI Metric Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: Critical Alerts */}
+      {/* ── Feedback Toast ── */}
+      {toastMessage && (
+        <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-800 rounded-2xl text-emerald-900 dark:text-emerald-300 text-xs flex items-center justify-between gap-3 shadow-xs animate-in fade-in">
+          <div className="flex items-center gap-2 font-semibold">
+            <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span>{toastMessage}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setToastMessage(null)}
+            className="text-emerald-700 hover:text-emerald-950 dark:text-emerald-400 cursor-pointer"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+
+      {/* ── Executive KPI Metric Cards ── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div
-          onClick={() => setPriorityFilter("high")}
-          className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-rose-300 dark:border-rose-500/30 hover:border-rose-500 transition-all cursor-pointer space-y-3 relative overflow-hidden group shadow-xs hover:shadow-md"
+          onClick={() => setActiveTab("all")}
+          className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-amber-500 transition-all cursor-pointer space-y-1 shadow-xs"
         >
-          <div className="flex items-center justify-between">
-            <div className="h-9 w-9 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-500 border border-rose-500/30 flex items-center justify-center font-black text-base">
-              !
-            </div>
-            <span className="text-xs font-bold text-rose-600 dark:text-rose-400">Critical Alerts</span>
+          <div className="flex items-center justify-between text-slate-500 text-[11px] font-semibold uppercase tracking-wider">
+            <span>Total Broadcasts</span>
+            <Inbox className="h-4 w-4 text-slate-400" />
           </div>
-          <div className="font-mono text-3xl font-black text-slate-900 dark:text-white">
-            {criticalCount}
+          <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">{metrics.total}</div>
+          <div className="text-[10px] text-slate-500 font-medium">All logged operation notices</div>
+        </div>
+
+        <div
+          onClick={() => setActiveTab("unread")}
+          className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-500/30 hover:border-amber-500 transition-all cursor-pointer space-y-1 shadow-xs"
+        >
+          <div className="flex items-center justify-between text-amber-600 dark:text-amber-400 text-[11px] font-semibold uppercase tracking-wider">
+            <span>Unread Attention</span>
+            <Zap className="h-4 w-4 text-amber-500" />
           </div>
-          <div className="flex items-center gap-1 text-[11px] text-rose-600 dark:text-rose-400 font-medium group-hover:underline">
-            <span>Requires immediate attention</span>
-            <ArrowRight className="h-3 w-3" />
+          <div className="text-2xl font-black text-amber-600 dark:text-amber-400 font-mono">{metrics.unread}</div>
+          <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium flex items-center gap-1">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+            Awaiting triage / review
           </div>
         </div>
 
-        {/* Card 2: High Priority */}
         <div
-          onClick={() => setPriorityFilter("high")}
-          className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-500/30 hover:border-amber-500 transition-all cursor-pointer space-y-3 relative overflow-hidden group shadow-xs hover:shadow-md"
+          onClick={() => setActiveTab("high")}
+          className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-rose-300 dark:border-rose-500/30 hover:border-rose-500 transition-all cursor-pointer space-y-1 shadow-xs"
         >
-          <div className="flex items-center justify-between">
-            <div className="h-9 w-9 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-500 border border-amber-500/30 flex items-center justify-center">
-              <AlertTriangle className="h-4 w-4" />
-            </div>
-            <span className="text-xs font-bold text-amber-600 dark:text-amber-400">High Priority</span>
+          <div className="flex items-center justify-between text-rose-600 dark:text-rose-400 text-[11px] font-semibold uppercase tracking-wider">
+            <span>Critical Escalations</span>
+            <AlertTriangle className="h-4 w-4 text-rose-500" />
           </div>
-          <div className="font-mono text-3xl font-black text-slate-900 dark:text-white">
-            {highCount}
-          </div>
-          <div className="flex items-center gap-1 text-[11px] text-amber-600 dark:text-amber-400 font-medium group-hover:underline">
-            <span>Needs quick action</span>
-            <ArrowRight className="h-3 w-3" />
-          </div>
+          <div className="text-2xl font-black text-rose-600 dark:text-rose-400 font-mono">{metrics.high}</div>
+          <div className="text-[10px] text-rose-600 dark:text-rose-400 font-medium">High priority compliance items</div>
         </div>
 
-        {/* Card 3: Medium Priority */}
         <div
-          onClick={() => setPriorityFilter("medium")}
-          className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-blue-300 dark:border-blue-500/30 hover:border-blue-500 transition-all cursor-pointer space-y-3 relative overflow-hidden group shadow-xs hover:shadow-md"
+          onClick={() => setActiveTab("all")}
+          className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-500 transition-all cursor-pointer space-y-1 shadow-xs"
         >
-          <div className="flex items-center justify-between">
-            <div className="h-9 w-9 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30 flex items-center justify-center font-bold text-xs font-serif italic">
-              i
-            </div>
-            <span className="text-xs font-bold text-blue-600 dark:text-blue-400">Medium Priority</span>
+          <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 text-[11px] font-semibold uppercase tracking-wider">
+            <span>Processed Items</span>
+            <CheckCircle2 className="h-4 w-4 text-emerald-500" />
           </div>
-          <div className="font-mono text-3xl font-black text-slate-900 dark:text-white">
-            {mediumCount}
-          </div>
-          <div className="flex items-center gap-1 text-[11px] text-blue-600 dark:text-blue-400 font-medium group-hover:underline">
-            <span>Monitor and review</span>
-            <ArrowRight className="h-3 w-3" />
-          </div>
-        </div>
-
-        {/* Card 4: Low Priority */}
-        <div
-          onClick={() => setPriorityFilter("low")}
-          className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-500/30 hover:border-emerald-500 transition-all cursor-pointer space-y-3 relative overflow-hidden group shadow-xs hover:shadow-md"
-        >
-          <div className="flex items-center justify-between">
-            <div className="h-9 w-9 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center justify-center">
-              <CheckCircle2 className="h-4 w-4" />
-            </div>
-            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">Low Priority</span>
-          </div>
-          <div className="font-mono text-3xl font-black text-slate-900 dark:text-white">
-            {lowCount}
-          </div>
-          <div className="flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium group-hover:underline">
-            <span>Information / FYI</span>
-            <ArrowRight className="h-3 w-3" />
-          </div>
+          <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">{metrics.resolved}</div>
+          <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Read &amp; archived tasks</div>
         </div>
       </div>
 
-      {/* Main Content Area (Split Grid) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Side: Notifications Table Container */}
-        <div className={`${selectedNotif ? "lg:col-span-8" : "lg:col-span-12"} bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs transition-all duration-200`}>
-          {/* Header Controls Bar */}
-          <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 bg-slate-50/80 dark:bg-slate-950/60">
-            <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-slate-200">
-              <Bell className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              <span>All Notifications ({filteredNotifications.length})</span>
-            </div>
-
-            <div className="flex items-center gap-2 flex-wrap">
-              {/* Priority Select Filter */}
-              <div className="relative">
-                <select
-                  value={priorityFilter}
-                  onChange={(e) => setPriorityFilter(e.target.value)}
-                  className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium"
+      {/* ── Multi-Parameter Navigation & Filter Matrix ── */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3 shadow-xs">
+        {/* Tabs Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800/80 pb-3">
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            {[
+              { id: "all", label: "All Alerts", count: metrics.total },
+              { id: "unread", label: "Unread", count: metrics.unread, highlight: metrics.unread > 0 },
+              { id: "high", label: "Critical", count: metrics.high },
+              { id: "verification", label: "Verification Requests" },
+              { id: "compliance", label: "Compliance Alerts" },
+            ].map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                  className={`px-3.5 py-1.5 rounded-xl font-medium whitespace-nowrap flex items-center gap-2 transition-all cursor-pointer text-xs ${
+                    isActive
+                      ? "bg-amber-500 text-slate-950 font-bold shadow-xs"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60"
+                  }`}
                 >
-                  <option value="all">All Priorities</option>
-                  <option value="high">High Priority</option>
-                  <option value="medium">Medium Priority</option>
-                  <option value="low">Low Priority</option>
-                </select>
-              </div>
-
-              {/* Search Box */}
-              <div className="relative w-48">
-                <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
-                <input
-                  type="text"
-                  placeholder="Search notifications..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-900 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-            </div>
+                  <span>{tab.label}</span>
+                  {tab.count !== undefined && (
+                    <span
+                      className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full font-bold ${
+                        isActive
+                          ? "bg-slate-950/20 text-slate-950"
+                          : tab.highlight
+                          ? "bg-amber-500/20 text-amber-700 dark:text-amber-400"
+                          : "bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+                      }`}
+                    >
+                      {tab.count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-950/80 text-slate-600 dark:text-slate-400 uppercase tracking-wider text-[10px] font-bold">
-                  <th className="p-3.5">Alert</th>
-                  <th className="p-3.5">Description</th>
-                  <th className="p-3.5">Priority</th>
-                  <th className="p-3.5">Timestamp</th>
-                  <th className="p-3.5">Status</th>
-                  <th className="p-3.5 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
-                {filteredNotifications.length > 0 ? (
-                  filteredNotifications.map((notif) => {
-                    const isSelected = selectedNotif?.id === notif.id;
-                    const isUnread = !notif.read;
+          {/* Batch Actions Bar (when selected) */}
+          {selectedIds.length > 0 && (
+            <div className="flex items-center gap-2 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 px-3 py-1 rounded-xl animate-in fade-in">
+              <span className="font-bold text-amber-800 dark:text-amber-300 text-xs font-mono">
+                {selectedIds.length} Selected
+              </span>
+              <button
+                type="button"
+                onClick={handleBatchMarkRead}
+                className="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[11px] cursor-pointer"
+              >
+                Mark Read
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedIds([])}
+                className="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-[11px] cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+        </div>
 
-                    return (
-                      <tr
-                        key={notif.id}
-                        className={`transition-all ${
-                          isSelected
-                            ? "bg-blue-50/80 dark:bg-blue-950/60 border-l-4 border-l-blue-600 text-slate-900 dark:text-white font-medium"
-                            : isUnread
-                            ? "bg-amber-500/5 dark:bg-amber-500/10 border-l-4 border-l-amber-500 hover:bg-amber-500/10 dark:hover:bg-amber-500/15 text-slate-900 dark:text-slate-100 font-semibold"
-                            : "hover:bg-slate-50/80 dark:hover:bg-slate-850/50 text-slate-600 dark:text-slate-400 opacity-80 hover:opacity-100"
-                        }`}
-                      >
-                        {/* Alert Column */}
-                        <td className="p-3.5 align-middle">
-                          <div className="flex items-center gap-3 max-w-[220px]">
-                            <div className="relative">
-                              {getIconForPriority(notif.priority)}
-                              {isUnread && (
-                                <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-amber-500 ring-2 ring-white dark:ring-slate-900 animate-pulse" />
-                              )}
-                            </div>
-                            <div className="flex flex-col gap-0.5">
-                              <div className="flex items-center gap-1.5">
-                                <span className={`text-xs leading-snug ${isUnread ? "font-black text-slate-900 dark:text-white" : "font-medium text-slate-700 dark:text-slate-300"}`}>
-                                  {notif.title}
-                                </span>
-                                {isUnread && (
-                                  <span className="px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider uppercase bg-amber-500 text-slate-950 shrink-0">
-                                    NEW
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </td>
+        {/* Filter Controls Row */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Search Box */}
+          <div className="relative flex-1 min-w-[240px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search alert title, reference ID, message body..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-3 py-1.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
 
-                        {/* Description Column */}
-                        <td className="p-3.5 align-middle">
-                          <p className={`text-xs line-clamp-2 max-w-xs leading-relaxed ${isUnread ? "text-slate-800 dark:text-slate-200" : "text-slate-500 dark:text-slate-400"}`}>
-                            {notif.message}
-                          </p>
-                        </td>
+          {/* Type Filter */}
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-slate-200 focus:ring-2 focus:ring-amber-500 font-medium"
+          >
+            <option value="all">All Alert Types</option>
+            <option value="verification_request">Verification Requests</option>
+            <option value="compliance_alert">Compliance Alerts</option>
+            <option value="evidence_expired">Evidence Expiration</option>
+            <option value="moderation_task">Moderation Tasks</option>
+            <option value="job_failed">Job / Sync Failures</option>
+            <option value="system_notice">System Notices</option>
+          </select>
 
-                        {/* Priority Column */}
-                        <td className="p-3.5 align-middle">
+          {/* Priority Filter */}
+          <select
+            value={priorityFilter}
+            onChange={(e) => setPriorityFilter(e.target.value)}
+            className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-slate-200 focus:ring-2 focus:ring-amber-500 font-medium"
+          >
+            <option value="all">All Priorities</option>
+            <option value="high">Critical (High)</option>
+            <option value="medium">Elevated (Medium)</option>
+            <option value="low">Informational (Low)</option>
+          </select>
+
+          {(searchQuery || typeFilter !== "all" || priorityFilter !== "all" || activeTab !== "all") && (
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="inline-flex items-center gap-1 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-semibold text-xs px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            >
+              <RotateCcw className="h-3 w-3" />
+              <span>Reset</span>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* ── Main Dual Split Workstation ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Side: Notifications Stream List */}
+        <div className={`${selectedNotif ? "lg:col-span-7" : "lg:col-span-12"} bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs transition-all`}>
+          {/* Header row with Select All */}
+          <div className="p-3.5 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/80 flex items-center justify-between">
+            <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-700 dark:text-slate-300">
+              <input
+                type="checkbox"
+                checked={selectedIds.length > 0 && selectedIds.length === filteredNotifications.length}
+                onChange={handleSelectAll}
+                className="accent-amber-500 h-4 w-4 rounded cursor-pointer"
+              />
+              <span>Select All Displayed ({filteredNotifications.length})</span>
+            </label>
+
+            <span className="text-[11px] text-slate-400 font-mono">
+              Live Operations Queue
+            </span>
+          </div>
+
+          {/* Notification Items List */}
+          <div className="divide-y divide-slate-100 dark:divide-slate-800">
+            {filteredNotifications.length > 0 ? (
+              filteredNotifications.map((notif) => {
+                const isSelected = selectedNotif?.id === notif.id;
+                const isChecked = selectedIds.includes(notif.id);
+                const isUnread = !notif.read;
+
+                return (
+                  <div
+                    key={notif.id}
+                    className={`p-4 transition-all flex items-start justify-between gap-4 ${
+                      isSelected
+                        ? "bg-amber-500/10 border-l-4 border-l-amber-500"
+                        : isUnread
+                        ? "bg-slate-50/70 dark:bg-slate-950/60 border-l-4 border-l-amber-500 hover:bg-slate-100/70 dark:hover:bg-slate-900"
+                        : "hover:bg-slate-50 dark:hover:bg-slate-850/40 opacity-80 hover:opacity-100 border-l-4 border-l-transparent"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3.5 flex-1 min-w-0">
+                      {/* Checkbox */}
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => handleToggleSelect(notif.id)}
+                        className="accent-amber-500 h-4 w-4 rounded mt-1 shrink-0 cursor-pointer"
+                      />
+
+                      {/* Icon */}
+                      {getTypeIcon(notif.type, notif.priority)}
+
+                      {/* Content */}
+                      <div className="space-y-1 flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className={`text-xs ${isUnread ? "font-black text-slate-900 dark:text-white" : "font-bold text-slate-700 dark:text-slate-300"}`}>
+                            {notif.title}
+                          </span>
                           {getPriorityBadge(notif.priority)}
-                        </td>
-
-                        {/* Timestamp Column */}
-                        <td className="p-3.5 align-middle whitespace-nowrap">
-                          <div className={`font-mono text-xs ${isUnread ? "font-bold text-slate-900 dark:text-slate-100" : "font-semibold text-slate-600 dark:text-slate-400"}`}>
-                            {notif.createdAt}
-                          </div>
-                          <div className="font-mono text-[10px] text-slate-400 dark:text-slate-500">
-                            Apr 26, 2025 10:24 AM
-                          </div>
-                        </td>
-
-                        {/* Status Column */}
-                        <td className="p-3.5 align-middle whitespace-nowrap">
-                          {isUnread ? (
-                            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 font-bold text-[10px] inline-flex items-center gap-1.5">
-                              <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-                              <span>Unread</span>
-                            </span>
-                          ) : (
-                            <span className="px-2.5 py-0.5 rounded-full bg-slate-500/15 text-slate-600 dark:text-slate-400 border border-slate-500/30 font-bold text-[10px] inline-flex items-center gap-1.5">
-                              <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
-                              <span>Read</span>
+                          {isUnread && (
+                            <span className="px-1.5 py-0.2 rounded text-[9px] font-black uppercase bg-amber-500 text-slate-950">
+                              NEW
                             </span>
                           )}
-                        </td>
+                        </div>
 
-                        {/* Actions Column */}
-                        <td className="p-3.5 align-middle text-right whitespace-nowrap">
-                          <div className="inline-flex items-center gap-1.5">
-                            <button
-                              onClick={() => setSelectedNotif(isSelected ? null : notif)}
-                              className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
-                                isSelected
-                                  ? "bg-blue-600 text-white border-blue-600"
-                                  : "bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700"
-                              }`}
-                              title={isSelected ? "Close details" : "Inspect details"}
-                            >
-                              <Eye className="h-3.5 w-3.5" />
-                            </button>
-                            <button
-                              className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
-                              title="More options"
-                            >
-                              <MoreHorizontal className="h-3.5 w-3.5" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  <tr>
-                    <td colSpan={6} className="p-8 text-center text-slate-400 dark:text-slate-500">
-                      No notifications match your search criteria.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                        <p className={`text-xs line-clamp-2 leading-relaxed ${isUnread ? "text-slate-800 dark:text-slate-200" : "text-slate-500 dark:text-slate-400"}`}>
+                          {notif.message}
+                        </p>
 
-          {/* Table Footer Pagination */}
-          <div className="p-3.5 border-t border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/60 flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-400">
-            <div>
-              Showing 1 - {filteredNotifications.length} of {filteredNotifications.length} notifications
-            </div>
-            <div className="flex items-center gap-1 font-mono">
-              <button disabled className="p-1 rounded bg-white dark:bg-slate-900 text-slate-400 border border-slate-200 dark:border-slate-800">
-                &lt;
-              </button>
-              <button className="px-2.5 py-0.5 rounded bg-blue-600 text-white font-bold">
-                1
-              </button>
-              <button disabled className="p-1 rounded bg-white dark:bg-slate-900 text-slate-400 border border-slate-200 dark:border-slate-800">
-                &gt;
-              </button>
-            </div>
+                        <div className="flex flex-wrap items-center gap-3 text-[10px] text-slate-400 font-mono pt-1">
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            {notif.createdAt}
+                          </span>
+                          <span>•</span>
+                          <span className="capitalize font-semibold text-slate-600 dark:text-slate-400">
+                            {notif.type.replace(/_/g, " ")}
+                          </span>
+                          <span>•</span>
+                          <span>Ref: #{notif.id}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Actions on row */}
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {isUnread && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            markNotificationRead(notif.id);
+                            setToastMessage(`Marked "${notif.title}" as read.`);
+                            setTimeout(() => setToastMessage(null), 2500);
+                          }}
+                          className="p-1.5 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
+                          title="Mark as read"
+                        >
+                          <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                        </button>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() => setSelectedNotif(isSelected ? null : notif)}
+                        className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
+                          isSelected
+                            ? "bg-amber-500 text-slate-950 border-amber-500 font-bold"
+                            : "bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700"
+                        }`}
+                        title={isSelected ? "Close details" : "Inspect details"}
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                      </button>
+
+                      {notif.actionUrl && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            markNotificationRead(notif.id);
+                            navigate(notif.actionUrl!);
+                          }}
+                          className="p-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 transition-colors cursor-pointer font-bold"
+                          title="Jump to resolution workflow"
+                        >
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="p-12 text-center space-y-2">
+                <Bell className="h-8 w-8 text-slate-300 dark:text-slate-700 mx-auto" />
+                <div className="text-slate-500 font-medium">No operational notifications match your filter criteria.</div>
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="text-xs font-bold text-amber-600 hover:underline cursor-pointer"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Right Side: Inspector Side Panel (4 cols) */}
+        {/* Right Side: Detailed Forensic Inspector Panel */}
         {selectedNotif && (
-          <div className="lg:col-span-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-6 shadow-xl sticky top-6">
+          <div className="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-5 shadow-xl sticky top-6 animate-in fade-in">
             {/* Header */}
             <div className="flex items-start justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
               <div className="flex items-start gap-3">
-                {getIconForPriority(selectedNotif.priority)}
+                {getTypeIcon(selectedNotif.type, selectedNotif.priority)}
                 <div className="space-y-1">
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white leading-snug">
+                  <h3 className="text-sm font-black text-slate-900 dark:text-white leading-snug">
                     {selectedNotif.title}
                   </h3>
-                  {getPriorityBadge(selectedNotif.priority)}
+                  <div className="flex items-center gap-2">
+                    {getPriorityBadge(selectedNotif.priority)}
+                    <span className="text-[10px] font-mono text-slate-400">Ref: #{selectedNotif.id}</span>
+                  </div>
                 </div>
               </div>
 
               <button
+                type="button"
                 onClick={() => setSelectedNotif(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            {/* Notification Brief Message */}
-            <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-              {selectedNotif.message}
-            </p>
+            {/* Notification Full Message */}
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-bold text-slate-400 uppercase">Alert Summary</span>
+              <p className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 font-medium">
+                {selectedNotif.message}
+              </p>
+            </div>
 
-            {/* Details Key-Value Section */}
-            <div className="space-y-3 pt-2">
-              <div className="flex items-center gap-2 font-bold text-xs text-blue-600 dark:text-blue-400">
-                <Info className="h-4 w-4" />
-                <span>Details</span>
-              </div>
-
-              <div className="bg-slate-50 dark:bg-slate-950/80 rounded-xl p-3.5 border border-slate-200 dark:border-slate-800 space-y-2.5 font-mono text-[11px]">
+            {/* Key-Value Details */}
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-bold text-slate-400 uppercase">Operational Metadata</span>
+              <div className="bg-slate-50 dark:bg-slate-950/80 rounded-xl p-3.5 border border-slate-200 dark:border-slate-800 space-y-2 font-mono text-[11px]">
                 <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400">Alert Type</span>
+                  <span className="text-slate-500 dark:text-slate-400">Alert Category</span>
                   <span className="text-slate-800 dark:text-slate-200 font-semibold capitalize">
                     {selectedNotif.type.replace(/_/g, " ")}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400">Source</span>
-                  <span className="text-slate-800 dark:text-slate-200 font-semibold">VTIndex Registry</span>
+                  <span className="text-slate-500 dark:text-slate-400">Source Feed</span>
+                  <span className="text-slate-800 dark:text-slate-200 font-semibold">VTIndex Core Engine</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400">Reference No.</span>
-                  <span className="text-amber-600 dark:text-amber-400 font-bold">#{selectedNotif.id}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400">Created</span>
+                  <span className="text-slate-500 dark:text-slate-400">Timestamp</span>
                   <span className="text-slate-700 dark:text-slate-300">{selectedNotif.createdAt}</span>
                 </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500 dark:text-slate-400">Triage Status</span>
+                  <span className={`font-bold ${selectedNotif.read ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}`}>
+                    {selectedNotif.read ? "Read & Processed" : "Active / Action Required"}
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Full Description Section */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 font-bold text-xs text-blue-600 dark:text-blue-400">
-                <FileText className="h-4 w-4" />
-                <span>Description</span>
-              </div>
-              <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800">
-                {selectedNotif.message} Immediate attention is required to avoid regulatory issues or compliance non-conformance.
-              </p>
-            </div>
-
-            {/* Status Section */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 font-bold text-xs text-blue-600 dark:text-blue-400">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                <span>Status</span>
-              </div>
-              <div>
-                <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-bold text-xs inline-flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  <span>{selectedNotif.read ? "Read & Processed" : "Active"}</span>
-                </span>
-              </div>
-            </div>
-
-            {/* Actions Buttons Section */}
+            {/* Actions */}
             <div className="space-y-2.5 pt-2 border-t border-slate-200 dark:border-slate-800">
-              <div className="flex items-center gap-2 font-bold text-xs text-blue-600 dark:text-blue-400 mb-2">
-                <Wrench className="h-4 w-4" />
-                <span>Actions</span>
-              </div>
-
               {!selectedNotif.read && (
                 <button
-                  onClick={() => markNotificationRead(selectedNotif.id)}
-                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
+                  type="button"
+                  onClick={() => {
+                    markNotificationRead(selectedNotif.id);
+                    setToastMessage(`Marked "${selectedNotif.title}" as read.`);
+                    setTimeout(() => setToastMessage(null), 2500);
+                  }}
+                  className="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
                 >
                   <Check className="h-4 w-4" />
-                  <span>Mark as Read</span>
+                  <span>Mark as Read &amp; Acknowledged</span>
                 </button>
               )}
 
               {selectedNotif.actionUrl && (
                 <button
+                  type="button"
                   onClick={() => {
                     markNotificationRead(selectedNotif.id);
                     navigate(selectedNotif.actionUrl!);
                   }}
                   className="w-full py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
-                  <span>Resolve Task</span>
-                  <ArrowRight className="h-4 w-4" />
+                  <span>Resolve &amp; Jump to Workstation</span>
+                  <ArrowRight className="h-4 w-4 text-amber-500" />
                 </button>
               )}
             </div>
