@@ -189,7 +189,7 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
 
       {/* 2. SIDEBAR CONTAINER */}
       <aside
-        className={`fixed left-0 top-0 bottom-0 z-50 lg:z-30 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 flex flex-col transition-all duration-300 ease-in-out shadow-2xl lg:shadow-xs ${
+        className={`fixed left-0 top-0 bottom-0 z-50 lg:z-30 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 flex flex-col transition-all duration-300 ease-in-out shadow-2xl lg:shadow-xs overflow-x-hidden ${
           isMobileSidebarOpen
             ? "translate-x-0 w-72"
             : "-translate-x-full lg:translate-x-0"
@@ -263,7 +263,7 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
           <div className="px-2 pt-2.5 pb-1 flex justify-center shrink-0">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl text-slate-500 dark:text-slate-400 hover:text-amber-500 transition-colors cursor-pointer"
+              className="p-2 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-850 rounded-xl text-slate-500 dark:text-slate-400 hover:text-amber-500 transition-colors cursor-pointer"
               title="Quick Search (Ctrl+K)"
             >
               <Search className="h-4 w-4" />
@@ -272,7 +272,11 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
         )}
 
         {/* NAVIGATION GROUPS SCROLL AREA */}
-        <div className="flex-1 overflow-y-auto px-2.5 py-3 space-y-4 text-xs custom-scrollbar">
+        <div
+          className={`flex-1 overflow-y-auto overflow-x-hidden space-y-4 text-xs no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
+            isCollapsed && !isMobileSidebarOpen ? "px-2 py-3" : "px-2.5 py-3"
+          }`}
+        >
           {navGroups.map((group, gIdx) => (
             <div key={gIdx} className="space-y-1">
               {(!isCollapsed || isMobileSidebarOpen) ? (
@@ -295,7 +299,7 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
                       key={item.to}
                       to={item.to}
                       onClick={() => setIsMobileSidebarOpen(false)}
-                      title={isCollapsed && !isMobileSidebarOpen ? item.label : undefined}
+                      title={isCollapsed && !isMobileSidebarOpen ? `${item.label}${item.badge !== undefined ? ` (${item.badge})` : ""}` : undefined}
                       className={`relative group flex items-center rounded-xl font-medium transition-all ${
                         isCollapsed && !isMobileSidebarOpen
                           ? "justify-center p-2.5"
@@ -335,18 +339,6 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
                           <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-amber-500 ring-2 ring-white dark:ring-slate-950" />
                         )
                       )}
-
-                      {/* Collapsed Hover Tooltip Floating Flyout */}
-                      {isCollapsed && !isMobileSidebarOpen && (
-                        <div className="absolute left-full ml-2.5 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-150 z-50 whitespace-nowrap border border-slate-800 flex items-center gap-2">
-                          <span>{item.label}</span>
-                          {item.badge !== undefined && (
-                            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 font-bold">
-                              {item.badge}
-                            </span>
-                          )}
-                        </div>
-                      )}
                     </Link>
                   );
                 })}
@@ -356,7 +348,7 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
         </div>
 
         {/* BOTTOM USER & NODE STATUS FOOTER */}
-        <div className="p-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/60 backdrop-blur-xs shrink-0">
+        <div className="p-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/60 backdrop-blur-xs shrink-0 overflow-x-hidden">
           {(!isCollapsed || isMobileSidebarOpen) ? (
             <div className="space-y-2">
               <div className="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
