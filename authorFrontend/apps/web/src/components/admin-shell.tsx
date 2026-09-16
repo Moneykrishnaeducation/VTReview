@@ -20,8 +20,8 @@ export function AdminShell() {
 
       {/* Main Content Area */}
       <main
-        className={`flex-1 pt-14 transition-all duration-200 flex flex-col ${
-          isSidebarCollapsed ? "pl-16" : "pl-64"
+        className={`flex-1 pt-14 transition-all duration-300 flex flex-col pl-0 ${
+          isSidebarCollapsed ? "lg:pl-20" : "lg:pl-64"
         }`}
       >
         {/* Breadcrumbs Toolbar */}

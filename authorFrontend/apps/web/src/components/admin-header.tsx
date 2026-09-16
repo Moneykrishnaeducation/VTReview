@@ -16,6 +16,7 @@ import {
   ExternalLink,
   ShieldCheck,
   Clock,
+  Menu,
 } from "lucide-react";
 
 interface AdminHeaderProps {
@@ -28,6 +29,8 @@ export function AdminHeader({ isSidebarCollapsed }: AdminHeaderProps) {
     setActiveRole,
     activeRoleDef,
     setIsSearchOpen,
+    isMobileSidebarOpen,
+    setIsMobileSidebarOpen,
     unreadNotificationsCount,
     notifications,
     markNotificationRead,
@@ -43,21 +46,30 @@ export function AdminHeader({ isSidebarCollapsed }: AdminHeaderProps) {
 
   return (
     <header
-      className={`fixed top-0 right-0 z-20 h-14 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-between px-4 md:px-6 transition-all duration-200 ${
-        isSidebarCollapsed ? "left-16" : "left-64"
+      className={`fixed top-0 right-0 z-20 h-14 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-between px-3 md:px-6 transition-all duration-300 left-0 ${
+        isSidebarCollapsed ? "lg:left-20" : "lg:left-64"
       }`}
     >
-      {/* Left: Quick Search Button & Breadcrumb hint */}
-      <div className="flex items-center gap-3 flex-1 max-w-lg">
+      {/* Left: Mobile Drawer Trigger & Quick Search Button */}
+      <div className="flex items-center gap-2.5 flex-1 max-w-lg">
+        {/* Mobile Hamburger Drawer Trigger */}
+        <button
+          onClick={() => setIsMobileSidebarOpen(true)}
+          className="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-colors cursor-pointer shadow-2xs"
+          aria-label="Open Navigation Drawer"
+        >
+          <Menu className="h-4 w-4" />
+        </button>
+
         <button
           onClick={() => setIsSearchOpen(true)}
-          className="w-full max-w-sm bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-400 flex items-center justify-between gap-2 shadow-xs transition-colors cursor-pointer"
+          className="w-full max-w-xs sm:max-w-sm bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-850 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400 flex items-center justify-between gap-2 shadow-2xs transition-colors cursor-pointer"
         >
-          <div className="flex items-center gap-2">
-            <Search className="h-3.5 w-3.5 text-slate-500" />
-            <span>Search entities, licenses, evidence...</span>
+          <div className="flex items-center gap-2 truncate">
+            <Search className="h-3.5 w-3.5 text-slate-400" />
+            <span className="truncate">Search entities, licenses...</span>
           </div>
-          <kbd className="hidden sm:inline-block font-mono text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-400 border border-slate-700">
+          <kbd className="hidden sm:inline-block font-mono text-[10px] bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
             Ctrl + K
           </kbd>
         </button>

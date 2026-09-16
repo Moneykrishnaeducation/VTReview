@@ -68,9 +68,11 @@ interface AdminContextType {
   markNotificationRead: (id: string) => void;
   markAllNotificationsRead: () => void;
 
-  // UI Modals & Global States
+  // UI Modals & Mobile Sidebar
   isSearchOpen: boolean;
   setIsSearchOpen: (open: boolean) => void;
+  isMobileSidebarOpen: boolean;
+  setIsMobileSidebarOpen: (open: boolean) => void;
   selectedEvidenceModal: EvidenceItem | null;
   setSelectedEvidenceModal: (evidence: EvidenceItem | null) => void;
   hasUnsavedChanges: boolean;
@@ -103,8 +105,9 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>(INITIAL_AUDIT_LOGS);
   const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
 
-  // UI Modals
+  // UI Modals & Mobile Sidebar
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [selectedEvidenceModal, setSelectedEvidenceModal] = useState<EvidenceItem | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
@@ -464,6 +467,8 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         markAllNotificationsRead,
         isSearchOpen,
         setIsSearchOpen,
+        isMobileSidebarOpen,
+        setIsMobileSidebarOpen,
         selectedEvidenceModal,
         setSelectedEvidenceModal,
         hasUnsavedChanges,
