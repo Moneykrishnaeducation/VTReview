@@ -50,7 +50,7 @@ export default function BackToTop() {
   return (
     <div
       className={`fixed right-5 z-50 transition-all duration-300 ease-out ${
-        isTrayVisible ? "bottom-20 md:bottom-22" : "bottom-6"
+        isTrayVisible ? "bottom-20 md:bottom-22" : "bottom-4"
       } ${
         isVisible
           ? "opacity-100 translate-y-0 pointer-events-auto"
