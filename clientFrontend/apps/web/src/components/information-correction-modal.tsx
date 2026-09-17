@@ -46,7 +46,7 @@ export default function InformationCorrectionModal() {
       {/* 1. FIXED FLOATING YELLOW BUTTON AT BOTTOM RIGHT */}
       <button
         onClick={() => setIsBannerOpen(!isBannerOpen)}
-        className="fixed bottom-4 right-4 z-40 bg-[#FFD200] hover:bg-[#F2C700] text-slate-950 font-bold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2 cursor-pointer border border-amber-400/50 transition-all hover:scale-105"
+        className="fixed bottom-4 right-20 z-40 bg-[#FFD200] hover:bg-[#F2C700] text-slate-950 font-bold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2 cursor-pointer border border-amber-400/50 transition-all hover:scale-105"
         title="Information Correction"
         aria-label="Information Correction"
       >
