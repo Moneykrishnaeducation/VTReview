@@ -16,6 +16,7 @@ import ToolsDashboard from "./routes/tools-dashboard";
 import ComplaintsHub from "./routes/complaints-hub";
 import RatingMethodology from "./routes/rating-methodology";
 import CommunityConvocation from "./routes/community-convocation";
+import Contact from "./routes/contact";
 
 function NotFound() {
   return (
@@ -57,6 +58,7 @@ export const router = createBrowserRouter([
       { path: "tools/cost-calculator", element: <ToolsDashboard /> },
       { path: "complaints", element: <ComplaintsHub /> },
       { path: "how-we-rate", element: <RatingMethodology /> },
+      { path: "contact", element: <Contact /> },
       { path: "*", element: <NotFound /> },
     ],
   },
