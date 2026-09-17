@@ -5,6 +5,7 @@ import GlobalHeader from "@/components/global-header";
 import GlobalFooter from "@/components/global-footer";
 import WireframeToolbar from "@/components/wireframe-toolbar";
 import StickyComparisonTray from "@/components/sticky-comparison-tray";
+import InformationCorrectionModal from "@/components/information-correction-modal";
 import { ComparisonProvider, useComparison } from "@/lib/comparison-context";
 import { AuthProvider } from "@/lib/auth-context";
 import { ErrorBoundary } from "@/components/error-boundary";
@@ -40,6 +41,7 @@ function LayoutContent() {
         <GlobalFooter />
       </div>
       <StickyComparisonTray />
+      <InformationCorrectionModal />
       <Toaster richColors />
     </div>
   );
