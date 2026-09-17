@@ -27,11 +27,13 @@ import { BROKERS } from "@/data/broker-directory-data";
 import logo from "@/assets/logo.png";
 import { ModeToggle } from "@/components/mode-toggle";
 import { useAuth } from "@/lib/auth-context";
+import AuthModal from "@/components/auth-modal";
 
 export default function GlobalHeader() {
   const { session, login, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -265,13 +267,19 @@ export default function GlobalHeader() {
           <div className="flex items-center gap-2">
             <ModeToggle />
 
-            {/* User Profile Icon Dropdown (Matching image.png UI Design - No Outer Border, Inner Circular Ring) */}
+            {/* User Profile Icon Dropdown & Login Modal Trigger */}
             <div className="relative" ref={userMenuRef}>
               <button
-                
+                onClick={() => {
+                  if (session.isAuthenticated) {
+                    setIsUserMenuOpen(!isUserMenuOpen);
+                  } else {
+                    setShowAuthModal(true);
+                  }
+                }}
                 className="group p-2 rounded-2xl bg-slate-900/90 hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-center focus:outline-none"
-                title="Login"
-                aria-label="Login"
+                title={session.isAuthenticated ? "User Profile Menu" : "Sign In / Register"}
+                aria-label={session.isAuthenticated ? "User Profile Menu" : "Sign In / Register"}
               >
                 <div className="relative h-8 w-8 rounded-full border border-slate-700/40 bg-slate-800/40 flex items-center justify-center transition-all group-hover:border-slate-600/60">
                   {session.isAuthenticated && session.user ? (
@@ -287,8 +295,6 @@ export default function GlobalHeader() {
                   )}
                 </div>
               </button>
-
-             
             </div>
 
             {/* Single-Line Find My Broker Button */}
@@ -791,6 +797,9 @@ export default function GlobalHeader() {
           </div>
         </div>
       )}
+
+      {/* AUTHENTICATION / LOGIN POPUP MODAL */}
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
     </>
   );
 }
