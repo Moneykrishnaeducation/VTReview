@@ -48,7 +48,7 @@ export default function GlobalFooter() {
 
   return (
     <>
-      <footer className="bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 text-xs border-t border-slate-200 dark:border-slate-800/90 pt-12 pb-16 mt-16 transition-colors">
+      <footer className="bg-slate-200 dark:bg-slate-950 text-slate-600 dark:text-slate-400 text-xs border-t border-slate-200 dark:border-slate-800/90 pt-12 pb-16 transition-colors">
         <div className="max-w-[1240px] mx-auto px-4">
           {/* ========================================================================= */}
           {/* NEWSLETTER & REGULATORY ALERT SUBSCRIPTION BANNER */}
