@@ -1,6 +1,17 @@
 from rest_framework import serializers
 
-from .models import Broker, Review
+from .models import Broker, Review, User
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "id", "email", "password_hash", "first_name", "last_name", "phone",
+            "status", "email_verified", "last_login_at", "created_at", "updated_at",
+        ]
+        read_only_fields = ["id", "created_at", "updated_at"]
+        extra_kwargs = {"password_hash": {"write_only": True}}
 
 
 class ReviewSerializer(serializers.ModelSerializer):

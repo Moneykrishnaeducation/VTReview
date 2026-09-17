@@ -4,6 +4,8 @@ from .views import (
     AuthorBrokerListView,
     AuthorReviewListView,
     AuthorReviewModerationView,
+    AuthorUserDetailView,
+    AuthorUserListCreateView,
     BrokerDetailView,
     BrokerListView,
     HealthView,
@@ -18,4 +20,6 @@ urlpatterns = [
     path("author/brokers/", AuthorBrokerListView.as_view(), name="author-broker-list"),
     path("author/reviews/", AuthorReviewListView.as_view(), name="author-review-list"),
     path("author/reviews/<int:pk>/moderate/", AuthorReviewModerationView.as_view(), name="author-review-moderate"),
+    path("author/users/", AuthorUserListCreateView.as_view(), name="author-user-list-create"),
+    path("author/users/<uuid:pk>/", AuthorUserDetailView.as_view(), name="author-user-detail"),
 ]

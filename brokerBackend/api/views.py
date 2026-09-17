@@ -4,13 +4,23 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Broker, Review
-from .serializers import BrokerSerializer, ReviewSerializer, ReviewSubmissionSerializer
+from .models import Broker, Review, User
+from .serializers import BrokerSerializer, ReviewSerializer, ReviewSubmissionSerializer, UserSerializer
 
 
 class HealthView(APIView):
     def get(self, request):
         return Response({"status": "ok", "service": "broker-backend"})
+
+
+class AuthorUserListCreateView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class AuthorUserDetailView(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 class BrokerListView(generics.ListAPIView):
