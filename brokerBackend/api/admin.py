@@ -2,7 +2,29 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User as AuthUser
 
-from .models import Broker, Review, Role, User
+from .models import Broker, Company, CompanyAddress, Review, Role, User
+
+
+class CompanyAddressInline(admin.StackedInline):
+    model = CompanyAddress
+    extra = 1
+    classes = ("collapse",)
+
+
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ("brand_name", "legal_name", "country", "status", "verified_site", "created_at")
+    list_filter = ("status", "verified_site", "country")
+    search_fields = ("brand_name", "legal_name", "registration_number", "email")
+    ordering = ("brand_name",)
+    inlines = [CompanyAddressInline]
+
+
+@admin.register(CompanyAddress)
+class CompanyAddressAdmin(admin.ModelAdmin):
+    list_display = ("company", "address_type", "city", "state", "country", "is_primary", "created_at")
+    list_filter = ("address_type", "is_primary", "country")
+    search_fields = ("company__brand_name", "address", "city", "country", "email", "phone")
 
 
 @admin.register(Role)
@@ -37,9 +59,9 @@ class ApiUserAdmin(admin.ModelAdmin):
 
 @admin.register(Broker)
 class BrokerAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug", "published", "editorial_score_100", "updated_at")
-    list_filter = ("published", "is_regulated_tier1")
-    search_fields = ("name", "slug", "primary_license")
+    list_display = ("name", "slug", "company", "published", "editorial_score_100", "updated_at")
+    list_filter = ("published", "is_regulated_tier1", "company")
+    search_fields = ("name", "slug", "primary_license", "company__brand_name")
     prepopulated_fields = {"slug": ("name",)}
 
 

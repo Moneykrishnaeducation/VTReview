@@ -1,12 +1,37 @@
 from rest_framework import serializers
 
-from .models import Broker, Review, Role, User
+from .models import Broker, Company, CompanyAddress, Review, Role, User
 
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = ["id", "code", "name", "description", "permissions"]
+
+
+class CompanyAddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompanyAddress
+        fields = [
+            "id", "company", "address_type", "address", "city", "state",
+            "postal_code", "country", "email", "phone", "is_primary",
+            "created_at", "updated_at",
+        ]
+        read_only_fields = ["id", "created_at", "updated_at"]
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    addresses = CompanyAddressSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Company
+        fields = [
+            "id", "brand_name", "legal_name", "registration_number", "register_region",
+            "operating_period", "country", "jurisdiction", "email", "contact_number",
+            "website_url", "verified_site", "business_region", "about_us",
+            "company_profile_description", "status", "addresses", "created_at", "updated_at",
+        ]
+        read_only_fields = ["id", "created_at", "updated_at"]
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -35,13 +60,14 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class BrokerSerializer(serializers.ModelSerializer):
+    company_detail = CompanySerializer(source="company", read_only=True)
     user_reviews = serializers.SerializerMethodField()
     min_deposit_formatted = serializers.SerializerMethodField()
 
     class Meta:
         model = Broker
         fields = [
-            "id", "slug", "name", "logo_text", "logo_url", "affiliate_url", "hq", "founded",
+            "id", "slug", "name", "company", "company_detail", "logo_text", "logo_url", "affiliate_url", "hq", "founded",
             "parent_company", "primary_license", "editorial_rating", "editorial_score_100",
             "editorial_class", "user_rating", "review_count", "eur_usd_spread", "min_deposit",
             "min_deposit_formatted", "max_leverage_retail", "execution_model", "platforms",

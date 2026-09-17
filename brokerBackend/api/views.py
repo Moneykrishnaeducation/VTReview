@@ -4,9 +4,11 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Broker, Review, Role, User
+from .models import Broker, Company, CompanyAddress, Review, Role, User
 from .serializers import (
     BrokerSerializer,
+    CompanyAddressSerializer,
+    CompanySerializer,
     ReviewSerializer,
     ReviewSubmissionSerializer,
     RoleSerializer,
@@ -22,6 +24,39 @@ class HealthView(APIView):
 class RoleListView(generics.ListAPIView):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
+
+
+class CompanyListCreateView(generics.ListCreateAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+
+
+class CompanyDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+
+
+class CompanyAddressListCreateView(generics.ListCreateAPIView):
+    serializer_class = CompanyAddressSerializer
+
+    def get_queryset(self):
+        queryset = CompanyAddress.objects.all()
+        company_id = self.kwargs.get("company_id") or self.request.query_params.get("companyId")
+        if company_id:
+            queryset = queryset.filter(company_id=company_id)
+        return queryset
+
+    def perform_create(self, serializer):
+        company_id = self.kwargs.get("company_id")
+        if company_id:
+            serializer.save(company_id=company_id)
+        else:
+            serializer.save()
+
+
+class CompanyAddressDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CompanyAddress.objects.all()
+    serializer_class = CompanyAddressSerializer
 
 
 class AuthorUserListCreateView(generics.ListCreateAPIView):

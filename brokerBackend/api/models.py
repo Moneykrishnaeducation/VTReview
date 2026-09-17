@@ -59,7 +59,85 @@ class User(models.Model):
         return self.email
 
 
+class Company(models.Model):
+    class Status(models.TextChoices):
+        ACTIVE = "active", "Active"
+        INACTIVE = "inactive", "Inactive"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    brand_name = models.CharField(max_length=255)
+    legal_name = models.CharField(max_length=255, blank=True)
+    registration_number = models.CharField(max_length=100, blank=True)
+    register_region = models.CharField(max_length=100, blank=True)
+    operating_period = models.CharField(max_length=100, blank=True)
+    country = models.CharField(max_length=100, blank=True)
+    jurisdiction = models.CharField(max_length=100, blank=True)
+    email = models.EmailField(max_length=255, blank=True)
+    contact_number = models.CharField(max_length=50, blank=True)
+    website_url = models.URLField(max_length=1000, blank=True)
+    verified_site = models.BooleanField(default=False)
+    business_region = models.TextField(blank=True)
+    about_us = models.TextField(blank=True)
+    company_profile_description = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.ACTIVE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "companies"
+        ordering = ["brand_name"]
+        verbose_name_plural = "Companies"
+
+    def __str__(self) -> str:
+        return self.brand_name
+
+
+class CompanyAddress(models.Model):
+    class AddressType(models.TextChoices):
+        REGISTERED = "registered", "Registered"
+        OFFICE = "office", "Office"
+        BRANCH = "branch", "Branch"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name="addresses",
+        db_column="company_id",
+    )
+    address_type = models.CharField(
+        max_length=50,
+        choices=AddressType.choices,
+        default=AddressType.OFFICE,
+    )
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    postal_code = models.CharField(max_length=30, blank=True)
+    country = models.CharField(max_length=100, blank=True)
+    email = models.EmailField(max_length=255, blank=True)
+    phone = models.CharField(max_length=50, blank=True)
+    is_primary = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "company_addresses"
+        ordering = ["-is_primary", "country", "city"]
+        verbose_name_plural = "Company Addresses"
+
+    def __str__(self) -> str:
+        return f"{self.company.brand_name} ({self.address_type}): {self.city}, {self.country}"
+
+
 class Broker(models.Model):
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="brokers",
+    )
     slug = models.SlugField(unique=True)
     name = models.CharField(max_length=160)
     logo_text = models.CharField(max_length=80, blank=True)
