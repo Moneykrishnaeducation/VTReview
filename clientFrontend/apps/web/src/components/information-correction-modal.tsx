@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import {
   FileEdit,
   X,
@@ -13,6 +14,7 @@ import {
 import { toast } from "sonner";
 
 export default function InformationCorrectionModal() {
+  const navigate = useNavigate();
   const [isBannerOpen, setIsBannerOpen] = useState(false);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
 
@@ -79,7 +81,7 @@ export default function InformationCorrectionModal() {
               <button
                 onClick={() => {
                   setIsBannerOpen(false);
-                  setIsFormModalOpen(true);
+                  navigate("/contact");
                 }}
                 className="bg-slate-950 hover:bg-slate-850 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all shadow-md cursor-pointer hover:scale-[1.02]"
               >
