@@ -86,7 +86,7 @@ describe("Platform Traders & Public Viewers Page (/users/traders, /traders)", ()
     expect(screen.getByText(/SimonB_FX/i)).toBeInTheDocument();
   });
 
-  it("opens register trader modal", () => {
+  it("opens user reviews modal and lists all reviews posted by the user", () => {
     render(
       <MemoryRouter>
         <AdminProvider>
@@ -95,10 +95,37 @@ describe("Platform Traders & Public Viewers Page (/users/traders, /traders)", ()
       </MemoryRouter>
     );
 
-    const registerBtn = screen.getByRole("button", { name: /Register Trader/i });
-    fireEvent.click(registerBtn);
+    // Click on Reviews button for SimonB_FX
+    const reviewButtons = screen.getAllByRole("button", { name: /Reviews/i });
+    fireEvent.click(reviewButtons[0]);
 
-    expect(screen.getByText(/Register Platform Trader/i)).toBeInTheDocument();
+    expect(screen.getByText(/Trader Reviews & Testimonials/i)).toBeInTheDocument();
+    expect(screen.getByText(/All broker reviews, ratings, and moderation records submitted by this trader/i)).toBeInTheDocument();
+
+    // Verify all reviews are listed (Review #1, Review #2, Review #3, Review #4)
+    expect(screen.getByText(/Review #1 of 4/i)).toBeInTheDocument();
+    expect(screen.getByText(/Review #2 of 4/i)).toBeInTheDocument();
+    expect(screen.getByText(/Review #3 of 4/i)).toBeInTheDocument();
+    expect(screen.getByText(/Review #4 of 4/i)).toBeInTheDocument();
+    expect(screen.getByText(/Consistently tight spreads on EUR\/USD/i)).toBeInTheDocument();
+    expect(screen.getByText(/Superior cTrader execution speed/i)).toBeInTheDocument();
+  });
+
+  it("toggles block login access for a trader user", () => {
+    render(
+      <MemoryRouter>
+        <AdminProvider>
+          <TraderUsersPage />
+        </AdminProvider>
+      </MemoryRouter>
+    );
+
+    // Find block buttons and click block on the first trader
+    const blockButtons = screen.getAllByRole("button", { name: /Block/i });
+    fireEvent.click(blockButtons[0]);
+
+    // Confirmation alert should indicate login access is blocked
+    expect(screen.getByText(/Login access BLOCKED/i)).toBeInTheDocument();
   });
 });
 
