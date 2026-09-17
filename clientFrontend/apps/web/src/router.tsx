@@ -17,6 +17,7 @@ import ComplaintsHub from "./routes/complaints-hub";
 import RatingMethodology from "./routes/rating-methodology";
 import CommunityConvocation from "./routes/community-convocation";
 import Contact from "./routes/contact";
+import UserProfile from "./routes/userprofile";
 
 function NotFound() {
   return (
@@ -59,6 +60,8 @@ export const router = createBrowserRouter([
       { path: "complaints", element: <ComplaintsHub /> },
       { path: "how-we-rate", element: <RatingMethodology /> },
       { path: "contact", element: <Contact /> },
+      { path: "userprofile", element: <UserProfile /> },
+      { path: "profile", element: <UserProfile /> },
       { path: "*", element: <NotFound /> },
     ],
   },
