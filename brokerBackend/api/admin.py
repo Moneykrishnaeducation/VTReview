@@ -2,7 +2,14 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User as AuthUser
 
-from .models import Broker, Company, Review, Role, User
+from .models import Broker, Company, RelatedCompany, Review, Role, User
+
+
+class RelatedCompanyInline(admin.TabularInline):
+    model = RelatedCompany
+    fk_name = "company"
+    extra = 1
+    fields = ("related_company_name", "relationship_type", "country", "registration_number", "website_url")
 
 
 @admin.register(Company)
@@ -11,12 +18,20 @@ class CompanyAdmin(admin.ModelAdmin):
     list_filter = ("status", "verified_site", "address_type", "country")
     search_fields = ("brand_name", "legal_name", "registration_number", "address", "city", "email")
     ordering = ("brand_name",)
+    inlines = [RelatedCompanyInline]
     fieldsets = (
         ("Company Info", {"fields": ("brand_name", "legal_name", "registration_number", "register_region", "operating_period", "jurisdiction", "status")}),
         ("Contact & Online", {"fields": ("email", "contact_number", "phone", "website_url", "verified_site")}),
         ("Address Details", {"fields": ("address_type", "address", "city", "state", "postal_code", "country", "is_primary")}),
         ("Descriptions", {"fields": ("business_region", "about_us", "company_profile_description")}),
     )
+
+
+@admin.register(RelatedCompany)
+class RelatedCompanyAdmin(admin.ModelAdmin):
+    list_display = ("company", "related_company_name", "relationship_type", "country", "created_at")
+    list_filter = ("relationship_type", "country")
+    search_fields = ("company__brand_name", "related_company_name", "registration_number", "country")
 
 
 @admin.register(Role)

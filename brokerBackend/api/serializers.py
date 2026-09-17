@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Broker, Company, Review, Role, User
+from .models import Broker, Company, RelatedCompany, Review, Role, User
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -9,7 +9,21 @@ class RoleSerializer(serializers.ModelSerializer):
         fields = ["id", "code", "name", "description", "permissions"]
 
 
+class RelatedCompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RelatedCompany
+        fields = [
+            "id", "company", "related_company_name", "related_company",
+            "relationship_type", "country", "registration_number",
+            "website_url", "description", "source_url",
+            "created_at", "updated_at",
+        ]
+        read_only_fields = ["id", "created_at", "updated_at"]
+
+
 class CompanySerializer(serializers.ModelSerializer):
+    related_companies = RelatedCompanySerializer(many=True, read_only=True)
+
     class Meta:
         model = Company
         fields = [
@@ -18,7 +32,7 @@ class CompanySerializer(serializers.ModelSerializer):
             "phone", "website_url", "verified_site", "business_region", "about_us",
             "company_profile_description", "status",
             "address_type", "address", "city", "state", "postal_code", "is_primary",
-            "created_at", "updated_at",
+            "related_companies", "created_at", "updated_at",
         ]
         read_only_fields = ["id", "created_at", "updated_at"]
 

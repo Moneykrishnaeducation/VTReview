@@ -112,6 +112,51 @@ class Company(models.Model):
         return self.brand_name
 
 
+class RelatedCompany(models.Model):
+    class RelationshipType(models.TextChoices):
+        PARENT = "parent", "Parent"
+        SUBSIDIARY = "subsidiary", "Subsidiary"
+        AFFILIATE = "affiliate", "Affiliate"
+        BRAND = "brand", "Brand"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name="related_companies",
+        db_column="company_id",
+    )
+    related_company_name = models.CharField(max_length=255)
+    related_company = models.ForeignKey(
+        Company,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="referenced_by_companies",
+        db_column="related_company_id",
+    )
+    relationship_type = models.CharField(
+        max_length=100,
+        choices=RelationshipType.choices,
+        default=RelationshipType.AFFILIATE,
+    )
+    country = models.CharField(max_length=100, blank=True)
+    registration_number = models.CharField(max_length=100, blank=True)
+    website_url = models.URLField(max_length=1000, blank=True)
+    description = models.TextField(blank=True)
+    source_url = models.URLField(max_length=1000, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "related_companies"
+        ordering = ["company", "relationship_type", "related_company_name"]
+        verbose_name_plural = "Related Companies"
+
+    def __str__(self) -> str:
+        return f"{self.company.brand_name} -> {self.related_company_name} ({self.relationship_type})"
+
+
 class Broker(models.Model):
     company = models.ForeignKey(
         Company,
