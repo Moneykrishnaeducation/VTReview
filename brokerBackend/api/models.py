@@ -1,6 +1,37 @@
 import uuid
 
+from django.contrib.auth.models import User as AuthUser
 from django.db import models
+
+
+class Role(models.Model):
+    name = models.CharField(max_length=80, unique=True)
+    code = models.CharField(max_length=40, unique=True)
+    description = models.TextField(blank=True)
+    permissions = models.JSONField(default=list, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "role"
+        ordering = ["name"]
+
+    def __str__(self) -> str:
+        return self.name
+
+
+# Map Role into the default Django auth_user table
+AuthUser.add_to_class(
+    "role",
+    models.ForeignKey(
+        Role,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="auth_users",
+        db_column="role_id",
+    ),
+)
 
 
 class User(models.Model):

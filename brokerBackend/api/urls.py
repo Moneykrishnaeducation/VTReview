@@ -10,10 +10,12 @@ from .views import (
     BrokerListView,
     HealthView,
     ReviewCreateView,
+    RoleListView,
 )
 
 urlpatterns = [
     path("health/", HealthView.as_view(), name="health"),
+    path("roles/", RoleListView.as_view(), name="role-list"),
     path("brokers/", BrokerListView.as_view(), name="broker-list"),
     path("brokers/<slug:slug>/", BrokerDetailView.as_view(), name="broker-detail"),
     path("reviews/", ReviewCreateView.as_view(), name="review-create"),
