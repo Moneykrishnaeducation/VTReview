@@ -2,29 +2,21 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User as AuthUser
 
-from .models import Broker, Company, CompanyAddress, Review, Role, User
-
-
-class CompanyAddressInline(admin.StackedInline):
-    model = CompanyAddress
-    extra = 1
-    classes = ("collapse",)
+from .models import Broker, Company, Review, Role, User
 
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ("brand_name", "legal_name", "country", "status", "verified_site", "created_at")
-    list_filter = ("status", "verified_site", "country")
-    search_fields = ("brand_name", "legal_name", "registration_number", "email")
+    list_display = ("brand_name", "legal_name", "city", "country", "status", "verified_site", "created_at")
+    list_filter = ("status", "verified_site", "address_type", "country")
+    search_fields = ("brand_name", "legal_name", "registration_number", "address", "city", "email")
     ordering = ("brand_name",)
-    inlines = [CompanyAddressInline]
-
-
-@admin.register(CompanyAddress)
-class CompanyAddressAdmin(admin.ModelAdmin):
-    list_display = ("company", "address_type", "city", "state", "country", "is_primary", "created_at")
-    list_filter = ("address_type", "is_primary", "country")
-    search_fields = ("company__brand_name", "address", "city", "country", "email", "phone")
+    fieldsets = (
+        ("Company Info", {"fields": ("brand_name", "legal_name", "registration_number", "register_region", "operating_period", "jurisdiction", "status")}),
+        ("Contact & Online", {"fields": ("email", "contact_number", "phone", "website_url", "verified_site")}),
+        ("Address Details", {"fields": ("address_type", "address", "city", "state", "postal_code", "country", "is_primary")}),
+        ("Descriptions", {"fields": ("business_region", "about_us", "company_profile_description")}),
+    )
 
 
 @admin.register(Role)
