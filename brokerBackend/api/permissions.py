@@ -1,7 +1,7 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
-class IsStaffOrReadOnly(BasePermission):
+class IsAuthOrReadOnly(BasePermission):
     """Allow public reads while restricting writes to staff users."""
 
     def has_permission(self, request, view) -> bool:
@@ -10,7 +10,7 @@ class IsStaffOrReadOnly(BasePermission):
         )
 
 
-class IsStaffUser(BasePermission):
+class IsAuthUser(BasePermission):
     """Allow access only to authenticated staff users."""
 
     def has_permission(self, request, view) -> bool:
